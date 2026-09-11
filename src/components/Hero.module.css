@@ -85,18 +85,12 @@
   content: "";
 }
 
+/* Niente transition sul link: è lui che GSAP anima all'ingresso, e una
+   transition CSS su opacity/transform gli farebbe prendere come valore finale
+   quello di partenza (resterebbe invisibile). Hover e transition stanno sul
+   simbolo. */
 .navLogo {
   display: block;
-  opacity: 0.9;
-  transition:
-    opacity 0.3s,
-    transform 0.5s var(--ease-out);
-}
-
-.navLogo:hover,
-.navLogo:focus-visible {
-  opacity: 1;
-  transform: translateY(-1px);
 }
 
 /* Il PNG del simbolo fa da maschera: il colore segue quello del menu */
@@ -105,8 +99,18 @@
   height: clamp(1.25rem, 0.9rem + 1vw, 2.1rem);
   aspect-ratio: 495 / 478;
   background: currentColor;
+  opacity: 0.9;
   -webkit-mask: url("/assets/logo-simbolo.png") no-repeat center / contain;
   mask: url("/assets/logo-simbolo.png") no-repeat center / contain;
+  transition:
+    opacity 0.3s,
+    transform 0.5s var(--ease-out);
+}
+
+.navLogo:hover .navSymbol,
+.navLogo:focus-visible .navSymbol {
+  opacity: 1;
+  transform: translateY(-1px);
 }
 
 .topLink,
