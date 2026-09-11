@@ -1,0 +1,258 @@
+/* Sticky: la hero resta ferma in cima mentre il resto della pagina
+   (wrapper con z-index più alto in page.tsx) le scorre sopra. */
+.hero {
+  --hero-cream: #f6f1e5;
+  position: sticky;
+  top: 0;
+  z-index: 0;
+  display: flex;
+  justify-content: center;
+  min-height: 100svh;
+  padding-inline: var(--pad-x);
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--hero-cream);
+  container-type: inline-size;
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 18, 28, 0.5) 0%,
+    rgba(8, 18, 28, 0.08) 32%,
+    rgba(8, 18, 28, 0.14) 58%,
+    rgba(8, 18, 28, 0.66) 100%
+  );
+}
+
+/* La colonna prende la larghezza del wordmark (fit-content): la nav in alto e
+   la tagline in basso si allargano da sole ai suoi bordi. */
+.inner {
+  /* 100cqw = larghezza interna della hero (content box, padding escluso):
+     il wordmark, largo --wordmark-em em, riempie tutta la larghezza utile. */
+  --wm-size: calc(100cqw / var(--wordmark-em));
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  width: fit-content;
+  max-width: 100%;
+  padding-block: clamp(1.4rem, 3vw, 2.4rem) clamp(1.1rem, 2.6vw, 2rem);
+}
+
+/* Nav e tagline non contribuiscono alla larghezza della colonna
+   (contain: inline-size): è sempre il wordmark a dettarla, loro si adattano.
+   Il padding a sinistra allinea il testo all'inchiostro della "L" (spazio
+   laterale del glifo: 0.031em); a destra la "a" finale è già a filo. */
+.topNav,
+.tagline {
+  contain: inline-size;
+  min-width: 0;
+  padding-left: calc(var(--wm-size) * 0.031);
+}
+
+/* ---------- Nav in alto ---------- */
+
+/* Simbolo del logo al centro esatto: le due metà hanno la stessa larghezza.
+   Lo pseudo-elemento vuoto dopo l'ultima voce a sinistra (e prima della prima
+   a destra) rende la distanza dal simbolo uguale a quella tra le voci. */
+.topNav {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+}
+
+.topNav ul {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  white-space: nowrap;
+}
+
+.topNav ul:first-child::after,
+.topNav ul:last-child::before {
+  content: "";
+}
+
+.navLogo {
+  display: block;
+  opacity: 0.9;
+  transition:
+    opacity 0.3s,
+    transform 0.5s var(--ease-out);
+}
+
+.navLogo:hover,
+.navLogo:focus-visible {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+/* Il PNG del simbolo fa da maschera: il colore segue quello del menu */
+.navSymbol {
+  display: block;
+  height: clamp(1.25rem, 0.9rem + 1vw, 2.1rem);
+  aspect-ratio: 495 / 478;
+  background: currentColor;
+  -webkit-mask: url("/assets/logo-simbolo.png") no-repeat center / contain;
+  mask: url("/assets/logo-simbolo.png") no-repeat center / contain;
+}
+
+.topLink,
+.tagline {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: clamp(0.6rem, 0.5rem + 0.32vw, 0.82rem);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.topLink {
+  position: relative;
+  display: inline-block;
+  padding-block: 0.35rem;
+  opacity: 0.9;
+  transition: opacity 0.3s;
+}
+
+.topLink::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0.1rem;
+  left: 0;
+  height: 1.5px;
+  background: var(--lemon);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s var(--ease-out);
+}
+
+.topLink:hover,
+.topLink:focus-visible {
+  opacity: 1;
+}
+
+.topLink:hover::after,
+.topLink:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* Pagine ancora da fare: voce spenta, senza link né sottolineatura */
+.topLink.off,
+.topLink.off:hover {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.topLink.off::after {
+  content: none;
+}
+
+/* ---------- Wordmark + tagline in basso ---------- */
+
+.bottom {
+  display: grid;
+  gap: clamp(0.5rem, 1.2vw, 1rem);
+  align-self: end;
+}
+
+/* Niente letter-spacing: farebbe perdere la legatura "fi" del logo. */
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--wm-size);
+  line-height: 1;
+  letter-spacing: 0;
+  white-space: nowrap;
+  color: var(--hero-cream);
+  /* Il padding lascia spazio agli sbordi dei glifi; i margini negativi lo
+     annullano nel layout. L'overflow nasconde i glifi prima della reveal. */
+  padding: 0.14em 0.05em 0.04em;
+  margin: -0.14em -0.05em -0.04em;
+  overflow: hidden;
+}
+
+.word {
+  position: relative;
+  display: inline-block;
+}
+
+/* Testo completo, invisibile: definisce larghezza e posizione di ogni glifo */
+.ghost {
+  opacity: 0;
+}
+
+.letters {
+  position: absolute;
+  inset: 0;
+  visibility: hidden;
+}
+
+.letters[data-ready] {
+  visibility: visible;
+}
+
+.glyph {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: pre;
+  will-change: transform;
+}
+
+.tagline {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  column-gap: 1em;
+  row-gap: 0.3em;
+  opacity: 0.88;
+}
+
+@media (max-width: 900px) {
+  .inner {
+    padding-block: 1.25rem 1.1rem;
+  }
+
+  .topNav ul {
+    gap: 0.6rem;
+  }
+}
+
+/* Su schermi stretti la tagline va a capo: l'ultima riga resta allineata a
+   sinistra invece di spargersi (il riempitivo assorbe lo spazio residuo). */
+@media (max-width: 600px) {
+  .tagline::after {
+    content: "";
+    flex: 1 1 0;
+  }
+}
+
+/* Schermi molto stretti: la nav su una riga deve restare entro il wordmark */
+@media (max-width: 400px) {
+  .topNav ul {
+    gap: 0.5rem;
+  }
+
+  .topLink {
+    font-size: 0.56rem;
+  }
+}
+
+@media (max-width: 340px) {
+  .topLink {
+    font-size: 0.5rem;
+  }
+}

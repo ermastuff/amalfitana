@@ -1,0 +1,14 @@
+.wrap {
+  position: relative;
+  display: inline;
+  white-space: nowrap;
+}
+
+.svg {
+  position: absolute;
+  left: -2%;
+  bottom: -0.14em;
+  width: 104%;
+  height: auto;
+  pointer-events: none;
+}

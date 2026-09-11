@@ -1,0 +1,274 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  color: var(--ink);
+  background: color-mix(in srgb, var(--cream) 80%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid transparent;
+  transition:
+    transform 0.5s var(--ease-out),
+    border-color 0.4s,
+    background-color 0.4s,
+    color 0.4s;
+}
+
+/* Scroll verso il basso: l'header scivola fuori dallo schermo (classe
+   gestita da uno ScrollTrigger in Header.tsx). In fondo al file per vincere
+   sulle regole .onHero. */
+
+.scrolled {
+  border-bottom-color: var(--line);
+  background: color-mix(in srgb, var(--cream) 92%, transparent);
+}
+
+/* Home: sopra la hero l'header resta nascosto (la navigazione sta nella hero
+   stessa) e scende dall'alto una volta superato il video. */
+.onHero {
+  position: fixed;
+  right: 0;
+  left: 0;
+  color: #fff;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  transform: translateY(-100%);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    transform 0.6s var(--ease-out),
+    opacity 0.35s,
+    visibility 0s linear 0.35s,
+    border-color 0.4s,
+    background-color 0.4s,
+    color 0.4s;
+}
+
+.onHero.scrolled {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--cream) 92%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transform: none;
+  opacity: 1;
+  visibility: visible;
+  transition:
+    transform 0.6s var(--ease-out),
+    opacity 0.35s,
+    visibility 0s,
+    border-color 0.4s,
+    background-color 0.4s,
+    color 0.4s;
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  width: 100%;
+  height: var(--header-h);
+  padding: 0 2.19619vw;
+}
+
+.brand {
+  display: block;
+  flex: none;
+}
+
+/* Il PNG del wordmark fa da maschera: il colore segue currentColor */
+.logo {
+  display: block;
+  height: 26px;
+  aspect-ratio: 1901 / 250;
+  background: currentColor;
+  -webkit-mask: url("/assets/logo-wordmark.png") no-repeat center / contain;
+  mask: url("/assets/logo-wordmark.png") no-repeat center / contain;
+  transition:
+    background-color 0.4s,
+    transform 0.5s var(--ease-out);
+}
+
+.brand:hover .logo {
+  transform: translateY(-1px);
+}
+
+.navList {
+  display: flex;
+  gap: 2rem;
+}
+
+.navLink {
+  position: relative;
+  display: inline-block;
+  padding-block: 0.4rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.78;
+  transition: opacity 0.3s;
+}
+
+.navLink::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--lemon);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s var(--ease-out);
+}
+
+.navLink:hover,
+.navLink[aria-current="page"] {
+  opacity: 1;
+}
+
+.navLink:hover::after,
+.navLink[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+.cta {
+  padding: 0.75em 1.35em;
+  font-size: 0.9rem;
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.cta:hover {
+  background: var(--ink-deep);
+}
+
+.onHero:not(.scrolled) .cta {
+  background: transparent;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.onHero:not(.scrolled) .cta:hover {
+  background: #fff;
+  color: var(--ink);
+}
+
+.burger {
+  display: none;
+  width: 44px;
+  height: 44px;
+  margin-right: -10px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.burgerLine {
+  width: 24px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform 0.4s var(--ease-out);
+}
+
+.burger[aria-expanded="true"] .burgerLine:first-child {
+  transform: translateY(4px) rotate(45deg);
+}
+
+.burger[aria-expanded="true"] .burgerLine:last-child {
+  transform: translateY(-4px) rotate(-45deg);
+}
+
+.overlay {
+  position: fixed;
+  top: var(--header-h);
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2rem var(--pad-x) 2.5rem;
+  background: var(--sea-deep);
+  color: var(--cream);
+  opacity: 0;
+  visibility: hidden;
+  overflow: auto;
+}
+
+.overlayList {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.overlayLink {
+  display: block;
+  padding-block: 0.3rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.2rem, 8.5vw, 3.4rem);
+  line-height: 1.1;
+}
+
+.overlayLink[aria-current="page"] {
+  color: var(--lemon);
+}
+
+/* Pagine ancora da fare: la voce resta, spenta e senza link */
+.navLink.off,
+.navLink.off:hover {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.navLink.off::after {
+  content: none;
+}
+
+.overlayLink.off {
+  opacity: 0.4;
+}
+
+.overlayMeta {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.95rem;
+  color: color-mix(in srgb, var(--cream) 70%, transparent);
+}
+
+@media (max-width: 900px) {
+  /* .inner .cta: specificità maggiore del .btn globale */
+  .nav,
+  .inner .cta {
+    display: none;
+  }
+
+  .burger {
+    display: flex;
+  }
+
+  /* Menu aperto sopra la hero: l'header deve essere leggibile sul blu */
+  .onHero:has(+ #mobile-menu[aria-hidden="false"]) {
+    color: #fff;
+    background: var(--sea-deep);
+  }
+}
+
+@media (min-width: 901px) {
+  .overlay {
+    display: none;
+  }
+}
+
+/* Header nascosto scorrendo verso il basso */
+.header.hidden,
+.onHero.scrolled.hidden {
+  transform: translateY(-100%);
+}

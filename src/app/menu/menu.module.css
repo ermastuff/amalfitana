@@ -1,0 +1,363 @@
+/* ---------- Hero con foto ---------- */
+
+/* Come in home l'header resta nascosto sopra a questa hero (vedi HERO_ROUTES
+   in Header.tsx): la navigazione sta qui dentro in alto, il titolo in basso.
+   60svh: al primo caricamento sotto si legge già la frase descrittiva. */
+.hero {
+  position: relative;
+  display: flex;
+  min-height: 60svh;
+  overflow: hidden;
+  background: var(--ink-deep);
+  color: var(--cream);
+}
+
+/* Foto verticale su schermo orizzontale: il taglio resta sulla pizza */
+.photo {
+  object-fit: cover;
+  object-position: 58% 58%;
+}
+
+/* Scurisce solo in alto e in basso, dove stanno nav e titolo */
+.shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(28, 18, 14, 0.5) 0%,
+    rgba(28, 18, 14, 0) 26%,
+    rgba(28, 18, 14, 0) 52%,
+    rgba(28, 18, 14, 0.6) 100%
+  );
+}
+
+/* Menu e titolo a tutta larghezza, solo il padding laterale. La riga
+   elastica in mezzo spinge il titolo in fondo alla hero; nessun padding
+   sotto, il titolo poggia sul bordo. */
+.heroInner {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  width: 100%;
+  padding-inline: var(--pad-x);
+  padding-block: clamp(1.4rem, 3vw, 2.4rem) 0;
+}
+
+/* ---------- Menu in alto (stesso della hero in home) ---------- */
+
+/* Simbolo del logo al centro esatto: le due metà hanno la stessa larghezza.
+   Lo pseudo-elemento vuoto dopo l'ultima voce a sinistra (e prima della prima
+   a destra) rende la distanza dal simbolo uguale a quella tra le voci. */
+.topNav {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+}
+
+.topNav ul {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  white-space: nowrap;
+}
+
+.topNav ul:first-child::after,
+.topNav ul:last-child::before {
+  content: "";
+}
+
+.navLogo {
+  display: block;
+  opacity: 0.9;
+  transition:
+    opacity 0.3s,
+    transform 0.5s var(--ease-out);
+}
+
+.navLogo:hover,
+.navLogo:focus-visible {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+/* Il PNG del simbolo fa da maschera: il colore segue quello del menu */
+.navSymbol {
+  display: block;
+  height: clamp(1.25rem, 0.9rem + 1vw, 2.1rem);
+  aspect-ratio: 495 / 478;
+  background: currentColor;
+  -webkit-mask: url("/assets/logo-simbolo.png") no-repeat center / contain;
+  mask: url("/assets/logo-simbolo.png") no-repeat center / contain;
+}
+
+.topLink {
+  position: relative;
+  display: inline-block;
+  padding-block: 0.35rem;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: clamp(0.6rem, 0.5rem + 0.32vw, 0.82rem);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.9;
+  transition: opacity 0.3s;
+}
+
+.topLink::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0.1rem;
+  left: 0;
+  height: 1.5px;
+  background: var(--lemon);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s var(--ease-out);
+}
+
+.topLink:hover,
+.topLink:focus-visible {
+  opacity: 1;
+}
+
+.topLink:hover::after,
+.topLink:focus-visible::after,
+.topLink[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+/* Pagine ancora da fare: voce spenta, senza link né sottolineatura */
+.topLink.off,
+.topLink.off:hover {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.topLink.off::after {
+  content: none;
+}
+
+/* ---------- Titolo ---------- */
+
+/* Didot Bold, colore dello sfondo del sito. Il 45svh nel min() impedisce
+   che su finestre larghe e basse il titolo salga fino al menu.
+   Margini negativi misurati sul font: a sinistra tolgono lo spazio laterale
+   della "M" (lo stesso 0.031em della "L" in home), così parte a filo con il
+   menu; sotto tolgono la riga oltre la linea di base (0.103em) e scendono di
+   altri 0.03em, così la base delle lettere entra nel bordo della hero. */
+.title {
+  align-self: end;
+  margin: 0 0 -0.133em -0.031em;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(4rem, min(18vw, 45svh), 16rem);
+  line-height: 0.9;
+  letter-spacing: 0;
+  color: var(--cream);
+}
+
+/* inline-block: GSAP può spostare le lettere una a una solo se sono blocchi */
+.letter {
+  display: inline-block;
+}
+
+/* Con le animazioni attive le lettere partono nascoste: il fade in di GSAP le
+   fa comparire senza il lampo della parola già visibile prima dell'avvio.
+   Con prefers-reduced-motion restano visibili e ferme. */
+@media (prefers-reduced-motion: no-preference) {
+  .letter {
+    opacity: 0;
+  }
+}
+
+/* ---------- Frase + filtri, sotto alla hero ---------- */
+
+/* La frase parte dal bordo come la hero; i filtri restano incolonnati con
+   la griglia dei prodotti (vedi .filters). */
+.intro {
+  display: grid;
+  gap: clamp(2.5rem, 5vw, 4rem);
+  padding: clamp(2.5rem, 5vw, 4.5rem) var(--pad-x) 0;
+}
+
+/* Frase: serif corsivo e sans alternati */
+
+.claim {
+  max-width: 50ch;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(1.25rem, 2.35vw, 2.1rem);
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+.claim em {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.12em;
+}
+
+/* Pastiglia con l'illustrazione, dimensionata in em così da crescere
+   insieme al testo in cui è incastonata. */
+.chip {
+  display: inline-block;
+  width: 2.9em;
+  height: 1.35em;
+  vertical-align: -0.3em;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.chip img {
+  width: 100%;
+  height: 100%;
+  padding: 0.07em 0.22em;
+  object-fit: contain;
+}
+
+.chipCream {
+  background: var(--cream-3);
+}
+
+.chipLemon {
+  background: var(--lemon);
+}
+
+.chipTerra {
+  background: color-mix(in srgb, var(--terra) 22%, var(--cream));
+}
+
+/* ---------- Filtri ---------- */
+
+/* La larghezza è quella del contenuto di .container: centrata dentro alla
+   sezione a tutta larghezza, cade esattamente sul bordo della griglia sotto. */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: calc(var(--max-w) - 2 * var(--pad-x));
+  margin-inline: auto;
+}
+
+/* La misura è in vw così i sette bottoni stanno su una riga sola anche
+   quando la finestra si stringe (vedi il nowrap sotto i 901px in su). */
+.filter {
+  padding: 0.85em 1.35em;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(0.58rem, 0.9vw, 0.86rem);
+  line-height: 1;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition:
+    background-color 0.3s,
+    border-color 0.3s,
+    color 0.3s;
+}
+
+.filter:hover {
+  border-color: var(--ink);
+}
+
+.filter[aria-pressed="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--cream);
+}
+
+/* ---------- Griglia dei prodotti ---------- */
+
+.groupHead {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: clamp(1.75rem, 3.5vw, 2.75rem);
+}
+
+.groupTitle {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.note {
+  font-size: 0.95rem;
+  color: var(--muted);
+  max-width: 60ch;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.75rem, 3.5vw, 3rem) clamp(1.5rem, 3vw, 2.5rem);
+}
+
+/* Il prezzo segue la descrizione: la sua altezza cambia da card a card,
+   invece di essere allineata in fondo alla riga della griglia. */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.name {
+  font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.desc {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.price {
+  padding-top: 0.15rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+@media (min-width: 901px) {
+  .filters {
+    flex-wrap: nowrap;
+  }
+}
+
+@media (max-width: 900px) {
+  .topNav ul {
+    gap: 0.6rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .filter {
+    padding: 0.7em 1.2em;
+    font-size: 0.72rem;
+  }
+
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 400px) {
+  .topNav ul {
+    gap: 0.5rem;
+  }
+
+  .topLink {
+    font-size: 0.56rem;
+  }
+}

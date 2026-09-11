@@ -1,0 +1,158 @@
+.wrap {
+  position: relative;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 0.5rem;
+  outline: none;
+}
+
+.wrap:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 8px;
+}
+
+.frame {
+  position: relative;
+  border: 6px solid #8d8d8d;
+  background: #8d8d8d;
+  box-shadow: 0 40px 70px -35px rgba(0, 0, 0, 0.5);
+}
+
+.book {
+  width: 100%;
+}
+
+/* Segnaposto con le proporzioni della doppia pagina durante il caricamento */
+.loading {
+  display: grid;
+  place-items: center;
+  gap: 0.75rem;
+  aspect-ratio: 612 / 436;
+  padding: 2rem;
+  background: #fff;
+  color: var(--ink);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.errorActions {
+  display: inline-flex;
+  gap: 1.5rem;
+}
+
+.bar {
+  width: min(60%, 260px);
+  height: 3px;
+  background: var(--cream-3);
+  overflow: hidden;
+}
+
+.barFill {
+  display: block;
+  height: 100%;
+  background: var(--ink);
+  transition: width 0.25s;
+}
+
+.arrow {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: var(--ink);
+  opacity: 0.7;
+  transition:
+    opacity 0.3s,
+    transform 0.3s var(--ease-out);
+}
+
+.arrow svg {
+  width: 22px;
+  height: 22px;
+}
+
+.arrow:hover:not(:disabled) {
+  opacity: 1;
+  transform: scale(1.12);
+}
+
+.arrow:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.toolbar {
+  grid-column: 1 / -1;
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.1rem;
+  padding: 0.4rem 0.6rem 0.4rem 1rem;
+  border-radius: 999px;
+  background: rgba(24, 24, 24, 0.88);
+  color: #fff;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.counter {
+  min-width: 3.5em;
+}
+
+.tool {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: inherit;
+  opacity: 0.85;
+  transition:
+    opacity 0.3s,
+    background-color 0.3s;
+}
+
+.tool svg {
+  width: 16px;
+  height: 16px;
+}
+
+.tool:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* Schermo intero */
+.wrap:fullscreen {
+  align-content: center;
+  height: 100vh;
+  padding: 2rem 1.5rem;
+  background: #121212;
+}
+
+.wrap:fullscreen .frame {
+  max-width: min(100%, 1500px);
+  margin-inline: auto;
+}
+
+.wrap:fullscreen .arrow {
+  color: #fff;
+}
+
+@media (max-width: 700px) {
+  .wrap {
+    grid-template-columns: 36px minmax(0, 1fr) 36px;
+    gap: 0.25rem;
+  }
+
+  .arrow {
+    width: 36px;
+    height: 36px;
+  }
+
+  .loading {
+    aspect-ratio: 306 / 436;
+  }
+}

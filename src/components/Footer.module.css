@@ -1,0 +1,200 @@
+/* Footer: fondo marrone scuro, testo crema centrato, wordmark e simbolo
+   nello stesso crema. Griglia a cinque colonne: due celle, ornamento al
+   centro, due celle. */
+.footer {
+  --fg: #f3eee2;
+  --line: color-mix(in srgb, #f3eee2 22%, transparent);
+  --cols: minmax(0, 1fr) minmax(0, 1fr) clamp(5rem, 16vw, 20rem) minmax(0, 1fr)
+    minmax(0, 1fr);
+  margin-top: auto;
+  padding: clamp(2.5rem, 5vw, 4rem) var(--pad-x) 1.4rem;
+  background: var(--ink-deep);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  text-align: center;
+  container-type: inline-size;
+}
+
+.footer a {
+  transition: opacity 0.3s;
+}
+
+.footer a:hover,
+.footer a:focus-visible {
+  opacity: 0.7;
+}
+
+/* ---------- Colonne incorniciate ---------- */
+
+.top {
+  display: grid;
+  grid-template-columns: var(--cols);
+  align-items: stretch;
+}
+
+.cell {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 2rem;
+  padding: 1.4rem 1rem 2rem;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.cellDivided {
+  border-left: 1px solid var(--line);
+}
+
+.cellTitle {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Contenuto centrato nello spazio che resta sotto al titolo */
+.cellBody {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 0.9rem;
+}
+
+.hours {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.hours li {
+  display: grid;
+}
+
+.range {
+  white-space: nowrap;
+}
+
+.ornament {
+  display: grid;
+  place-items: center;
+}
+
+/* Simbolo del logo come maschera, stesso colore del testo */
+.symbol {
+  width: 44px;
+  height: 44px;
+  background: currentColor;
+  -webkit-mask: url("/assets/logo-simbolo.png") no-repeat center / contain;
+  mask: url("/assets/logo-simbolo.png") no-repeat center / contain;
+}
+
+/* ---------- Liste di link (stesse colonne, centro vuoto) ---------- */
+
+.links {
+  display: grid;
+  grid-template-columns: var(--cols);
+  padding-block: clamp(2.5rem, 5vw, 4rem);
+}
+
+.col {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+}
+
+.col:nth-child(3) {
+  grid-column: 4;
+}
+
+.col:nth-child(4) {
+  grid-column: 5;
+}
+
+.colTitle {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.col ul {
+  display: grid;
+  gap: 0.3rem;
+}
+
+/* Pagine ancora da fare: voce spenta, senza link */
+.off {
+  opacity: 0.45;
+}
+
+/* ---------- Wordmark + riga finale ---------- */
+
+/* Come nella hero: riempie la larghezza interna (100cqw) con Didot Bold */
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: calc(100cqw / var(--wordmark-em));
+  line-height: 1;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.bottom {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1.5rem;
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  font-size: 0.82rem;
+}
+
+.bottom p:first-child {
+  text-align: left;
+}
+
+.bottom p:last-child {
+  text-align: right;
+}
+
+.credit {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 900px) {
+  .footer {
+    --cols: 1fr 1fr;
+  }
+
+  /* Ornamento sopra alle celle, che vanno su due righe */
+  .ornament {
+    grid-column: 1 / -1;
+    order: -1;
+    padding-bottom: 1.5rem;
+  }
+
+  .cell:nth-child(n + 4) {
+    border-top: 0;
+  }
+
+  .links {
+    gap: 2rem 1rem;
+  }
+
+  .col:nth-child(3),
+  .col:nth-child(4) {
+    grid-column: auto;
+  }
+
+  .bottom {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+
+  .bottom p:first-child,
+  .bottom p:last-child {
+    text-align: center;
+  }
+}

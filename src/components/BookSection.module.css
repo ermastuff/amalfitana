@@ -1,0 +1,90 @@
+.section {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 100svh;
+  padding: clamp(3rem, 6vw, 5rem) 32px clamp(6rem, 10vw, 8rem);
+  overflow: hidden;
+  background: var(--cream);
+}
+
+/* Pattern di illustrazioni: griglia sfalsata, leggermente ruotate */
+.pattern {
+  position: absolute;
+  inset: -6% -3%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  grid-auto-rows: 190px;
+  align-content: start;
+  gap: 3rem 2.5rem;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.tile {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform: rotate(var(--r, 0deg));
+}
+
+.tile:nth-child(even) {
+  transform: translateY(50%) rotate(var(--r, 0deg));
+}
+
+.inner {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: 1080px;
+}
+
+/* Alone chiaro dietro al libro per staccarlo dal pattern */
+.inner::before {
+  content: "";
+  position: absolute;
+  inset: -12% -18%;
+  z-index: -1;
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--cream) 96%, transparent) 40%,
+    transparent 72%
+  );
+  pointer-events: none;
+}
+
+.squareBtn {
+  position: absolute;
+  left: 32px;
+  bottom: 32px;
+  z-index: 2;
+  padding: 0.7rem 1.1rem;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  background: #fff;
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.squareBtn:hover {
+  background: var(--ink);
+  color: #fff;
+}
+
+@media (max-width: 700px) {
+  .pattern {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    grid-auto-rows: 120px;
+    gap: 2rem 1.5rem;
+  }
+
+  .section {
+    padding-bottom: 7rem;
+  }
+}

@@ -1,0 +1,71 @@
+.section {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  height: 100svh;
+  background: var(--cream);
+}
+
+/* ---------- Video + Lavora con noi ---------- */
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 0;
+}
+
+.videoWrap {
+  position: relative;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.join {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: 1.5rem;
+  padding: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 4vw, 3.5rem);
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.joinTitle {
+  font-size: clamp(2.4rem, 5vw, 4.5rem);
+}
+
+.joinText {
+  max-width: 28ch;
+  font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+  line-height: 1.5;
+}
+
+.joinBtn {
+  align-self: end;
+  justify-self: start;
+}
+
+@media (max-width: 900px) {
+  .section {
+    height: auto;
+    min-height: 100svh;
+  }
+
+  .split {
+    grid-template-columns: 1fr;
+  }
+
+  .videoWrap {
+    aspect-ratio: 16 / 9;
+  }
+
+  .join {
+    min-height: 60vw;
+  }
+}

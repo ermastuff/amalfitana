@@ -1,0 +1,76 @@
+/* Sezione manifesto: alta quanto lo schermo, frase centrata, etichetta
+   numerata con linea in alto a sinistra e illustrazione sfumata in alto a
+   destra come nel riferimento. */
+.section {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 100svh;
+  padding: clamp(5rem, 10vw, 8rem) var(--pad-x);
+  overflow: hidden;
+  background: var(--cream-2);
+  color: var(--ink);
+}
+
+/* Illustrazione decorativa: esce un po' dal bordo, opacità ridotta */
+.pizza {
+  position: absolute;
+  top: -4%;
+  right: -6%;
+  z-index: 0;
+  width: clamp(280px, 36vw, 620px);
+  height: auto;
+  opacity: 0.16;
+  transform: rotate(-8deg);
+  pointer-events: none;
+  user-select: none;
+}
+
+.label,
+.statement {
+  position: relative;
+  z-index: 1;
+}
+
+/* Etichetta più in basso rispetto al bordo, come nel riferimento */
+.label {
+  position: absolute;
+  top: clamp(4rem, 15svh, 9rem);
+  left: var(--pad-x);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.rule {
+  width: clamp(80px, 14vw, 200px);
+  height: 1px;
+  background: currentColor;
+  opacity: 0.5;
+}
+
+.statement {
+  max-width: 24ch;
+  text-align: center;
+  font-size: clamp(2.3rem, 5.4vw, 5.6rem);
+  line-height: 1.06;
+  letter-spacing: -0.01em;
+}
+
+/* Colore della coda in corsivo (il corsivo lo mette WordReveal) */
+.accent {
+  color: var(--olive);
+}
+
+@media (max-width: 900px) {
+  .pizza {
+    top: 2%;
+    right: -18%;
+    width: 70vw;
+  }
+}

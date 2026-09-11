@@ -1,0 +1,94 @@
+/* Due colonne identiche, alte esattamente quanto la finestra */
+.section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  height: 100svh;
+}
+
+.card {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  height: 100%;
+  min-height: 0;
+  /* In alto almeno l'altezza dell'header fisso, così i titoli restano visibili */
+  padding: max(clamp(2rem, 4vw, 3.5rem), calc(var(--header-h) + 0.75rem))
+    clamp(1.5rem, 6vw, 5.5rem) clamp(2rem, 4vw, 3.5rem);
+  text-align: center;
+}
+
+.cardInk {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.cardLight {
+  background: var(--cream-2);
+  color: var(--ink);
+}
+
+.title {
+  font-size: clamp(2.6rem, 5vw, 4.5rem);
+}
+
+/* Area centrale delle schede: riempie lo spazio tra titolo e didascalia */
+.media {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  place-items: center;
+  min-height: 0;
+}
+
+/* Scheda Ordina: mockup orizzontale, centrato, mai più alto dello spazio.
+   width/height auto + limiti massimi: le proporzioni restano intatte. */
+.mockup {
+  width: auto;
+  height: auto;
+  max-width: min(100%, 620px);
+  max-height: 100%;
+  border-radius: 6px;
+}
+
+.caption {
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  color: color-mix(in srgb, var(--cream) 85%, transparent);
+}
+
+/* Scheda Menu: la seconda riga arriva fino in fondo */
+.cardLight .media {
+  grid-row: 2 / -1;
+}
+
+.slideshow {
+  position: absolute;
+  inset: 0;
+}
+
+/* Solo posizionamento: lo stile è in .oval-btn (globals.css) */
+.oval {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+}
+
+@media (max-width: 900px) {
+  .section {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 100svh;
+  }
+
+  .card {
+    height: auto;
+    min-height: 50svh;
+  }
+
+  .cardLight .media {
+    min-height: 60vw;
+  }
+}

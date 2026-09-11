@@ -1,0 +1,7 @@
+/* ---------- Contenuto che scorre sopra la hero sticky ---------- */
+
+.afterHero {
+  position: relative;
+  z-index: 1;
+  background: var(--cream);
+}

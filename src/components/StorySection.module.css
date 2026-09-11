@@ -1,0 +1,103 @@
+/* Due colonne a tutta larghezza: quadrato con immagine a sinistra,
+   pannello crema con il testo a destra (centrato in verticale). */
+.section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--cream-2);
+}
+
+.media {
+  display: grid;
+  align-content: start;
+}
+
+.frame {
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--cream-3);
+}
+
+/* Più alto del quadrato: il parallasse non scopre mai i bordi */
+.parallax {
+  height: 116%;
+  margin-top: -8%;
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.panel {
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: clamp(1.25rem, 2.4vw, 2rem);
+  padding: clamp(3rem, 8vw, 6rem) clamp(2rem, 6vw, 6rem);
+}
+
+.symbol {
+  display: block;
+  width: 64px;
+  height: 64px;
+  background: var(--ink);
+  -webkit-mask: url("/assets/logo-simbolo.png") no-repeat center / contain;
+  mask: url("/assets/logo-simbolo.png") no-repeat center / contain;
+}
+
+/* Titolo in Didot Bold; la parola in <em> eredita il corsivo Didot dal globale */
+.title {
+  max-width: 14ch;
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  line-height: 1.12;
+}
+
+.text {
+  max-width: 42ch;
+  font-size: clamp(1rem, 1.2vw, 1.1rem);
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--ink);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  /* Niente transizione su opacity: Reveal la anima con GSAP */
+  transition: border-color 0.3s;
+}
+
+.link:hover,
+.link:focus-visible {
+  border-color: color-mix(in srgb, var(--ink) 35%, transparent);
+}
+
+.linkArrow {
+  width: 0.85em;
+  height: 0.85em;
+  transform: rotate(-45deg);
+  transition: transform 0.4s var(--ease-out);
+}
+
+.link:hover .linkArrow {
+  transform: rotate(-45deg) translateX(3px);
+}
+
+@media (max-width: 900px) {
+  .section {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    padding: clamp(2.5rem, 8vw, 4rem) var(--pad-x);
+  }
+}
