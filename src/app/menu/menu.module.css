@@ -43,105 +43,7 @@
   padding-block: clamp(1.4rem, 3vw, 2.4rem) 0;
 }
 
-/* ---------- Menu in alto (stesso della hero in home) ---------- */
-
-/* Simbolo del logo al centro esatto: le due metà hanno la stessa larghezza.
-   Lo pseudo-elemento vuoto dopo l'ultima voce a sinistra (e prima della prima
-   a destra) rende la distanza dal simbolo uguale a quella tra le voci. */
-.topNav {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  align-items: center;
-}
-
-.topNav ul {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  white-space: nowrap;
-}
-
-.topNav ul:first-child::after,
-.topNav ul:last-child::before {
-  content: "";
-}
-
-/* Niente transition sul link: è lui che GSAP anima all'ingresso, e una
-   transition CSS su opacity/transform gli farebbe prendere come valore finale
-   quello di partenza (resterebbe invisibile). Hover e transition stanno sul
-   simbolo. */
-.navLogo {
-  display: block;
-}
-
-/* Il PNG del simbolo fa da maschera: il colore segue quello del menu */
-.navSymbol {
-  display: block;
-  height: clamp(1.25rem, 0.9rem + 1vw, 2.1rem);
-  aspect-ratio: 495 / 478;
-  background: currentColor;
-  opacity: 0.9;
-  -webkit-mask: url("/assets/logo-simbolo.png") no-repeat center / contain;
-  mask: url("/assets/logo-simbolo.png") no-repeat center / contain;
-  transition:
-    opacity 0.3s,
-    transform 0.5s var(--ease-out);
-}
-
-.navLogo:hover .navSymbol,
-.navLogo:focus-visible .navSymbol {
-  opacity: 1;
-  transform: translateY(-1px);
-}
-
-.topLink {
-  position: relative;
-  display: inline-block;
-  padding-block: 0.35rem;
-  font-family: var(--font-body);
-  font-weight: 500;
-  font-size: clamp(0.6rem, 0.5rem + 0.32vw, 0.82rem);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  opacity: 0.9;
-  transition: opacity 0.3s;
-}
-
-.topLink::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  bottom: 0.1rem;
-  left: 0;
-  height: 1.5px;
-  background: var(--lemon);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.45s var(--ease-out);
-}
-
-.topLink:hover,
-.topLink:focus-visible {
-  opacity: 1;
-}
-
-.topLink:hover::after,
-.topLink:focus-visible::after,
-.topLink[aria-current="page"]::after {
-  transform: scaleX(1);
-}
-
-/* Pagine ancora da fare: voce spenta, senza link né sottolineatura */
-.topLink.off,
-.topLink.off:hover {
-  opacity: 0.45;
-  cursor: default;
-}
-
-.topLink.off::after {
-  content: none;
-}
+/* Il menu in alto è HeroNav (components/HeroNav.module.css). */
 
 /* ---------- Titolo ---------- */
 
@@ -336,10 +238,6 @@
 }
 
 @media (max-width: 900px) {
-  .topNav ul {
-    gap: 0.6rem;
-  }
-
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -353,15 +251,5 @@
 
   .grid {
     grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-@media (max-width: 400px) {
-  .topNav ul {
-    gap: 0.5rem;
-  }
-
-  .topLink {
-    font-size: 0.56rem;
   }
 }

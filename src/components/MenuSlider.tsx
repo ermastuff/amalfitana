@@ -13,8 +13,7 @@ type Slide = {
   label: string;
   name: string;
   detail: string;
-  /** Senza href (pagina ancora da fare) il bottone resta invisibile. */
-  href?: string;
+  href: string;
   cta: string;
   /** Foto dall'alto della pizza, mostrata nel disco. */
   image: string;
@@ -34,6 +33,7 @@ const slides: Slide[] = [
     name: "Le pizze d’autore",
     detail:
       "Pastorale · Renana · Moonlight · Il canto della terra · La dolce vita",
+    href: "/pizze-gourmet",
     cta: "Vedi le pizze gourmet",
     image: "/assets/Bufala Extra.png",
   },
@@ -370,23 +370,10 @@ export default function MenuSlider() {
             </button>
           </div>
 
-          {slide.href ? (
-            <Link href={slide.href} className={s.cta} data-info>
-              {slide.cta}
-              <Arrow className={s.ctaArrow} />
-            </Link>
-          ) : (
-            // Pagina ancora da fare: niente link, ma il bottone tiene il suo
-            // posto, così la barra non cambia altezza al cambio slide
-            <span
-              className={`${s.cta} ${s.ctaHidden}`}
-              aria-hidden="true"
-              data-info
-            >
-              {slide.cta}
-              <Arrow className={s.ctaArrow} />
-            </span>
-          )}
+          <Link href={slide.href} className={s.cta} data-info>
+            {slide.cta}
+            <Arrow className={s.ctaArrow} />
+          </Link>
         </div>
       </div>
     </section>

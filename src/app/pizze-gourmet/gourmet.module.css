@@ -1,119 +1,353 @@
-.list {
+/* Pagina gourmet: hero fotografica, poi un capitolo per pizza. In ogni
+   capitolo la foto resta ferma (sticky) mentre titolo, citazione e frammenti
+   del racconto le scorrono sopra; tra un capitolo e l'altro una fascia neutra
+   col semicerchio che si rivolta allo scroll. */
+
+/* ---------- Hero ---------- */
+
+/* Come in home l'header resta nascosto sopra a questa hero (vedi HERO_ROUTES
+   in Header.tsx): il menu sta qui dentro, in alto. */
+.hero {
+  position: relative;
+  display: flex;
+  min-height: 100svh;
+  overflow: hidden;
+  background: var(--ink-deep);
+  color: var(--cream);
+}
+
+.heroPhoto {
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+.heroShade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(28, 18, 14, 0.55) 0%,
+    rgba(28, 18, 14, 0.25) 35%,
+    rgba(28, 18, 14, 0.3) 65%,
+    rgba(28, 18, 14, 0.62) 100%
+  );
+}
+
+.heroInner {
+  position: relative;
+  z-index: 1;
   display: grid;
+  grid-template-rows: auto 1fr auto;
+  width: 100%;
+  padding: clamp(1.4rem, 3vw, 2.4rem) var(--pad-x) clamp(1.6rem, 3vw, 2.6rem);
 }
 
-.row {
-  display: grid;
-  grid-template-columns: minmax(120px, 0.3fr) minmax(0, 1fr);
-  gap: clamp(1.5rem, 4vw, 4rem);
-  padding-block: clamp(2.5rem, 5vw, 4.5rem);
-  border-top: 1px solid var(--line-strong);
+/* Le due parole agli angoli opposti; la linea che le unisce è calcolata in
+   GourmetHero.tsx sulle loro posizioni. */
+.claim {
+  position: relative;
 }
 
-.row:first-child {
-  border-top: 0;
-  padding-top: 0;
+/* L'h1 non fa da scatola: le parole si posizionano rispetto a .claim */
+.claimTitle {
+  display: contents;
 }
 
-.numWrap {
-  align-self: start;
-}
-
-.num {
-  display: block;
+.word {
+  position: absolute;
   font-family: var(--font-display);
-  font-size: clamp(4rem, 11vw, 9rem);
-  line-height: 0.85;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-  opacity: 0.32;
+  font-weight: 700;
+  font-size: clamp(3rem, 9vw, 9rem);
+  line-height: 0.95;
+  white-space: nowrap;
 }
 
-.body {
+.wordA {
+  top: 10%;
+  left: 0;
+}
+
+.wordB {
+  right: 0;
+  bottom: 8%;
+}
+
+.hint {
+  justify-self: start;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.55;
+}
+
+/* Con le animazioni attive parole e invito partono nascosti: il fade in di
+   GSAP li fa comparire senza il lampo iniziale. */
+@media (prefers-reduced-motion: no-preference) {
+  .word,
+  .hint {
+    opacity: 0;
+  }
+}
+
+/* ---------- Linee ---------- */
+
+.heroWire,
+.wires {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.wire {
+  fill: none;
+  stroke: var(--cream);
+  stroke-width: 1;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+
+.wireDashed {
+  stroke-dasharray: 5 7;
+}
+
+/* Il tracciato che si disegna dentro alla maschera di una linea tratteggiata:
+   più spesso della linea, così la copre tutta */
+.maskPath {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.vline {
+  width: 1px;
+  height: 36svh;
+  background: var(--cream);
+  opacity: 0.85;
+  transform-origin: top center;
+}
+
+/* ---------- Capitoli ---------- */
+
+.chapter {
+  position: relative;
+  color: var(--cream);
+}
+
+/* La foto resta ferma finché il capitolo non è finito */
+.bg {
+  position: sticky;
+  top: 0;
+  z-index: 0;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--ink-deep);
+}
+
+.photoBox {
+  position: absolute;
+  inset: 0;
+}
+
+/* Foto verticali: il taglio resta sulla pizza, che sta in basso */
+.photo {
+  object-fit: cover;
+  object-position: 50% 62%;
+}
+
+.shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(24, 14, 10, 0.62) 0%,
+    rgba(24, 14, 10, 0.4) 45%,
+    rgba(24, 14, 10, 0.68) 100%
+  );
+}
+
+/* Il contenuto risale sopra alla foto e le scorre sopra */
+.flow {
+  position: relative;
+  z-index: 1;
+  margin-top: -100svh;
+}
+
+/* Il padding in alto tiene il titolo sotto alla fascia di transizione, che
+   sovrasta i primi 36svh del capitolo (vedi .divider) */
+.beatTitle {
   display: grid;
-  gap: 1rem;
-  max-width: 640px;
+  align-content: center;
+  justify-items: center;
+  gap: 1.5rem;
+  min-height: 100svh;
+  padding: 34svh var(--pad-x) 10svh;
+  text-align: center;
 }
 
-.tagline {
+.chapterNo {
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.title {
+  max-width: 12ch;
+  font-size: clamp(3rem, 9vw, 8rem);
+  line-height: 0.95;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+
+.captions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem 2rem;
+  max-width: 60ch;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.beatQuote {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 2.4rem;
+  min-height: 100svh;
+  padding: 6svh var(--pad-x) 10svh;
+  text-align: center;
+}
+
+.quote {
+  max-width: 30ch;
   font-family: var(--font-display);
   font-style: italic;
-  font-size: 1.15rem;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 3vw, 2.7rem);
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+/* Il racconto: griglia a 12 colonne, ogni nodo ha colonne e riga assegnate
+   (SLOTS in wires.ts); le linee stanno in un SVG che copre tutta la griglia */
+.story {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(0.75rem, 1.5vw, 1.5rem);
+  row-gap: clamp(7rem, 20svh, 12rem);
+  align-items: center;
+  padding: 10svh var(--pad-x) 14svh;
+}
+
+.node {
+  grid-column: var(--col);
+  grid-row: var(--row);
+}
+
+.frag {
+  justify-self: start;
+  width: fit-content;
+  max-width: 34ch;
+  font-size: clamp(1rem, 1.2vw, 1.2rem);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.shot {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+
+.beatEnd {
+  display: grid;
+  justify-items: center;
+  align-content: end;
+  min-height: 56svh;
+  padding-bottom: 4svh;
+}
+
+/* ---------- Fascia tra i capitoli ---------- */
+
+/* Sta sopra al capitolo seguente per 36svh (margine negativo): la sua foto è
+   già dietro alla fascia, così il semicerchio prima le scende dentro e poi,
+   rivoltandosi, è la foto a salire dentro alla fascia. */
+.divider {
+  position: relative;
+  z-index: 2;
+  height: 60svh;
+  margin-bottom: -36svh;
+  pointer-events: none;
+}
+
+.arc {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.arc path {
+  fill: var(--cream-2);
+}
+
+/* ---------- Chiusura ---------- */
+
+.closing {
+  display: grid;
+  gap: 1.2rem;
+  justify-items: start;
+  padding: clamp(4rem, 9vw, 8rem) var(--pad-x);
+  background: var(--cream-2);
   color: var(--ink);
 }
 
-.name {
-  margin-top: -0.4rem;
-}
-
-.story {
-  font-size: 1.05rem;
-  color: var(--muted);
-}
-
-.ingredients {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-.ingredient {
-  font-size: 0.85rem;
-  font-weight: 500;
-  padding: 0.35rem 0.8rem;
-  border: 1px solid var(--line-strong);
-  border-radius: 999px;
-}
-
-.meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 2rem;
-  margin-top: 1rem;
-}
-
-.price {
-  font-family: var(--font-display);
-  font-size: 1.8rem;
-}
-
-.pairing {
-  display: grid;
-  gap: 0.1rem;
-  font-size: 0.95rem;
-}
-
-.pairingLabel {
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.cta {
-  background: var(--cream-2);
-}
-
-.ctaInner {
-  display: grid;
-  gap: 1.5rem;
-  justify-items: start;
-}
-
-.ctaInner .h2 {
+.closingTitle {
   max-width: 16ch;
 }
 
+.closingActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.75rem;
+  margin-top: 0.6rem;
+}
+
+/* ---------- Mobile ---------- */
+
 @media (max-width: 700px) {
-  .row {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
+  .wordA {
+    top: 6%;
   }
 
-  .num {
-    font-size: 3.5rem;
+  .wordB {
+    bottom: 14%;
+  }
+
+  .beatTitle {
+    padding-top: 30svh;
+  }
+
+  .story {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    row-gap: clamp(4.5rem, 12svh, 7rem);
+    padding: 8svh var(--pad-x) 12svh;
+  }
+
+  .node {
+    grid-column: var(--col-m);
   }
 }

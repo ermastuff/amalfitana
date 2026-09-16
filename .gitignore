@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# materiale di lavoro in public/assets: screenshot di riferimento (131 MB) e
+# foto originali a 6000px; il sito usa le copie a 2560px in public/assets/gourmet
+public/assets/FireShot*
+public/assets/Renana.JPG
+public/assets/Dolce Vita.JPG
+public/assets/Pastorale.JPG
+public/assets/Moonlight.JPG
+public/assets/Canto della terra.JPG

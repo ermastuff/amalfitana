@@ -1,11 +1,10 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { gsap, MOTION_OK, useGSAP } from "@/lib/gsap";
+import HeroNav from "@/components/HeroNav";
 import Reveal from "@/components/Reveal";
-import { heroNavSides, site, type NavLink } from "@/data/site";
 import { formatDelta, formatPrice, menuSections } from "@/data/menu";
 import s from "./menu.module.css";
 
@@ -36,26 +35,6 @@ const TITLE_LETTERS: { char: string; kern?: string }[] = [
   { char: "u" },
 ];
 
-// Menu della hero, come in home: simbolo del logo al centro, voci divise a
-// metà ai lati. Le pagine ancora da fare restano nel menu, spente e senza link.
-const [NAV_LEFT, NAV_RIGHT] = heroNavSides;
-
-const navItem = (link: NavLink) => (
-  <li key={link.href} data-menu-nav>
-    {link.disabled ? (
-      <span className={`${s.topLink} ${s.off}`}>{link.label}</span>
-    ) : (
-      <Link
-        href={link.href}
-        className={s.topLink}
-        aria-current={link.href === "/menu" ? "page" : undefined}
-      >
-        {link.label}
-      </Link>
-    )}
-  </li>
-);
-
 /** Hero con foto e titolo, frase con i filtri, griglia a tre colonne dei prodotti. */
 export default function MenuBrowser() {
   const heroRef = useRef<HTMLElement>(null);
@@ -76,7 +55,7 @@ export default function MenuBrowser() {
             0,
           )
           .from(
-            "[data-menu-nav]",
+            "[data-hero-nav]",
             { y: -14, opacity: 0, duration: 0.9, stagger: 0.08 },
             0.4,
           )
@@ -138,19 +117,8 @@ export default function MenuBrowser() {
         <div className={s.shade} aria-hidden="true" />
 
         <div className={s.heroInner}>
-          {/* Stesso menu della home: simbolo del logo al centro, voci ai lati */}
-          <nav className={s.topNav} aria-label="Sezioni del sito">
-            <ul>{NAV_LEFT.map(navItem)}</ul>
-            <Link
-              href="/"
-              className={s.navLogo}
-              aria-label={`${site.name}, home`}
-              data-menu-nav
-            >
-              <span className={s.navSymbol} aria-hidden="true" />
-            </Link>
-            <ul>{NAV_RIGHT.map(navItem)}</ul>
-          </nav>
+          {/* Stesso menu della home */}
+          <HeroNav current="/menu" />
 
           <h1 className={s.title}>
             <span className="visually-hidden">Menu</span>

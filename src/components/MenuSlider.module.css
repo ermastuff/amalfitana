@@ -255,10 +255,6 @@
   transform: rotate(-45deg);
 }
 
-.ctaHidden {
-  visibility: hidden;
-}
-
 /* ---------- Mobile ---------- */
 
 @media (max-width: 900px) {

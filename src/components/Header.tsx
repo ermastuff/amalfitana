@@ -10,7 +10,7 @@ import s from "./Header.module.css";
 
 // Pagine che aprono con una hero scura a tutta pagina: lì la navigazione sta
 // dentro alla hero stessa, quindi l'header resta nascosto finché non la si supera.
-const HERO_ROUTES = ["/", "/menu"];
+const HERO_ROUTES = ["/", "/menu", "/pizze-gourmet"];
 
 export default function Header() {
   const pathname = usePathname();

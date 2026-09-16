@@ -1,0 +1,122 @@
+/* Menu dentro alle hero: simbolo del logo al centro esatto, voci divise a
+   metà ai due lati. Le due metà hanno la stessa larghezza; lo pseudo-elemento
+   vuoto dopo l'ultima voce a sinistra (e prima della prima a destra) rende la
+   distanza dal simbolo uguale a quella tra le voci. Il colore è quello del
+   contenitore. */
+.nav {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+}
+
+.nav ul {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  white-space: nowrap;
+}
+
+.nav ul:first-child::after,
+.nav ul:last-child::before {
+  content: "";
+}
+
+/* Niente transition sul link: è lui che GSAP anima all'ingresso, e una
+   transition CSS su opacity/transform gli farebbe prendere come valore finale
+   quello di partenza (resterebbe invisibile). Hover e transition stanno sul
+   simbolo. */
+.logo {
+  display: block;
+}
+
+/* Il PNG del simbolo fa da maschera: il colore segue quello del menu */
+.symbol {
+  display: block;
+  height: clamp(1.25rem, 0.9rem + 1vw, 2.1rem);
+  aspect-ratio: 495 / 478;
+  background: currentColor;
+  opacity: 0.9;
+  -webkit-mask: url("/assets/logo-simbolo.png") no-repeat center / contain;
+  mask: url("/assets/logo-simbolo.png") no-repeat center / contain;
+  transition:
+    opacity 0.3s,
+    transform 0.5s var(--ease-out);
+}
+
+.logo:hover .symbol,
+.logo:focus-visible .symbol {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.link {
+  position: relative;
+  display: inline-block;
+  padding-block: 0.35rem;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: clamp(0.6rem, 0.5rem + 0.32vw, 0.82rem);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.9;
+  transition: opacity 0.3s;
+}
+
+.link::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0.1rem;
+  left: 0;
+  height: 1.5px;
+  background: var(--lemon);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s var(--ease-out);
+}
+
+.link:hover,
+.link:focus-visible {
+  opacity: 1;
+}
+
+.link:hover::after,
+.link:focus-visible::after,
+.link[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+/* Pagine ancora da fare: voce spenta, senza link né sottolineatura */
+.link.off,
+.link.off:hover {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.link.off::after {
+  content: none;
+}
+
+@media (max-width: 900px) {
+  .nav ul {
+    gap: 0.6rem;
+  }
+}
+
+/* Schermi molto stretti: il menu su una riga sola deve restare entro i bordi */
+@media (max-width: 400px) {
+  .nav ul {
+    gap: 0.5rem;
+  }
+
+  .link {
+    font-size: 0.56rem;
+  }
+}
+
+@media (max-width: 340px) {
+  .link {
+    font-size: 0.5rem;
+  }
+}

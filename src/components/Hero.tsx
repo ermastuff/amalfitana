@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef } from "react";
-import Link from "next/link";
 import { gsap, MOTION_OK, useGSAP } from "@/lib/gsap";
-import { heroNavSides, site, type NavLink } from "@/data/site";
+import { site } from "@/data/site";
+import HeroNav from "./HeroNav";
 import s from "./Hero.module.css";
 
 // Wordmark come nel logo: stesso font (Didot Bold), apostrofo tipografico e
@@ -15,22 +15,6 @@ const GLYPHS = WORDMARK.match(/fi|./gu) ?? [];
 const TAGLINE =
   "ingredienti naturali e tanta passione per pizze dal Gusto inconfondibile";
 const TAGLINE_WORDS = TAGLINE.split(" ");
-
-// Menu in alto: il simbolo del logo al centro, le voci divise a metà ai lati.
-const [NAV_LEFT, NAV_RIGHT] = heroNavSides;
-
-// Le pagine ancora da fare restano nel menu, spente e senza link.
-const navItem = (link: NavLink) => (
-  <li key={link.href} data-hero-nav>
-    {link.disabled ? (
-      <span className={`${s.topLink} ${s.off}`}>{link.label}</span>
-    ) : (
-      <Link href={link.href} className={s.topLink}>
-        {link.label}
-      </Link>
-    )}
-  </li>
-);
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -131,18 +115,7 @@ export default function Hero() {
 
       {/* La colonna è larga quanto il wordmark: nav e tagline si allineano ai suoi bordi */}
       <div className={s.inner}>
-        <nav className={s.topNav} aria-label="Sezioni del sito">
-          <ul>{NAV_LEFT.map(navItem)}</ul>
-          <Link
-            href="/"
-            className={s.navLogo}
-            aria-label={`${site.name}, home`}
-            data-hero-nav
-          >
-            <span className={s.navSymbol} aria-hidden="true" />
-          </Link>
-          <ul>{NAV_RIGHT.map(navItem)}</ul>
-        </nav>
+        <HeroNav className={s.topNav} />
 
         <div className={s.bottom} data-hero-bottom>
           <h1 className={s.wordmark}>

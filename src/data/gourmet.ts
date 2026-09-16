@@ -1,98 +1,129 @@
 export type GourmetPizza = {
+  slug: string;
   name: string;
-  tagline: string;
-  story: string;
+  /** Didascalie sotto al titolo: gli ingredienti. */
   ingredients: string[];
-  price: number;
-  pairing: string;
+  /** Frase d’apertura, in corsivo dopo la linea. */
+  quote: string;
+  /** Il resto del racconto, spezzato in frammenti sparsi sulla pagina. */
+  fragments: string[];
+  /** Foto a tutto schermo: copia a 2560px dell’originale (public/assets/gourmet). */
+  image: string;
 };
 
+// Nell’ordine in cui compaiono in pagina.
 export const gourmetPizzas: GourmetPizza[] = [
   {
-    name: "Costiera",
-    tagline: "Il mare in un morso",
-    story:
-      "Nata guardando il golfo: la dolcezza del gambero rosso incontra l'acidità viva del limone di Amalfi. La burrata arriva a crudo, a fine cottura, per non perdere la sua freschezza.",
+    slug: "renana",
+    name: "Renana",
     ingredients: [
-      "Fiordilatte di Agerola",
-      "Gamberi rossi di Mazara",
+      "Farina macinata a pietra",
       "Burrata",
-      "Zeste di limone di Amalfi IGP",
-      "Basilico fresco",
-    ],
-    price: 18,
-    pairing: "Falanghina del Sannio DOP",
-  },
-  {
-    name: "Cetara",
-    tagline: "Un omaggio al borgo delle alici",
-    story:
-      "Poche gocce di colatura di alici bastano a cambiare tutto. Il pomodorino del piennolo porta dolcezza, la stracciatella addolcisce, il pane croccante dà la spinta finale.",
-    ingredients: [
-      "Colatura di alici di Cetara",
-      "Pomodorino del piennolo DOP",
-      "Stracciatella",
-      "Briciole di pane tostato",
-      "Origano di montagna",
-    ],
-    price: 16,
-    pairing: "Greco di Tufo DOCG",
-  },
-  {
-    name: "Nerano",
-    tagline: "Gli spaghetti alla Nerano, su una pizza",
-    story:
-      "Il piatto simbolo della Penisola Sorrentina, riletto sull'impasto. Zucchine fritte al momento, crema di zucchine alla base e il Provolone del Monaco che fila senza coprire.",
-    ingredients: [
-      "Crema di zucchine",
-      "Zucchine fritte",
-      "Provolone del Monaco DOP",
+      "Crudo San Daniele 24 mesi",
+      "Ciliegino confit",
       "Basilico",
-      "Pepe nero",
     ],
-    price: 15,
-    pairing: "Fiano di Avellino DOCG",
+    quote:
+      "La delicatezza del ciliegino confit e la freschezza del basilico si contrappongono alla forza e all’intensità della sinfonia.",
+    fragments: [
+      "La cremosità della burrata",
+      "e la sapidità del crudo San Daniele",
+      "creano un contrasto di consistenze",
+      "con la croccantezza della farina macinata a pietra.",
+      "La dolcezza vibrante della sinfonia",
+      "bilancia la sapidità del crudo",
+      "e la cremosità della burrata.",
+    ],
+    image: "/assets/gourmet/renana.jpg",
   },
   {
-    name: "Genovese",
-    tagline: "Otto ore di cipolla",
-    story:
-      "La cipolla ramata di Montoro stufata lentamente diventa una crema dolce e profonda. Sopra, provola e pecorino: la domenica napoletana in versione tonda.",
+    slug: "la-dolce-vita",
+    name: "La dolce vita",
     ingredients: [
-      "Cipolla ramata di Montoro",
-      "Provola affumicata",
-      "Pecorino romano",
-      "Pepe nero",
+      "Farina macinata a pietra",
+      "Mozzarella fior di latte",
+      "Provola affumicata gourmet",
+      "Crudo San Daniele 24 mesi",
+      "Pepi pregiati",
     ],
-    price: 15,
-    pairing: "Aglianico del Taburno",
+    quote:
+      "La delicatezza della mozzarella fior di latte e la freschezza del pepe si contrappongono alla sapidità del prosciutto crudo e all’affumicatura della provola.",
+    fragments: [
+      "La croccantezza della farina macinata a pietra",
+      "crea un contrasto di consistenze",
+      "con la morbidezza dei formaggi.",
+      "La raffinatezza del film «La Dolce Vita»",
+      "bilancia la rusticità",
+      "e il carattere deciso della pizza.",
+    ],
+    image: "/assets/gourmet/dolce-vita.jpg",
   },
   {
-    name: "Tartufo e Fonduta",
-    tagline: "La più ricca del menu",
-    story:
-      "Fonduta di parmigiano 36 mesi, tartufo nero a lamelle e guanciale reso croccante. Il tuorlo marinato si scioglie al taglio e lega tutto.",
+    slug: "pastorale",
+    name: "Pastorale",
     ingredients: [
-      "Fonduta di parmigiano 36 mesi",
-      "Tartufo nero estivo",
-      "Guanciale croccante",
-      "Tuorlo marinato",
+      "Farina macinata a pietra",
+      "Mozzarella fior di latte",
+      "Salsiccia",
+      "Taleggio",
+      "Radicchio rosso di Treviso",
     ],
-    price: 20,
-    pairing: "Taurasi DOCG",
+    quote:
+      "La delicatezza del taleggio e la freschezza del radicchio rosso di Treviso si contrappongono alla forza e all’intensità della sinfonia.",
+    fragments: [
+      "La salsiccia e la mozzarella fior di latte",
+      "creano un contrasto di sapori",
+      "con la dolcezza della farina macinata a pietra.",
+      "La serenità e la pace della sinfonia",
+      "bilanciano la rusticità e il carattere deciso della pizza.",
+      "Con i suoi sapori di terra e di bosco,",
+      "offre un’esperienza culinaria che si completa con la Sinfonia «Pastorale» di Beethoven.",
+    ],
+    image: "/assets/gourmet/pastorale.jpg",
   },
   {
-    name: "Delizia",
-    tagline: "Il dolce, ma è una pizza",
-    story:
-      "La delizia al limone diventa pizza da dessert: base sottile, crema al limone, ricotta di bufala montata e meringa passata al cannello.",
+    slug: "moonlight",
+    name: "Moonlight",
     ingredients: [
-      "Crema al limone di Amalfi",
+      "Farina macinata a pietra",
+      "Mozzarella fior di latte",
       "Ricotta di bufala",
-      "Meringa al cannello",
-      "Zeste candite",
+      "Salmone affumicato norvegese",
+      "Aneto",
     ],
-    price: 12,
-    pairing: "Limoncello della casa",
+    quote: "Quiete e romanticismo si incontrano.",
+    fragments: [
+      "La base, realizzata con farina macinata a pietra,",
+      "dona una consistenza rustica e autentica",
+      "che esalta perfettamente i suoi ingredienti.",
+      "La mozzarella fior di latte regala alla pizza dolcezza,",
+      "mentre la ricotta di bufala aggiunge una cremosità lussuosa.",
+      "Il salmone affumicato norvegese introduce una nota sofisticata,",
+      "perfettamente bilanciata dall’aroma fresco e leggermente piccante dell’aneto.",
+      "Un omaggio culinario alla maestria e all’eleganza dell’iconica Sonata al Chiaro di Luna di Beethoven.",
+    ],
+    image: "/assets/gourmet/moonlight.jpg",
+  },
+  {
+    slug: "il-canto-della-terra",
+    name: "Il Canto della Terra",
+    ingredients: [
+      "Farina macinata a pietra",
+      "Crema di melanzane e parmigiano",
+      "Mozzarella fior di latte",
+      "Prosciutto cotto San Giovanni",
+    ],
+    quote:
+      "Una dichiarazione d’amore per la natura e per la profondità della vita.",
+    fragments: [
+      "La croccantezza della farina macinata a pietra",
+      "evoca i campi dorati e la solidità della terra,",
+      "mentre la crema di melanzana offre una vellutata profondità,",
+      "riflettendo le contemplazioni malinconiche presenti nella sinfonia di Mahler.",
+      "La mozzarella fior di latte si fonde armoniosamente con la dolcezza della melanzana,",
+      "mentre il prosciutto cotto aggiunge alla pizza delle note delicate.",
+      "Il Canto della Terra è un dipinto sonoro e culinario per il tuo palato.",
+    ],
+    image: "/assets/gourmet/canto-della-terra.jpg",
   },
 ];
