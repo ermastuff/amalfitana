@@ -46,7 +46,7 @@ export default function ChapterDivider() {
   );
 
   return (
-    <div ref={ref} className={s.divider} aria-hidden="true">
+    <div ref={ref} className={s.divider} aria-hidden="true" data-pace="fast">
       <svg
         className={s.arc}
         viewBox="0 0 100 66"

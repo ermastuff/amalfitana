@@ -38,9 +38,9 @@ export default function GourmetHero({ firstId }: Props) {
       const [a, b] = gsap.utils.toArray<HTMLElement>("[data-hero-word]", el);
       if (!claim || !path || !a || !b) return;
 
-      // La linea va dal basso della prima parola all'alto della seconda
-      const layout = () =>
-        path.setAttribute("d", wirePath(box(a), box(b), "solid", "vertical"));
+      // Le due parole sono su righe diverse: la linea scende dalla metà
+      // orizzontale della prima alla metà orizzontale della seconda
+      const layout = () => path.setAttribute("d", wirePath(box(a), box(b), "solid"));
       layout();
       document.fonts.ready.then(layout);
 

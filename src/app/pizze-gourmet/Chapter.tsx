@@ -5,28 +5,12 @@ import Image from "next/image";
 import { gsap, MOTION_OK, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import type { GourmetPizza } from "@/data/gourmet";
 import Letters from "./Letters";
-import { PATTERNS, wirePath, type Box, type Entry } from "./wires";
+import { PATTERNS, wirePath, type Box } from "./wires";
 import s from "./gourmet.module.css";
 
 type Props = { pizza: GourmetPizza; index: number; total: number };
 
-type StoryNode = Entry & { text?: string };
-
 const pad = (n: number) => String(n).padStart(2, "0");
-
-// I nodi del racconto secondo il pattern del capitolo: ogni posto per una
-// frase prende la frase successiva (i posti in più restano vuoti), i posti
-// per le foto restano. Le foto sono per ora due ritagli della foto di sfondo
-// (in alto gli ingredienti, in basso la pizza): da sostituire con foto vere.
-function storyNodes(pizza: GourmetPizza, entries: Entry[]): StoryNode[] {
-  const texts = [...pizza.fragments];
-  const nodes: StoryNode[] = [];
-  for (const entry of entries) {
-    if (entry.kind === "shot") nodes.push(entry);
-    else if (texts.length) nodes.push({ ...entry, text: texts.shift() });
-  }
-  return nodes;
-}
 
 // Posizione e misura di un nodo rispetto al racconto, senza le trasformazioni
 // di GSAP (a metà animazione il nodo è scalato): le linee vanno ai posti finali.
@@ -48,8 +32,8 @@ export default function Chapter({ pizza, index, total }: Props) {
   const storyRef = useRef<HTMLDivElement>(null);
   const uid = useId().replace(/:/g, "");
   const pattern = PATTERNS[index % PATTERNS.length];
-  const nodes = storyNodes(pizza, pattern.entries);
-  const wireCount = nodes.filter((n) => n.kind === "text").length - 1;
+  const texts = pizza.fragments.slice(0, pattern.texts.length);
+  const wireCount = Math.max(texts.length - 1, 0);
 
   useGSAP(
     () => {
@@ -64,7 +48,8 @@ export default function Chapter({ pizza, index, total }: Props) {
 
       // Ogni linea ha un tracciato che si disegna (data-draw) e, se
       // tratteggiata, un secondo tracciato visibile mascherato dal primo;
-      // entrambi hanno lo stesso percorso (data-wire).
+      // entrambi hanno lo stesso percorso (data-wire). Le foto agganciate a
+      // una linea si mettono poi sul punto di mezzo del tracciato.
       const layout = () => {
         textEls.slice(0, -1).forEach((from, i) => {
           const d = wirePath(
@@ -76,6 +61,25 @@ export default function Chapter({ pizza, index, total }: Props) {
             .querySelectorAll<SVGPathElement>(`[data-wire="${i}"]`)
             .forEach((p) => p.setAttribute("d", d));
         });
+
+        story
+          .querySelectorAll<HTMLElement>("[data-shot-wire]")
+          .forEach((shot) => {
+            const path = story.querySelector<SVGPathElement>(
+              `[data-draw="${shot.dataset.shotWire}"]`,
+            );
+            const length = path?.getTotalLength() ?? 0;
+            if (!path || !length) return;
+            const mid = path.getPointAtLength(length / 2);
+            // xPercent/yPercent invece di translate(-50%): così la centratura
+            // sopravvive alle animazioni di scala di GSAP
+            gsap.set(shot, {
+              left: mid.x,
+              top: mid.y,
+              xPercent: -50,
+              yPercent: -50,
+            });
+          });
       };
       layout();
       document.fonts.ready.then(layout);
@@ -101,7 +105,12 @@ export default function Chapter({ pizza, index, total }: Props) {
           const scrollTrigger = { trigger: title, start: "top 72%", once: true };
           // Il titolo intero si avvicina; le lettere compaiono una dopo
           // l'altra, con un piccolo ritardo tra loro
-          gsap.from(title, { scale: 0.7, duration: 1.6, ease: "power3.out", scrollTrigger });
+          gsap.from(title, {
+            scale: 0.7,
+            duration: 1.6,
+            ease: "power3.out",
+            scrollTrigger,
+          });
           gsap.from(title.querySelectorAll("[data-letter]"), {
             opacity: 0,
             filter: "blur(14px)",
@@ -207,10 +216,7 @@ export default function Chapter({ pizza, index, total }: Props) {
     { scope: ref },
   );
 
-  const storyStyle = {
-    "--row-gap": pattern.rowGap,
-    "--shot-ratio": pattern.shotRatio,
-  } as CSSProperties;
+  const storyStyle = { "--row-gap": pattern.rowGap } as CSSProperties;
 
   return (
     <section
@@ -263,10 +269,15 @@ export default function Chapter({ pizza, index, total }: Props) {
           </p>
         </div>
 
-        <div ref={storyRef} className={s.story} style={storyStyle}>
+        <div
+          ref={storyRef}
+          className={s.story}
+          style={storyStyle}
+          data-pace="slow"
+        >
           {/* Le linee stanno sotto ai nodi: se incrociano una foto, ci passano sotto */}
           <svg className={s.wires} aria-hidden="true" focusable="false">
-            {Array.from({ length: Math.max(wireCount, 0) }, (_, i) => {
+            {Array.from({ length: wireCount }, (_, i) => {
               const kind = pattern.wires[i % pattern.wires.length];
               if (kind !== "dashed") {
                 return (
@@ -296,29 +307,52 @@ export default function Chapter({ pizza, index, total }: Props) {
             })}
           </svg>
 
-          {nodes.map((node, i) => {
+          {texts.map((text, i) => {
+            const slot = pattern.texts[i];
             const style = {
-              "--col": node.col,
-              "--col-m": node.colM,
-              "--row": node.row,
-              // Punto attorno a cui la foto piccola viene ingrandita (vedi .shot img)
-              "--shot-origin": node.kind === "shot" ? node.pos : undefined,
+              "--col": slot.col,
+              "--col-m": slot.colM,
+              "--row": slot.row,
+              "--row-m": slot.rowM,
             } as CSSProperties;
-            return node.kind === "text" ? (
+            return (
               <p
                 key={i}
                 className={`${s.node} ${s.frag}`}
                 style={style}
                 data-node="text"
               >
-                {node.text}
+                {text}
               </p>
-            ) : (
+            );
+          })}
+
+          {/* Al massimo due foto per capitolo: di fianco a una frase, sulla
+              sua stessa riga e quindi centrate con lei, oppure esattamente
+              a metà di una linea (posizionate in layout()). */}
+          {pattern.shots.map((shot, i) => {
+            const beside = shot.at === "beside";
+            const style = beside
+              ? ({
+                  "--col": shot.col,
+                  "--col-m": shot.colM,
+                  "--row": shot.row,
+                  "--row-m": shot.row,
+                  "--shot-ratio": pattern.besideRatio,
+                  "--shot-origin": shot.pos,
+                } as CSSProperties)
+              : ({
+                  "--shot-ratio": pattern.wireRatio,
+                  "--shot-w": pattern.wireWidth,
+                  "--shot-origin": shot.pos,
+                } as CSSProperties);
+            return (
               <div
-                key={i}
-                className={`${s.node} ${s.shot}`}
+                key={`shot-${i}`}
+                className={`${s.shot} ${beside ? s.node : s.shotWire}`}
                 style={style}
                 data-node="shot"
+                data-shot-wire={beside ? undefined : shot.wire}
                 aria-hidden="true"
               >
                 <Image

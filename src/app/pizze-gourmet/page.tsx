@@ -6,6 +6,7 @@ import { site } from "@/data/site";
 import Chapter from "./Chapter";
 import ChapterDivider from "./ChapterDivider";
 import GourmetHero from "./GourmetHero";
+import ScrollPace from "./ScrollPace";
 import s from "./gourmet.module.css";
 
 export const metadata: Metadata = {
@@ -17,6 +18,9 @@ export const metadata: Metadata = {
 export default function GourmetPage() {
   return (
     <>
+      {/* Scroll più lento sui racconti, più svelto tra una sezione e l'altra */}
+      <ScrollPace />
+
       <GourmetHero firstId={gourmetPizzas[0].slug} />
 
       {gourmetPizzas.map((pizza, i) => (

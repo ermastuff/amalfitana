@@ -57,7 +57,7 @@
   position: absolute;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(3rem, 9vw, 9rem);
+  font-size: clamp(3.3rem, 9.8vw, 9.8rem);
   line-height: 0.95;
   white-space: nowrap;
 }
@@ -118,13 +118,13 @@
 .wire {
   fill: none;
   stroke: var(--cream);
-  stroke-width: 1;
+  stroke-width: 1.6;
   stroke-linecap: round;
   opacity: 0.85;
 }
 
 .wireDashed {
-  stroke-dasharray: 5 7;
+  stroke-dasharray: 6 9;
 }
 
 /* Il tracciato che si disegna dentro alla maschera di una linea tratteggiata:
@@ -132,12 +132,12 @@
 .maskPath {
   fill: none;
   stroke: #fff;
-  stroke-width: 4;
+  stroke-width: 6;
   stroke-linecap: round;
 }
 
 .vline {
-  width: 1px;
+  width: 1.5px;
   height: 36svh;
   background: var(--cream);
   opacity: 0.85;
@@ -213,7 +213,7 @@
 
 .title {
   max-width: 12ch;
-  font-size: clamp(3rem, 9vw, 8rem);
+  font-size: clamp(3.4rem, 10vw, 9rem);
   line-height: 0.95;
   letter-spacing: -0.005em;
   text-wrap: balance;
@@ -247,15 +247,14 @@
   font-family: var(--font-display);
   font-style: italic;
   font-weight: 400;
-  font-size: clamp(1.5rem, 3vw, 2.7rem);
+  font-size: clamp(1.6rem, 3.2vw, 2.9rem);
   line-height: 1.25;
   text-wrap: balance;
 }
 
-/* Il racconto: griglia a 12 colonne, ogni nodo ha colonne e riga assegnate
+/* Il racconto: griglia a 12 colonne, ogni frase ha colonne e riga assegnate
    dal pattern del capitolo (PATTERNS in wires.ts); le linee stanno in un SVG
-   che copre tutta la griglia, sotto ai nodi. Distanza tra le righe e formato
-   delle foto arrivano dal pattern. */
+   che copre tutta la griglia, sotto ai nodi. */
 .story {
   position: relative;
   display: grid;
@@ -285,6 +284,15 @@
   position: relative;
   aspect-ratio: var(--shot-ratio, 3 / 4);
   overflow: hidden;
+}
+
+/* Foto agganciata a metà di una linea: posizione e centratura arrivano da
+   Chapter.tsx (left/top più xPercent/yPercent, così la centratura
+   sopravvive alle animazioni di scala). */
+.shotWire {
+  position: absolute;
+  z-index: 1;
+  width: var(--shot-w, clamp(130px, 15vw, 210px));
 }
 
 /* Ritaglio della foto di sfondo: ingrandita attorno al punto scelto dal
@@ -374,5 +382,13 @@
 
   .node {
     grid-column: var(--col-m);
+    grid-row: var(--row-m, var(--row));
+  }
+
+  /* Tra una riga e l'altra c'è poco spazio: la foto sulla linea sta larga
+     e bassa, così non tocca le frasi sopra e sotto. */
+  .shotWire {
+    width: clamp(96px, 26vw, 150px);
+    aspect-ratio: 3 / 2;
   }
 }
