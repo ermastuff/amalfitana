@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { gsap, MOTION_OK, useGSAP } from "@/lib/gsap";
 import HeroNav from "@/components/HeroNav";
+import Letters from "./Letters";
 import { wirePath, type Box } from "./wires";
 import s from "./gourmet.module.css";
 
@@ -46,42 +47,47 @@ export default function GourmetHero({ firstId }: Props) {
       let draw: gsap.core.Tween | undefined;
       const mm = gsap.matchMedia();
       mm.add(MOTION_OK, () => {
-        // Le parole arrivano "in profondità": da lontano (piccole, sfocate)
-        // verso lo schermo. Partono già nascoste dal CSS: niente lampo.
-        const far = { opacity: 0, scale: 0.7, filter: "blur(18px)" };
-        const near = {
-          opacity: 1,
-          scale: 1,
-          filter: "blur(0px)",
-          duration: 1.6,
-          clearProps: "filter",
+        // Le parole arrivano "in profondità": la parola intera si avvicina
+        // mentre le lettere compaiono una dopo l'altra, con un piccolo
+        // ritardo. Le lettere partono già nascoste dal CSS: niente lampo.
+        const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+        const word = (w: HTMLElement, at: number) => {
+          tl.from(w, { scale: 0.7, duration: 1.6 }, at).fromTo(
+            w.querySelectorAll("[data-letter]"),
+            { opacity: 0, filter: "blur(14px)" },
+            {
+              opacity: 1,
+              filter: "blur(0px)",
+              duration: 1.1,
+              stagger: 0.06,
+              clearProps: "filter",
+            },
+            at,
+          );
         };
         draw = gsap.fromTo(
           path,
           { drawSVG: "0%" },
           { drawSVG: "100%", duration: 1.4, ease: "power2.inOut" },
         );
-        gsap
-          .timeline({ defaults: { ease: "power3.out" } })
-          .from(
-            "[data-hero-photo]",
-            { opacity: 0, scale: 1.08, duration: 2.2, ease: "power2.out" },
-            0,
-          )
-          .from(
-            "[data-hero-nav]",
-            { y: -14, opacity: 0, duration: 0.9, stagger: 0.08 },
-            0.4,
-          )
-          .fromTo(a, far, near, 0.6)
-          .add(draw, 1.3)
-          .fromTo(b, far, near, 1.7)
-          .fromTo(
-            "[data-hero-hint]",
-            { opacity: 0, y: 10 },
-            { opacity: 1, y: 0, duration: 0.8 },
-            2.3,
-          );
+        tl.from(
+          "[data-hero-photo]",
+          { opacity: 0, scale: 1.08, duration: 2.2, ease: "power2.out" },
+          0,
+        ).from(
+          "[data-hero-nav]",
+          { y: -14, opacity: 0, duration: 0.9, stagger: 0.08 },
+          0.4,
+        );
+        word(a, 0.6);
+        tl.add(draw, 1.5);
+        word(b, 1.9);
+        tl.fromTo(
+          "[data-hero-hint]",
+          { opacity: 0, y: 10 },
+          { opacity: 1, y: 0, duration: 0.8 },
+          2.7,
+        );
       });
 
       // Al resize le parole si spostano: linea ricalcolata e rimisurata
@@ -122,14 +128,16 @@ export default function GourmetHero({ firstId }: Props) {
               aria-hidden="true"
               data-hero-word
             >
-              Le pizze
+              <Letters text="Le pizze" />
             </span>
             <span
               className={`${s.word} ${s.wordB}`}
               aria-hidden="true"
               data-hero-word
             >
-              <em>d’autore.</em>
+              <em>
+                <Letters text="d’autore." />
+              </em>
             </span>
           </h1>
           <svg className={s.heroWire} aria-hidden="true" focusable="false">

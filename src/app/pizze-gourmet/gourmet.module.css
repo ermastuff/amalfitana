@@ -1,7 +1,7 @@
 /* Pagina gourmet: hero fotografica, poi un capitolo per pizza. In ogni
-   capitolo la foto resta ferma (sticky) mentre titolo, citazione e frammenti
-   del racconto le scorrono sopra; tra un capitolo e l'altro una fascia neutra
-   col semicerchio che si rivolta allo scroll. */
+   capitolo la foto resta ferma (sticky, con un lieve parallasse) mentre
+   titolo, citazione e punti del racconto le scorrono sopra; prima di ogni
+   capitolo una fascia neutra col semicerchio che si rivolta allo scroll. */
 
 /* ---------- Hero ---------- */
 
@@ -81,10 +81,23 @@
   line-height: 1.55;
 }
 
-/* Con le animazioni attive parole e invito partono nascosti: il fade in di
-   GSAP li fa comparire senza il lampo iniziale. */
+/* ---------- Lettere ---------- */
+
+/* Span inline (non inline-block): crenatura e a capo restano quelli del
+   font. La parola non si spezza al suo interno. */
+.letterWord {
+  white-space: nowrap;
+}
+
+.letter {
+  display: inline;
+}
+
+/* Con le animazioni attive le lettere della hero e l'invito partono
+   nascosti: il fade in di GSAP li fa comparire senza il lampo iniziale.
+   I titoli dei capitoli stanno sotto la piega: ci pensa GSAP da solo. */
 @media (prefers-reduced-motion: no-preference) {
-  .word,
+  .word .letter,
   .hint {
     opacity: 0;
   }
@@ -148,9 +161,10 @@
   background: var(--ink-deep);
 }
 
+/* Più alta dello schermo: il parallasse (±4%) non scopre mai i bordi */
 .photoBox {
   position: absolute;
-  inset: 0;
+  inset: -7% 0;
 }
 
 /* Foto verticali: il taglio resta sulla pizza, che sta in basso */
@@ -178,14 +192,14 @@
 }
 
 /* Il padding in alto tiene il titolo sotto alla fascia di transizione, che
-   sovrasta i primi 36svh del capitolo (vedi .divider) */
+   sovrasta i primi 44svh del capitolo (vedi .divider) */
 .beatTitle {
   display: grid;
   align-content: center;
   justify-items: center;
   gap: 1.5rem;
   min-height: 100svh;
-  padding: 34svh var(--pad-x) 10svh;
+  padding: 42svh var(--pad-x) 8svh;
   text-align: center;
 }
 
@@ -239,13 +253,15 @@
 }
 
 /* Il racconto: griglia a 12 colonne, ogni nodo ha colonne e riga assegnate
-   (SLOTS in wires.ts); le linee stanno in un SVG che copre tutta la griglia */
+   dal pattern del capitolo (PATTERNS in wires.ts); le linee stanno in un SVG
+   che copre tutta la griglia, sotto ai nodi. Distanza tra le righe e formato
+   delle foto arrivano dal pattern. */
 .story {
   position: relative;
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: clamp(0.75rem, 1.5vw, 1.5rem);
-  row-gap: clamp(7rem, 20svh, 12rem);
+  row-gap: var(--row-gap, clamp(7rem, 20svh, 12rem));
   align-items: center;
   padding: 10svh var(--pad-x) 14svh;
 }
@@ -255,19 +271,28 @@
   grid-row: var(--row);
 }
 
+/* La scatola si stringe sul testo: le linee si agganciano alle parole */
 .frag {
   justify-self: start;
   width: fit-content;
-  max-width: 34ch;
-  font-size: clamp(1rem, 1.2vw, 1.2rem);
+  max-width: 30ch;
+  font-size: clamp(1.05rem, 1.3vw, 1.3rem);
   line-height: 1.5;
   text-wrap: pretty;
 }
 
 .shot {
   position: relative;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: var(--shot-ratio, 3 / 4);
   overflow: hidden;
+}
+
+/* Ritaglio della foto di sfondo: ingrandita attorno al punto scelto dal
+   pattern, così un riquadro mostra gli ingredienti in alto e l'altro la
+   pizza in basso, e non due copie della stessa foto */
+.shot img {
+  transform: scale(1.9);
+  transform-origin: var(--shot-origin, 50% 50%);
 }
 
 .beatEnd {
@@ -278,16 +303,16 @@
   padding-bottom: 4svh;
 }
 
-/* ---------- Fascia tra i capitoli ---------- */
+/* ---------- Fascia prima di ogni capitolo ---------- */
 
-/* Sta sopra al capitolo seguente per 36svh (margine negativo): la sua foto è
-   già dietro alla fascia, così il semicerchio prima le scende dentro e poi,
-   rivoltandosi, è la foto a salire dentro alla fascia. */
+/* Sta sopra al capitolo seguente per 44svh (margine negativo): la sua foto è
+   già dietro alla fascia, così il semicerchio prima le scende dentro fino in
+   fondo e poi, rivoltandosi, è la foto a salire dentro alla fascia. */
 .divider {
   position: relative;
   z-index: 2;
-  height: 60svh;
-  margin-bottom: -36svh;
+  height: 66svh;
+  margin-bottom: -44svh;
   pointer-events: none;
 }
 
@@ -338,7 +363,7 @@
   }
 
   .beatTitle {
-    padding-top: 30svh;
+    padding-top: 40svh;
   }
 
   .story {

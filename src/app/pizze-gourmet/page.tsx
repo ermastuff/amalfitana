@@ -21,7 +21,7 @@ export default function GourmetPage() {
 
       {gourmetPizzas.map((pizza, i) => (
         <Fragment key={pizza.slug}>
-          {i > 0 && <ChapterDivider />}
+          <ChapterDivider />
           <Chapter pizza={pizza} index={i} total={gourmetPizzas.length} />
         </Fragment>
       ))}

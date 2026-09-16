@@ -4,27 +4,27 @@ import { useId, useRef, type CSSProperties } from "react";
 import Image from "next/image";
 import { gsap, MOTION_OK, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import type { GourmetPizza } from "@/data/gourmet";
-import { SLOTS, WIRE_KINDS, wirePath, type Box } from "./wires";
+import Letters from "./Letters";
+import { PATTERNS, wirePath, type Box, type Entry } from "./wires";
 import s from "./gourmet.module.css";
 
 type Props = { pizza: GourmetPizza; index: number; total: number };
 
-type StoryNode =
-  | { kind: "text"; text: string }
-  | { kind: "shot"; position: string };
+type StoryNode = Entry & { text?: string };
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
-// Le due foto piccole entrano dopo il secondo e il quarto frammento, come i
-// ritratti del riferimento. Per ora sono due ritagli della foto di sfondo
+// I nodi del racconto secondo il pattern del capitolo: ogni posto per una
+// frase prende la frase successiva (i posti in più restano vuoti), i posti
+// per le foto restano. Le foto sono per ora due ritagli della foto di sfondo
 // (in alto gli ingredienti, in basso la pizza): da sostituire con foto vere.
-function storyNodes(pizza: GourmetPizza): StoryNode[] {
+function storyNodes(pizza: GourmetPizza, entries: Entry[]): StoryNode[] {
+  const texts = [...pizza.fragments];
   const nodes: StoryNode[] = [];
-  pizza.fragments.forEach((text, i) => {
-    nodes.push({ kind: "text", text });
-    if (i === 1) nodes.push({ kind: "shot", position: "50% 16%" });
-    if (i === 3) nodes.push({ kind: "shot", position: "50% 80%" });
-  });
+  for (const entry of entries) {
+    if (entry.kind === "shot") nodes.push(entry);
+    else if (texts.length) nodes.push({ ...entry, text: texts.shift() });
+  }
   return nodes;
 }
 
@@ -38,15 +38,18 @@ const box = (el: HTMLElement): Box => ({
 });
 
 /**
- * Un capitolo: la foto resta ferma (sticky) mentre le scorrono sopra il
- * titolo con gli ingredienti, la linea con la frase d'apertura, il racconto a
- * frammenti collegati da linee che si disegnano, e la linea di chiusura.
+ * Un capitolo: la foto resta ferma (sticky, con un lieve parallasse) mentre
+ * le scorrono sopra il titolo con gli ingredienti, la linea con la frase
+ * d'apertura, il racconto a punti collegati da linee che si disegnano, e la
+ * linea di chiusura.
  */
 export default function Chapter({ pizza, index, total }: Props) {
   const ref = useRef<HTMLElement>(null);
   const storyRef = useRef<HTMLDivElement>(null);
   const uid = useId().replace(/:/g, "");
-  const nodes = storyNodes(pizza);
+  const pattern = PATTERNS[index % PATTERNS.length];
+  const nodes = storyNodes(pizza, pattern.entries);
+  const wireCount = nodes.filter((n) => n.kind === "text").length - 1;
 
   useGSAP(
     () => {
@@ -56,16 +59,18 @@ export default function Chapter({ pizza, index, total }: Props) {
       const title = root.querySelector<HTMLElement>("[data-title]");
       const quote = root.querySelector<HTMLElement>("[data-quote]");
       const nodeEls = gsap.utils.toArray<HTMLElement>("[data-node]", story);
+      // Le linee uniscono solo le frasi, mai le foto
+      const textEls = nodeEls.filter((el) => el.dataset.node === "text");
 
-      // Le linee tra nodi consecutivi: ogni linea ha un tracciato che si
-      // disegna (data-draw) e, se tratteggiata, un secondo tracciato visibile
-      // mascherato dal primo; entrambi hanno lo stesso percorso (data-wire).
+      // Ogni linea ha un tracciato che si disegna (data-draw) e, se
+      // tratteggiata, un secondo tracciato visibile mascherato dal primo;
+      // entrambi hanno lo stesso percorso (data-wire).
       const layout = () => {
-        nodeEls.slice(0, -1).forEach((from, i) => {
+        textEls.slice(0, -1).forEach((from, i) => {
           const d = wirePath(
             box(from),
-            box(nodeEls[i + 1]),
-            WIRE_KINDS[i % WIRE_KINDS.length],
+            box(textEls[i + 1]),
+            pattern.wires[i % pattern.wires.length],
           );
           story
             .querySelectorAll<SVGPathElement>(`[data-wire="${i}"]`)
@@ -94,12 +99,23 @@ export default function Chapter({ pizza, index, total }: Props) {
 
         if (title) {
           const scrollTrigger = { trigger: title, start: "top 72%", once: true };
-          deep(title, { scrollTrigger });
+          // Il titolo intero si avvicina; le lettere compaiono una dopo
+          // l'altra, con un piccolo ritardo tra loro
+          gsap.from(title, { scale: 0.7, duration: 1.6, ease: "power3.out", scrollTrigger });
+          gsap.from(title.querySelectorAll("[data-letter]"), {
+            opacity: 0,
+            filter: "blur(14px)",
+            duration: 1.1,
+            stagger: 0.05,
+            ease: "power3.out",
+            clearProps: "filter",
+            scrollTrigger,
+          });
           deep("[data-caption]", {
             scale: 0.88,
             filter: "blur(8px)",
             duration: 1,
-            delay: 0.35,
+            delay: 0.5,
             stagger: 0.07,
             scrollTrigger,
           });
@@ -120,6 +136,22 @@ export default function Chapter({ pizza, index, total }: Props) {
           }),
         );
 
+        // Parallasse leggero della foto: scende piano mentre il capitolo scorre
+        gsap.fromTo(
+          "[data-parallax]",
+          { yPercent: -4 },
+          {
+            yPercent: 4,
+            ease: "none",
+            scrollTrigger: {
+              trigger: root,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            },
+          },
+        );
+
         // Linee verticali: si disegnano scorrendo
         gsap.utils.toArray<HTMLElement>("[data-vline]", root).forEach((line) => {
           gsap.fromTo(
@@ -138,9 +170,9 @@ export default function Chapter({ pizza, index, total }: Props) {
           );
         });
 
-        // Ogni collegamento si disegna mentre si scorre dal nodo di partenza
-        // a quello d'arrivo
-        nodeEls.slice(0, -1).forEach((from, i) => {
+        // Ogni collegamento si disegna mentre si scorre dalla frase di
+        // partenza a quella d'arrivo
+        textEls.slice(0, -1).forEach((from, i) => {
           const path = story.querySelector<SVGPathElement>(`[data-draw="${i}"]`);
           if (!path) return;
           draws.push(
@@ -153,7 +185,7 @@ export default function Chapter({ pizza, index, total }: Props) {
                 scrollTrigger: {
                   trigger: from,
                   start: "top 65%",
-                  endTrigger: nodeEls[i + 1],
+                  endTrigger: textEls[i + 1],
                   end: "top 60%",
                   scrub: true,
                 },
@@ -175,6 +207,11 @@ export default function Chapter({ pizza, index, total }: Props) {
     { scope: ref },
   );
 
+  const storyStyle = {
+    "--row-gap": pattern.rowGap,
+    "--shot-ratio": pattern.shotRatio,
+  } as CSSProperties;
+
   return (
     <section
       ref={ref}
@@ -184,8 +221,9 @@ export default function Chapter({ pizza, index, total }: Props) {
     >
       <div className={s.bg} aria-hidden="true">
         {/* Scatola assoluta: next/image la vuole per `fill` (lo sticky non
-            basta). La prima foto sta al bordo dello schermo: caricata subito. */}
-        <div className={s.photoBox}>
+            basta) ed è più alta dello schermo, per il parallasse. La prima
+            foto sta al bordo dello schermo: caricata subito. */}
+        <div className={s.photoBox} data-parallax>
           <Image
             src={pizza.image}
             alt=""
@@ -204,7 +242,10 @@ export default function Chapter({ pizza, index, total }: Props) {
             {pad(index + 1)} / {pad(total)}
           </p>
           <h2 id={`${uid}-title`} className={s.title} data-title>
-            {pizza.name}
+            <span className="visually-hidden">{pizza.name}</span>
+            <span aria-hidden="true">
+              <Letters text={pizza.name} />
+            </span>
           </h2>
           <ul className={s.captions} aria-label="Ingredienti">
             {pizza.ingredients.map((ingredient) => (
@@ -222,10 +263,11 @@ export default function Chapter({ pizza, index, total }: Props) {
           </p>
         </div>
 
-        <div ref={storyRef} className={s.story}>
+        <div ref={storyRef} className={s.story} style={storyStyle}>
+          {/* Le linee stanno sotto ai nodi: se incrociano una foto, ci passano sotto */}
           <svg className={s.wires} aria-hidden="true" focusable="false">
-            {nodes.slice(0, -1).map((_, i) => {
-              const kind = WIRE_KINDS[i % WIRE_KINDS.length];
+            {Array.from({ length: Math.max(wireCount, 0) }, (_, i) => {
+              const kind = pattern.wires[i % pattern.wires.length];
               if (kind !== "dashed") {
                 return (
                   <path key={i} className={s.wire} data-draw={i} data-wire={i} />
@@ -255,14 +297,20 @@ export default function Chapter({ pizza, index, total }: Props) {
           </svg>
 
           {nodes.map((node, i) => {
-            const slot = SLOTS[i];
             const style = {
-              "--col": slot.col,
-              "--col-m": slot.colM,
-              "--row": slot.row,
+              "--col": node.col,
+              "--col-m": node.colM,
+              "--row": node.row,
+              // Punto attorno a cui la foto piccola viene ingrandita (vedi .shot img)
+              "--shot-origin": node.kind === "shot" ? node.pos : undefined,
             } as CSSProperties;
             return node.kind === "text" ? (
-              <p key={i} className={`${s.node} ${s.frag}`} style={style} data-node>
+              <p
+                key={i}
+                className={`${s.node} ${s.frag}`}
+                style={style}
+                data-node="text"
+              >
                 {node.text}
               </p>
             ) : (
@@ -270,15 +318,15 @@ export default function Chapter({ pizza, index, total }: Props) {
                 key={i}
                 className={`${s.node} ${s.shot}`}
                 style={style}
-                data-node
+                data-node="shot"
                 aria-hidden="true"
               >
                 <Image
                   src={pizza.image}
                   alt=""
                   fill
-                  sizes="(max-width: 700px) 34vw, 16vw"
-                  style={{ objectFit: "cover", objectPosition: node.position }}
+                  sizes="(max-width: 700px) 60vw, 40vw"
+                  style={{ objectFit: "cover" }}
                 />
               </div>
             );

@@ -1,52 +1,129 @@
-/* Cablaggio del racconto: dove stanno i nodi (frammenti e foto piccole)
-   nella griglia e come si disegna la linea che li collega. */
+/* Cablaggio del racconto: i pattern con cui frasi e foto stanno nella griglia
+   e come si disegna la linea che collega una frase alla successiva. Le linee
+   uniscono solo le frasi: le foto non sono mai un capo, al massimo la linea ci
+   passa sotto. */
 
 export type WireKind = "solid" | "dashed" | "straight";
 
-export type Slot = { col: string; colM: string; row: number };
-
 export type Box = { left: number; top: number; width: number; height: number };
 
-/** Posto di ogni nodo, nell'ordine del DOM: colonne su 12 (6 da mobile) e
-    riga esplicita. Due nodi con la stessa riga stanno affiancati: la foto
-    piccola e il frammento che le sta accanto, come i ritratti del riferimento. */
-export const SLOTS: Slot[] = [
-  { col: "2 / span 4", colM: "1 / span 4", row: 1 },
-  { col: "8 / span 4", colM: "3 / span 4", row: 2 },
-  { col: "2 / span 2", colM: "1 / span 2", row: 3 },
-  { col: "7 / span 5", colM: "3 / span 4", row: 3 },
-  { col: "3 / span 4", colM: "1 / span 4", row: 4 },
-  { col: "10 / span 2", colM: "5 / span 2", row: 4 },
-  { col: "5 / span 5", colM: "2 / span 4", row: 5 },
-  { col: "8 / span 4", colM: "3 / span 4", row: 6 },
-  { col: "2 / span 5", colM: "1 / span 5", row: 7 },
-  { col: "7 / span 5", colM: "2 / span 4", row: 8 },
-  { col: "3 / span 4", colM: "1 / span 4", row: 9 },
-  { col: "8 / span 4", colM: "3 / span 4", row: 10 },
-];
+/** Un posto nella griglia del racconto: colonne su 12 (6 da mobile) e riga
+    esplicita. Un posto per una frase consuma la frase successiva; uno per una
+    foto ha il taglio della foto. Due posti con la stessa riga stanno
+    affiancati. */
+export type Entry =
+  | { kind: "text"; col: string; colM: string; row: number }
+  | { kind: "shot"; col: string; colM: string; row: number; pos: string };
 
-/** Stile della linea i-esima, dal nodo i al nodo i+1. */
-export const WIRE_KINDS: WireKind[] = [
-  "solid",
-  "dashed",
-  "solid",
-  "straight",
-  "solid",
-  "dashed",
-  "straight",
-  "solid",
-  "dashed",
-  "solid",
-  "straight",
+export type Pattern = {
+  entries: Entry[];
+  /** Stile della linea i-esima, dalla frase i alla frase i+1. */
+  wires: WireKind[];
+  /** Distanza tra le righe e formato delle foto: cambiano da capitolo a capitolo. */
+  rowGap: string;
+  shotRatio: string;
+};
+
+const T = (col: string, colM: string, row: number): Entry => ({ kind: "text", col, colM, row });
+const S = (col: string, colM: string, row: number, pos: string): Entry => ({ kind: "shot", col, colM, row, pos });
+
+/** Cinque pattern, uno per capitolo, ciascuno con sette posti per le frasi
+    e due per le foto. */
+export const PATTERNS: Pattern[] = [
+  // Zigzag largo: le foto ai lati, ognuna accanto a una frase
+  {
+    entries: [
+      T("2 / span 4", "1 / span 4", 1),
+      T("8 / span 4", "3 / span 4", 2),
+      S("2 / span 2", "1 / span 2", 3, "50% 16%"),
+      T("7 / span 5", "3 / span 4", 3),
+      T("3 / span 4", "1 / span 4", 4),
+      S("10 / span 2", "5 / span 2", 4, "50% 80%"),
+      T("5 / span 5", "2 / span 4", 5),
+      T("8 / span 4", "3 / span 4", 6),
+      T("2 / span 5", "1 / span 5", 7),
+    ],
+    wires: ["solid", "dashed", "solid", "straight", "solid", "dashed"],
+    rowGap: "clamp(7rem, 20svh, 12rem)",
+    shotRatio: "3 / 4",
+  },
+  // Colonna destra: le frasi scendono a destra, le foto impilate a sinistra
+  {
+    entries: [
+      T("7 / span 5", "2 / span 4", 1),
+      T("9 / span 4", "3 / span 4", 2),
+      S("2 / span 3", "1 / span 3", 2, "50% 22%"),
+      T("4 / span 5", "1 / span 4", 3),
+      S("2 / span 2", "1 / span 2", 4, "50% 84%"),
+      T("6 / span 6", "3 / span 4", 4),
+      T("8 / span 4", "2 / span 4", 5),
+      T("3 / span 5", "1 / span 4", 6),
+      T("6 / span 5", "2 / span 4", 7),
+    ],
+    wires: ["straight", "solid", "dashed", "solid", "dashed", "solid"],
+    rowGap: "clamp(6rem, 16svh, 10rem)",
+    shotRatio: "4 / 5",
+  },
+  // Centrato: le frasi oscillano attorno all'asse, le foto piccole
+  {
+    entries: [
+      T("5 / span 4", "2 / span 4", 1),
+      T("2 / span 4", "1 / span 4", 2),
+      T("8 / span 4", "3 / span 4", 3),
+      S("3 / span 2", "1 / span 2", 4, "50% 12%"),
+      T("6 / span 5", "3 / span 4", 4),
+      T("9 / span 4", "2 / span 4", 5),
+      T("2 / span 4", "1 / span 4", 6),
+      S("6 / span 2", "5 / span 2", 6, "50% 78%"),
+      T("7 / span 5", "2 / span 4", 7),
+    ],
+    wires: ["dashed", "solid", "solid", "straight", "dashed", "solid"],
+    rowGap: "clamp(8rem, 24svh, 14rem)",
+    shotRatio: "1 / 1",
+  },
+  // Due foto affiancate a metà: la linea tra le frasi ci passa sotto
+  {
+    entries: [
+      T("2 / span 4", "1 / span 4", 1),
+      T("7 / span 5", "3 / span 4", 2),
+      T("4 / span 5", "1 / span 4", 3),
+      S("3 / span 2", "1 / span 2", 4, "50% 18%"),
+      S("9 / span 2", "5 / span 2", 4, "50% 82%"),
+      T("6 / span 5", "2 / span 4", 5),
+      T("9 / span 4", "3 / span 4", 6),
+      T("3 / span 5", "1 / span 4", 7),
+      T("7 / span 5", "2 / span 4", 8),
+    ],
+    wires: ["solid", "dashed", "straight", "solid", "dashed", "solid"],
+    rowGap: "clamp(6.5rem, 18svh, 11rem)",
+    shotRatio: "3 / 4",
+  },
+  // A scala: parte da destra, una foto grande a destra e una piccola a sinistra
+  {
+    entries: [
+      T("8 / span 4", "3 / span 4", 1),
+      T("5 / span 5", "2 / span 4", 2),
+      S("10 / span 3", "5 / span 2", 2, "50% 20%"),
+      T("2 / span 5", "1 / span 4", 3),
+      T("6 / span 5", "2 / span 4", 4),
+      S("2 / span 2", "1 / span 2", 5, "50% 86%"),
+      T("5 / span 5", "3 / span 4", 5),
+      T("9 / span 4", "3 / span 4", 6),
+      T("3 / span 5", "1 / span 4", 7),
+    ],
+    wires: ["dashed", "solid", "straight", "solid", "solid", "dashed"],
+    rowGap: "clamp(7rem, 22svh, 13rem)",
+    shotRatio: "4 / 5",
+  },
 ];
 
 const r = (n: number) => Math.round(n * 10) / 10;
 
 /**
- * Percorso SVG dal nodo `a` al nodo `b` (misure nello stesso sistema di
- * coordinate del contenitore). Nodi affiancati: dal fianco dell'uno al fianco
- * dell'altro, con tangenti orizzontali. Nodi in colonna: dal basso di `a`
- * all'alto di `b`, agganciati dal lato rivolto verso l'altro, con tangenti
+ * Percorso SVG dalla frase `a` alla frase `b` (misure nello stesso sistema di
+ * coordinate del contenitore). Frasi affiancate: dal fianco dell'una al fianco
+ * dell'altra, con tangenti orizzontali. Frasi in colonna: dal basso di `a`
+ * all'alto di `b`, agganciate dal lato rivolto verso l'altra, con tangenti
  * verticali (la "S" del riferimento) oppure un tratto dritto.
  */
 export function wirePath(
