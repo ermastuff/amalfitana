@@ -252,17 +252,17 @@
   text-wrap: balance;
 }
 
-/* Il racconto: griglia a 12 colonne, ogni frase ha colonne e riga assegnate
-   dal pattern del capitolo (PATTERNS in wires.ts); le linee stanno in un SVG
-   che copre tutta la griglia, sotto ai nodi. */
+/* Il racconto: cinque colonne, le frasi solo nella seconda e nella quarta
+   (PATTERNS in wires.ts), una per riga e ben distanziate. Le linee stanno in
+   un SVG che copre tutta la griglia, sotto ai nodi. */
 .story {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   column-gap: clamp(0.75rem, 1.5vw, 1.5rem);
-  row-gap: var(--row-gap, clamp(7rem, 20svh, 12rem));
+  row-gap: var(--row-gap, clamp(24rem, 62svh, 42rem));
   align-items: center;
-  padding: 10svh var(--pad-x) 14svh;
+  padding: 14svh var(--pad-x) 18svh;
 }
 
 .node {
@@ -375,9 +375,8 @@
   }
 
   .story {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    row-gap: clamp(4.5rem, 12svh, 7rem);
-    padding: 8svh var(--pad-x) 12svh;
+    row-gap: clamp(18rem, 58svh, 34rem);
+    padding: 12svh var(--pad-x) 16svh;
   }
 
   .node {

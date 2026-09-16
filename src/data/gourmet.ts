@@ -5,7 +5,7 @@ export type GourmetPizza = {
   ingredients: string[];
   /** Frase d’apertura, in corsivo dopo la linea. */
   quote: string;
-  /** Il racconto a punti: al massimo sette, di sette parole l’uno. */
+  /** Il racconto a punti: cinque al massimo, di sette parole l’uno. */
   fragments: string[];
   /** Foto a tutto schermo: copia a 2560px dell’originale (public/assets/gourmet). */
   image: string;
@@ -28,9 +28,8 @@ export const gourmetPizzas: GourmetPizza[] = [
       "Il ciliegino confit, il basilico fresco.",
       "La burrata, cremosa.",
       "Il crudo San Daniele, sapido.",
-      "Sotto, la farina macinata a pietra croccante.",
-      "Un contrasto di consistenze.",
-      "La dolcezza vibrante della sinfonia bilancia tutto.",
+      "Sotto, la farina macinata a pietra.",
+      "La dolcezza della sinfonia bilancia tutto.",
     ],
     image: "/assets/gourmet/renana.jpg",
   },
@@ -48,11 +47,9 @@ export const gourmetPizzas: GourmetPizza[] = [
     fragments: [
       "Contro la sapidità del crudo.",
       "E l’affumicatura della provola.",
-      "La farina macinata a pietra, croccante.",
-      "I formaggi, morbidi.",
+      "La farina croccante, i formaggi morbidi.",
       "Un contrasto di consistenze.",
-      "La raffinatezza del film «La Dolce Vita».",
-      "Bilancia il carattere deciso della pizza.",
+      "La raffinatezza del film bilancia tutto.",
     ],
     image: "/assets/gourmet/dolce-vita.jpg",
   },
@@ -68,12 +65,10 @@ export const gourmetPizzas: GourmetPizza[] = [
     ],
     quote: "Delicato il taleggio, fresco il radicchio di Treviso.",
     fragments: [
-      "Contro la forza della sinfonia.",
       "Salsiccia e fior di latte, in contrasto.",
       "Con la dolce farina macinata a pietra.",
-      "La serenità della sinfonia.",
-      "Bilancia il carattere deciso della pizza.",
       "Sapori di terra e di bosco.",
+      "La serenità della sinfonia bilancia tutto.",
       "Si completa con la «Pastorale» di Beethoven.",
     ],
     image: "/assets/gourmet/pastorale.jpg",
@@ -91,11 +86,9 @@ export const gourmetPizzas: GourmetPizza[] = [
     quote: "Quiete e romanticismo si incontrano.",
     fragments: [
       "La base, farina macinata a pietra.",
-      "Rustica e autentica, esalta gli ingredienti.",
       "Il fior di latte regala dolcezza.",
-      "La ricotta di bufala, una cremosità lussuosa.",
+      "La ricotta di bufala, cremosità lussuosa.",
       "Il salmone norvegese, una nota sofisticata.",
-      "L’aneto la bilancia, fresco e piccante.",
       "Omaggio alla Sonata al Chiaro di Luna.",
     ],
     image: "/assets/gourmet/moonlight.jpg",
@@ -112,10 +105,8 @@ export const gourmetPizzas: GourmetPizza[] = [
     quote: "Una dichiarazione d’amore alla natura e alla vita.",
     fragments: [
       "La farina croccante evoca i campi dorati.",
-      "La solidità della terra.",
-      "La crema di melanzana, una vellutata profondità.",
+      "La crema di melanzana, vellutata profondità.",
       "Le contemplazioni malinconiche di Mahler.",
-      "Il fior di latte sposa la melanzana.",
       "Il prosciutto cotto aggiunge note delicate.",
       "Un dipinto sonoro e culinario.",
     ],

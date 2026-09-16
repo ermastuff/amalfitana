@@ -1,19 +1,24 @@
 /* Cablaggio del racconto: dove stanno frasi e foto nella griglia di ogni
    capitolo e come si disegna la linea che unisce una frase alla successiva.
 
-   Le linee attaccano sempre al centro di un lato: o partono dalla metà
-   orizzontale (sotto) e arrivano alla metà orizzontale (sopra), oppure
-   partono dalla metà verticale (fianco) e arrivano alla metà verticale.
-   Uniscono solo le frasi: le foto non sono mai un capo, al massimo la
-   linea ci passa sotto. */
+   Impianto uguale per tutti i capitoli, così niente è messo a caso:
+   - la griglia ha cinque colonne e le frasi stanno solo nella seconda e
+     nella quarta, alternandosi: la composizione resta dentro a una
+     larghezza circoscritta;
+   - una frase per riga, con molto spazio tra una e l'altra (vedi rowGap);
+   - le linee attaccano sempre al centro di un lato: metà orizzontale
+     sopra e sotto, oppure metà verticale ai fianchi;
+   - ogni capitolo ha esattamente una linea dritta, ed è sempre diagonale
+     (unisce la colonna 2 alla 4, mai due frasi incolonnate);
+   - le linee uniscono solo le frasi: le foto non sono mai un capo, al
+     massimo la linea ci passa sotto. */
 
 export type WireKind = "solid" | "dashed" | "straight";
 
 export type Box = { left: number; top: number; width: number; height: number };
 
-/** Posto di una frase: colonne su 12 (6 da mobile) e riga esplicita. Da
-    mobile le colonne sono strette: due frasi affiancate vanno su due righe
-    separate, ed è a questo che serve `rowM`. */
+/** Posto di una frase: colonna (la 2 o la 4 delle cinque) e riga. Da mobile
+    le colonne sono strette, quindi la frase ne occupa tre o quattro. */
 export type TextSlot = { col: string; colM: string; row: number; rowM: number };
 
 /** Posto di una foto piccola: di fianco a una frase, sulla stessa riga e
@@ -23,10 +28,11 @@ export type ShotSlot =
   | { at: "midwire"; wire: number; pos: string };
 
 export type Pattern = {
+  /** Cinque al massimo. */
   texts: TextSlot[];
-  /** Al massimo due per capitolo. */
+  /** Due al massimo. */
   shots: ShotSlot[];
-  /** Stile della linea i-esima, dalla frase i alla frase i+1. */
+  /** Stile della linea i-esima, dalla frase i alla frase i+1: una sola dritta. */
   wires: WireKind[];
   rowGap: string;
   besideRatio: string;
@@ -34,132 +40,125 @@ export type Pattern = {
   wireWidth: string;
 };
 
-// Corsie: sinistra, centro, destra (desktop / mobile)
-const L = "2 / span 4";
-const C = "5 / span 4";
-const R = "8 / span 4";
-const Lm = "1 / span 4";
-const Cm = "2 / span 4";
-const Rm = "3 / span 4";
+// Le due colonne delle parole: la seconda e la quarta.
+const A = "2";
+const B = "4";
+// Da mobile si allargano; dove c'è una foto di fianco lasciano il posto.
+const Am = "1 / span 4";
+const Bm = "2 / span 4";
+const AmShot = "1 / span 3";
+const BmShot = "3 / span 3";
 
-const T = (col: string, colM: string, row: number, rowM = row): TextSlot => ({
+const T = (col: string, colM: string, row: number): TextSlot => ({
   col,
   colM,
   row,
-  rowM,
+  rowM: row,
 });
 
-/** Cinque pattern, uno per capitolo: stesso impianto ordinato, composizioni
-    diverse (corsie, coppie affiancate, colonna centrale, scala, alternanza). */
+/** Un pattern per capitolo: cambia la colonna di partenza, quale linea è
+    quella dritta, il misto di piene e tratteggiate, lo spazio tra le righe e
+    il taglio delle foto. */
 export const PATTERNS: Pattern[] = [
-  // 1 — Zigzag a due corsie: le frasi rimbalzano da sinistra a destra
+  // 1 — parte da sinistra, dritta sulla seconda linea
   {
     texts: [
-      T(L, Lm, 1),
-      T(R, Rm, 2),
-      T(L, Lm, 3),
-      T(R, Rm, 4),
-      T(L, Lm, 5),
-      T(R, Rm, 6),
+      T(A, Am, 1),
+      T(B, BmShot, 2),
+      T(A, Am, 3),
+      T(B, Bm, 4),
+      T(A, Am, 5),
     ],
     shots: [
-      { at: "beside", col: "3 / span 2", colM: "1 / span 2", row: 2, pos: "50% 18%" },
+      { at: "beside", col: A, colM: "1 / span 2", row: 2, pos: "50% 18%" },
       { at: "midwire", wire: 3, pos: "50% 82%" },
     ],
-    wires: ["solid", "dashed", "solid", "solid", "dashed"],
-    rowGap: "clamp(7rem, 20svh, 12rem)",
+    wires: ["solid", "straight", "dashed", "solid"],
+    rowGap: "clamp(24rem, 62svh, 42rem)",
     besideRatio: "3 / 4",
     wireRatio: "3 / 2",
-    wireWidth: "clamp(130px, 15vw, 210px)",
+    wireWidth: "clamp(150px, 17vw, 240px)",
   },
-  // 2 — Coppie affiancate: due frasi per riga, la foto in mezzo alla linea
+  // 2 — parte da destra, dritta sull'ultima linea
   {
     texts: [
-      T(L, Lm, 1, 1),
-      T(R, Rm, 1, 2),
-      T(C, Cm, 2, 3),
-      T(L, Lm, 3, 4),
-      T(R, Rm, 3, 5),
-      T(C, Cm, 4, 6),
-      T(R, Rm, 5, 7),
+      T(B, Bm, 1),
+      T(A, Am, 2),
+      T(B, BmShot, 3),
+      T(A, Am, 4),
+      T(B, Bm, 5),
     ],
     shots: [
       { at: "midwire", wire: 0, pos: "50% 20%" },
-      { at: "midwire", wire: 3, pos: "50% 84%" },
+      { at: "beside", col: A, colM: "1 / span 2", row: 3, pos: "50% 84%" },
     ],
-    wires: ["solid", "dashed", "solid", "straight", "dashed", "solid"],
-    rowGap: "clamp(6rem, 17svh, 10rem)",
-    besideRatio: "3 / 4",
+    wires: ["dashed", "solid", "solid", "straight"],
+    rowGap: "clamp(24rem, 66svh, 44rem)",
+    besideRatio: "4 / 5",
     wireRatio: "4 / 5",
-    wireWidth: "clamp(110px, 12vw, 170px)",
+    wireWidth: "clamp(130px, 14vw, 200px)",
   },
-  // 3 — Colonna centrale: le frasi in asse, le foto ai lati
+  // 3 — parte da sinistra, dritta al centro, due foto ai lati
   {
     texts: [
-      T(C, Cm, 1),
-      T(C, "1 / span 4", 2),
-      T(C, Cm, 3),
-      T(C, Cm, 4),
-      T(C, "3 / span 4", 5),
-      T(C, Cm, 6),
-      T(C, Cm, 7),
+      T(A, AmShot, 1),
+      T(B, Bm, 2),
+      T(A, Am, 3),
+      T(B, BmShot, 4),
+      T(A, Am, 5),
     ],
     shots: [
-      { at: "beside", col: "10 / span 2", colM: "5 / span 2", row: 2, pos: "50% 16%" },
-      { at: "beside", col: "2 / span 2", colM: "1 / span 2", row: 5, pos: "50% 86%" },
+      { at: "beside", col: B, colM: "4 / span 2", row: 1, pos: "50% 16%" },
+      { at: "beside", col: A, colM: "1 / span 2", row: 4, pos: "50% 86%" },
     ],
-    wires: ["straight", "solid", "straight", "solid", "straight", "solid"],
-    rowGap: "clamp(7rem, 21svh, 12rem)",
+    wires: ["solid", "dashed", "straight", "solid"],
+    rowGap: "clamp(24rem, 60svh, 40rem)",
     besideRatio: "1 / 1",
     wireRatio: "3 / 2",
-    wireWidth: "clamp(130px, 15vw, 210px)",
+    wireWidth: "clamp(150px, 17vw, 240px)",
   },
-  // 4 — A scala: le frasi scendono verso destra e poi tornano
+  // 4 — parte da destra, dritta subito
   {
     texts: [
-      T("2 / span 4", Lm, 1),
-      T("4 / span 4", Cm, 2),
-      T("6 / span 4", Rm, 3),
-      T("8 / span 4", Rm, 4),
-      T("6 / span 4", Cm, 5),
-      T("4 / span 4", Lm, 6),
-      T("2 / span 4", Lm, 7),
+      T(B, Bm, 1),
+      T(A, Am, 2),
+      T(B, Bm, 3),
+      T(A, Am, 4),
+      T(B, BmShot, 5),
     ],
     shots: [
-      { at: "beside", col: "9 / span 3", colM: "5 / span 2", row: 1, pos: "50% 18%" },
-      { at: "midwire", wire: 3, pos: "50% 84%" },
+      { at: "midwire", wire: 2, pos: "50% 18%" },
+      { at: "beside", col: A, colM: "1 / span 2", row: 5, pos: "50% 84%" },
     ],
-    wires: ["solid", "solid", "dashed", "solid", "solid", "dashed"],
-    rowGap: "clamp(6.5rem, 18svh, 11rem)",
+    wires: ["straight", "solid", "dashed", "solid"],
+    rowGap: "clamp(24rem, 64svh, 43rem)",
     besideRatio: "4 / 5",
     wireRatio: "3 / 2",
-    wireWidth: "clamp(130px, 15vw, 210px)",
+    wireWidth: "clamp(150px, 17vw, 240px)",
   },
-  // 5 — Alternanza larga con pausa al centro
+  // 5 — parte da sinistra, dritta sulla seconda linea, tratteggi ai bordi
   {
     texts: [
-      T(R, Rm, 1),
-      T(L, Lm, 2),
-      T(R, Rm, 3),
-      T(C, "3 / span 4", 4),
-      T(L, Lm, 5),
-      T(R, "1 / span 4", 6),
-      T(C, Cm, 7),
+      T(A, Am, 1),
+      T(B, BmShot, 2),
+      T(A, Am, 3),
+      T(B, Bm, 4),
+      T(A, Am, 5),
     ],
     shots: [
-      { at: "beside", col: "2 / span 3", colM: "1 / span 2", row: 4, pos: "50% 18%" },
-      { at: "beside", col: "3 / span 2", colM: "5 / span 2", row: 6, pos: "50% 84%" },
+      { at: "beside", col: A, colM: "1 / span 2", row: 2, pos: "50% 18%" },
+      { at: "midwire", wire: 2, pos: "50% 84%" },
     ],
-    wires: ["dashed", "solid", "solid", "dashed", "solid", "straight"],
-    rowGap: "clamp(7rem, 22svh, 13rem)",
-    besideRatio: "4 / 5",
+    wires: ["dashed", "straight", "solid", "dashed"],
+    rowGap: "clamp(24rem, 63svh, 42rem)",
+    besideRatio: "3 / 4",
     wireRatio: "3 / 2",
-    wireWidth: "clamp(130px, 15vw, 210px)",
+    wireWidth: "clamp(150px, 17vw, 240px)",
   },
 ];
 
 const r = (n: number) => Math.round(n * 10) / 10;
-const PAD = 14;
+const PAD = 16;
 
 /**
  * Percorso SVG dalla frase `a` alla frase `b`, nelle coordinate del
@@ -167,7 +166,7 @@ const PAD = 14;
  * verticale) la linea va da un fianco all'altro, agganciata alla metà
  * verticale di entrambe, con tangenti orizzontali. Altrimenti scende dalla
  * metà orizzontale di `a` alla metà orizzontale di `b`, con tangenti
- * verticali (la "S" del riferimento) oppure dritta.
+ * verticali (la "S" del riferimento) oppure dritta in diagonale.
  */
 export function wirePath(a: Box, b: Box, kind: WireKind): string {
   const acx = a.left + a.width / 2;

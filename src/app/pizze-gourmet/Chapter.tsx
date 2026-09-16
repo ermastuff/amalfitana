@@ -281,7 +281,13 @@ export default function Chapter({ pizza, index, total }: Props) {
               const kind = pattern.wires[i % pattern.wires.length];
               if (kind !== "dashed") {
                 return (
-                  <path key={i} className={s.wire} data-draw={i} data-wire={i} />
+                  <path
+                    key={i}
+                    className={s.wire}
+                    data-draw={i}
+                    data-wire={i}
+                    data-kind={kind}
+                  />
                 );
               }
               const maskId = `${uid}-m${i}`;
@@ -295,7 +301,12 @@ export default function Chapter({ pizza, index, total }: Props) {
                     width="100%"
                     height="100%"
                   >
-                    <path className={s.maskPath} data-draw={i} data-wire={i} />
+                    <path
+                      className={s.maskPath}
+                      data-draw={i}
+                      data-wire={i}
+                      data-kind={kind}
+                    />
                   </mask>
                   <path
                     className={`${s.wire} ${s.wireDashed}`}
