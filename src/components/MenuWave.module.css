@@ -1,0 +1,140 @@
+/* Il menu raccontato con le foto: a sinistra una colonna di foto accavallate
+   che ondeggia da destra verso sinistra mentre si scorre (MenuWave.tsx), a
+   destra le liste, che restano ferme finché il gruppo non è finito. */
+
+.wave {
+  position: relative;
+  padding-block: clamp(4rem, 10vw, 9rem) clamp(5rem, 12vw, 10rem);
+  background: var(--cream-2);
+  overflow: hidden;
+}
+
+.group {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+  width: 100%;
+  max-width: var(--max-w);
+  margin-inline: auto;
+  padding-inline: var(--pad-x);
+}
+
+.group + .group {
+  margin-top: clamp(4rem, 10vw, 9rem);
+}
+
+/* Le foto stanno una sull'altra (--z) e ognuna parte da una sua distanza dal
+   bordo (--dx, da 0 a 1): l'onda parte da destra e finisce a sinistra. */
+.photos {
+  position: relative;
+}
+
+.photo {
+  position: relative;
+  z-index: var(--z);
+  width: var(--w);
+  margin-top: calc(var(--overlap) * -1);
+  margin-left: calc((100% - var(--w)) * var(--dx));
+  aspect-ratio: var(--ratio, 1 / 1);
+  overflow: hidden;
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
+  will-change: transform;
+}
+
+.img {
+  object-fit: cover;
+  object-position: var(--pos, 50% 50%);
+}
+
+/* ---------- Le liste ---------- */
+
+.side {
+  position: sticky;
+  top: 24svh;
+}
+
+.card {
+  display: grid;
+  gap: 1rem;
+  max-width: 26rem;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.eyebrow::before {
+  content: "";
+  width: 1.75em;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.title {
+  font-size: clamp(2.6rem, 6vw, 4.6rem);
+  line-height: 1;
+}
+
+.text {
+  max-width: 34ch;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.items {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 0.4rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.95rem;
+}
+
+.items li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7em;
+}
+
+.items li::before {
+  content: "";
+  flex: none;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.4;
+}
+
+.card a {
+  justify-self: start;
+  margin-top: 0.6rem;
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 900px) {
+  .group {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem;
+  }
+
+  .side {
+    position: relative;
+    top: auto;
+    order: -1;
+  }
+
+  .photo {
+    margin-top: calc(var(--overlap) * -0.6);
+  }
+}

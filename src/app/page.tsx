@@ -1,9 +1,6 @@
 import Hero from "@/components/Hero";
-import StatementSection from "@/components/StatementSection";
-import StorySection from "@/components/StorySection";
-import MenuSlider from "@/components/MenuSlider";
-import AppSection from "@/components/AppSection";
-import InstagramSection from "@/components/InstagramSection";
+import HomeStage from "@/components/HomeStage";
+import MenuWave from "@/components/MenuWave";
 import ReviewsSection from "@/components/ReviewsSection";
 import s from "./home.module.css";
 
@@ -14,20 +11,12 @@ export default function Home() {
 
       {/* Tutto ciò che segue scorre sopra la hero, che resta ferma */}
       <div className={s.afterHero}>
-        {/* Frase manifesto */}
-        <StatementSection />
+        {/* Il racconto a schermo fisso: foto che si alternano, titolo che si
+            ricompone, la strofa e infine l'invito a scaricare l'app */}
+        <HomeStage />
 
-        {/* Immagine quadrata + descrizione */}
-        <StorySection />
-
-        {/* Slider menù: classico / gourmet */}
-        <MenuSlider />
-
-        {/* Download app */}
-        <AppSection />
-
-        {/* Follow Instagram */}
-        <InstagramSection />
+        {/* Il menu: l'onda di foto con le liste di fianco */}
+        <MenuWave />
 
         {/* Recensioni Google */}
         <ReviewsSection />

@@ -1,0 +1,26 @@
+/* Ogni parola è una finestra che nasconde le lettere finché non salgono.
+   Il padding sotto (recuperato dal margine negativo) lascia spazio alle
+   lettere che scendono sotto la riga di base: la g e la p non si tagliano. */
+.word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+
+.letter {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* Con le animazioni attive le lettere partono sotto la finestra: niente
+   lampo prima che GSAP le faccia salire. Si usa `translate`, non `transform`:
+   GSAP azzera la prima (`translate: none`) quando prende in mano l'elemento,
+   mentre una `transform` la leggerebbe come posizione di partenza e le
+   lettere non salirebbero mai. */
+@media (prefers-reduced-motion: no-preference) {
+  .letter {
+    translate: 0 115%;
+  }
+}
