@@ -4,7 +4,7 @@
 
 .stage {
   position: relative;
-  height: 560svh;
+  height: 600svh;
   background: var(--cream-2);
 }
 
@@ -37,16 +37,16 @@
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(24, 14, 10, 0.62) 0%,
-    rgba(24, 14, 10, 0.44) 30%,
-    rgba(24, 14, 10, 0.5) 62%,
-    rgba(24, 14, 10, 0.68) 100%
+    rgba(24, 14, 10, 0.66) 0%,
+    rgba(24, 14, 10, 0.52) 30%,
+    rgba(24, 14, 10, 0.56) 62%,
+    rgba(24, 14, 10, 0.7) 100%
   );
 }
 
 /* I tre momenti del racconto stanno uno sopra l'altro: si alternano con lo
    scroll, non con il flusso della pagina. */
-.claim,
+.intro,
 .verses,
 .app {
   position: absolute;
@@ -55,30 +55,37 @@
   color: var(--cream);
 }
 
-/* ---------- 1. Il titolo che si ricompone ---------- */
+/* ---------- 1. Il testo d'apertura ---------- */
 
-.claim {
+.intro {
   display: grid;
   place-content: center;
   text-align: center;
 }
 
-/* La misura scende con la lunghezza del titolo (--join-ch, il numero di
-   caratteri): resta su una riga sola anche da telefono. */
-.claimTitle {
-  font-size: clamp(2.2rem, min(10vw, 150vw / var(--join-ch, 20)), 7rem);
-  line-height: 1;
+.introBox {
+  display: grid;
+  gap: clamp(2.2rem, 5vw, 4rem);
+  max-width: 52rem;
 }
 
-.claimLine {
-  position: relative;
+.introLines {
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 2.4vw, 2rem);
+  line-height: 1.45;
+}
+
+/* Blocco, non inline: la riga si deve poter scalare e sfocare */
+.introLine {
   display: block;
-  white-space: nowrap;
 }
 
-/* inline-block: le due parti si possono spostare */
-.claimPart {
-  display: inline-block;
+.introLead {
+  max-width: 54ch;
+  margin-inline: auto;
+  font-size: clamp(0.95rem, 1.15vw, 1.1rem);
+  line-height: 1.7;
+  opacity: 0.85;
 }
 
 /* ---------- 2. La strofa ---------- */
@@ -207,6 +214,7 @@
 /* Prima che GSAP prenda in mano la scena, il pannello dell'app resta
    invisibile: le lettere ci pensano da sole (LettersUp). */
 @media (prefers-reduced-motion: no-preference) {
+  .intro [data-intro-line],
   .app [data-app-item],
   .amp span {
     opacity: 0;
@@ -217,7 +225,7 @@
 
 @media (max-width: 860px) {
   .stage {
-    height: 480svh;
+    height: 520svh;
   }
 
   .versesLead {
@@ -288,7 +296,7 @@
     border-radius: 14px;
   }
 
-  .claim,
+  .intro,
   .verses,
   .app {
     position: relative;

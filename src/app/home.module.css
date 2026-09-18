@@ -1,7 +1,9 @@
 /* ---------- Contenuto che scorre sopra la hero sticky ---------- */
 
+/* Stesso colore della fascia col semicerchio che apre il blocco: le due si
+   fondono e resta visibile solo la cupola che scopre la foto sotto. */
 .afterHero {
   position: relative;
   z-index: 1;
-  background: var(--cream);
+  background: var(--cream-2);
 }

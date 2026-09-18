@@ -1,10 +1,10 @@
 "use client";
 
-import { Fragment, useRef, type CSSProperties } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import { gsap, MOTION_OK, useGSAP } from "@/lib/gsap";
 import { box, wirePath } from "@/lib/wire";
-import { app, claim, stageShots, verses } from "@/data/home";
+import { app, intro, stageShots, verses } from "@/data/home";
 import { site } from "@/data/site";
 import LettersUp from "./LettersUp";
 import s from "./HomeStage.module.css";
@@ -30,15 +30,13 @@ const target = () => {
   };
 };
 
-// La misura del titolo scende con la sua lunghezza: resta su una riga sola.
-const claimStyle = { "--join-ch": claim.label.length } as CSSProperties;
-
 /**
  * Il racconto a schermo fisso: la foto riempie lo schermo e cambia mentre si
- * scorre, il titolo si ricompone, la strofa si scrive una lettera alla volta
- * e alla fine la foto si rimpicciolisce fino a diventare il riquadro accanto
- * all'invito a scaricare l'app. Tutto dentro a un solo blocco appiccicato
- * (sticky): la visuale resta ferma finché il racconto non è finito.
+ * scorre, il testo d'apertura arriva in profondità, la strofa si scrive una
+ * lettera alla volta e alla fine la foto si rimpicciolisce fino a diventare
+ * il riquadro accanto all'invito a scaricare l'app. Tutto dentro a un solo
+ * blocco appiccicato (sticky): la visuale resta ferma finché il racconto non
+ * è finito.
  */
 export default function HomeStage() {
   const ref = useRef<HTMLElement>(null);
@@ -84,42 +82,24 @@ export default function HomeStage() {
         // Le foto si sovrappongono una sull'altra: basta accenderle in ordine
         const shots = gsap.utils.toArray<HTMLElement>("[data-shot]", root);
         shots.slice(1).forEach((shot, i) => {
-          tl.to(shot, { opacity: 1, duration: 7 }, 14 + i * 16);
+          tl.to(shot, { opacity: 1, duration: 7 }, 16 + i * 18);
         });
 
-        // 1. Il titolo si ricompone: le due parti arrivano da lontano
-        const parts = gsap.utils.toArray<HTMLElement>("[data-claim-part]", root);
-        const spread = () => {
-          const host = parts[0].parentElement!.getBoundingClientRect();
-          const first = parts[0];
-          const last = parts[parts.length - 1];
-          const left = host.left + first.offsetLeft - 14;
-          const right =
-            window.innerWidth -
-            14 -
-            (host.left + last.offsetLeft + last.offsetWidth);
-          // Da schermo stretto il titolo riempie quasi tutta la riga: si
-          // lascia che le parti escano di poco dai bordi (il blocco taglia
-          // fuori quello che avanza) e si separano soprattutto in verticale.
-          return Math.max(Math.min(left, right), window.innerWidth * 0.09);
-        };
+        // 1. Il testo d'apertura arriva "in profondità": una riga alla
+        //    volta, da lontano verso lo schermo
         tl.fromTo(
-          parts,
+          "[data-intro-line]",
+          { opacity: 0, scale: 0.9, filter: "blur(10px)" },
           {
-            x: (i: number) => (i / (parts.length - 1) - 0.5) * 2 * spread(),
-            yPercent: (i: number) =>
-              (i % 2 ? 1 : -1) * (window.innerWidth < 860 ? 110 : 44),
-            opacity: 0.35,
-          },
-          {
-            x: 0,
-            yPercent: 0,
             opacity: 1,
-            duration: 18,
-            ease: "power3.inOut",
+            scale: 1,
+            filter: "blur(0px)",
+            duration: 7,
+            stagger: 4,
+            ease: "power3.out",
           },
-          0,
-        ).to("[data-claim]", { opacity: 0, y: -26, duration: 6 }, 22);
+          2,
+        ).to("[data-intro]", { opacity: 0, y: -26, duration: 6 }, 28);
 
         // 2. La strofa: apertura, linea tratteggiata, le parole una dopo
         //    l'altra e infine le due code
@@ -127,12 +107,12 @@ export default function HomeStage() {
           ups(lead),
           { yPercent: 115, y: 0 },
           { yPercent: 0, duration: 7, stagger: 0.16, ease: "power3.out" },
-          28,
+          34,
         ).fromTo(
           "[data-wire-draw]",
           { drawSVG: "0%" },
           { drawSVG: "100%", duration: 12, ease: "power2.inOut" },
-          32,
+          38,
         );
         gsap.utils
           .toArray<HTMLElement>("[data-word]", scope)
@@ -141,7 +121,7 @@ export default function HomeStage() {
               ups(word),
               { yPercent: 115, y: 0 },
               { yPercent: 0, duration: 3, stagger: 0.12, ease: "power3.out" },
-              36 + i * 3.2,
+              44 + i * 3.4,
             );
           });
         gsap.utils
@@ -151,15 +131,15 @@ export default function HomeStage() {
               ups(tail),
               { yPercent: 115, y: 0 },
               { yPercent: 0, duration: 5, stagger: 0.08, ease: "power3.out" },
-              50 + i * 7,
+              58 + i * 7,
             );
           });
         tl.fromTo(
           "[data-amp]",
           { opacity: 0 },
           { opacity: 1, duration: 4 },
-          57,
-        ).to("[data-verses]", { opacity: 0, y: -28, duration: 7 }, 66);
+          66,
+        ).to("[data-verses]", { opacity: 0, y: -28, duration: 7 }, 74);
 
         // 3. La foto si rimpicciolisce fino al riquadro, l'ombra se ne va e
         //    intorno resta la pagina chiara
@@ -173,23 +153,23 @@ export default function HomeStage() {
             duration: 22,
             ease: "power2.inOut",
           },
-          70,
-        ).to("[data-shade]", { opacity: 0, duration: 14 }, 72);
+          78,
+        ).to("[data-shade]", { opacity: 0, duration: 14 }, 80);
 
         // 4. L'app: il titolo sale una lettera alla volta, poi il resto
         tl.fromTo(
           ups(root.querySelector("[data-app-title]")),
           { yPercent: 115, y: 0 },
           { yPercent: 0, duration: 9, stagger: 0.22, ease: "power3.out" },
-          86,
+          94,
         )
           .fromTo(
             "[data-app-item]",
             { opacity: 0, y: 22 },
             { opacity: 1, y: 0, duration: 7, stagger: 2, ease: "power3.out" },
-            92,
+            100,
           )
-          .set({}, {}, 100);
+          .set({}, {}, 110);
       });
 
       const ro = new ResizeObserver(layout);
@@ -219,21 +199,23 @@ export default function HomeStage() {
           <div className={s.shade} data-shade aria-hidden="true" />
         </div>
 
-        {/* 1. Il titolo che si ricompone */}
-        <div className={s.claim} data-claim>
-          <h2 id="stage-title" className={s.claimTitle} style={claimStyle}>
-            <span className="visually-hidden">{claim.label}</span>
-            <span className={s.claimLine} aria-hidden="true">
-              {claim.parts.map((part, i) => (
-                <Fragment key={i}>
-                  {i > 0 && " "}
-                  <span className={s.claimPart} data-claim-part>
-                    {part}
-                  </span>
-                </Fragment>
-              ))}
-            </span>
+        {/* 1. Il testo d'apertura */}
+        <div className={s.intro} data-intro>
+          <h2 id="stage-title" className="visually-hidden">
+            Chi siamo
           </h2>
+          <div className={s.introBox}>
+            <p className={s.introLines}>
+              {intro.lines.map((line) => (
+                <span key={line} className={s.introLine} data-intro-line>
+                  {line}
+                </span>
+              ))}
+            </p>
+            <p className={s.introLead} data-intro-line>
+              {intro.lead}
+            </p>
+          </div>
         </div>
 
         {/* 2. La strofa */}

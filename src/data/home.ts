@@ -12,10 +12,16 @@ export const stageShots = [
   { src: "/assets/gourmet/dolce-vita.jpg", alt: "" },
 ];
 
-/** Le due parti del titolo che si ricompongono all'inizio del racconto. */
-export const claim = {
-  label: "Poche cose, fatte bene.",
-  parts: ["Poche cose,", "fatte bene."],
+/** Il testo che apre il racconto: le righe in serif una sotto l'altra e, più
+    sotto, il paragrafo che le chiude. Stessa impostazione della filosofia. */
+export const intro = {
+  lines: [
+    "Siamo una pizzeria d’asporto a Flero.",
+    "Impastiamo oggi la pizza di dopodomani.",
+    "Farina macinata a pietra, due giorni d’attesa,",
+    "e un forno che conosciamo a memoria.",
+  ],
+  lead: "Poche cose, scelte bene, sempre le stesse: è l’unico modo che conosciamo per fare una pizza da ricordare. Da asporto o a domicilio, tutte le sere tranne il lunedì.",
 };
 
 /** La strofa: una riga d'apertura, la stessa parola ripetuta e due code.
