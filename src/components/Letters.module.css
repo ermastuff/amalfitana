@@ -1,0 +1,9 @@
+/* Span inline (non inline-block): crenatura e a capo restano quelli del
+   font. La parola non si spezza al suo interno. */
+.word {
+  white-space: nowrap;
+}
+
+.letter {
+  display: inline;
+}

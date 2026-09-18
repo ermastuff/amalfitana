@@ -1,135 +1,500 @@
-/* ---------- Storia ---------- */
+/* Pagina filosofia: farine, impasti e materie prime. Stessa impostazione
+   della pagina gourmet — hero fotografica (StoryHero) e fasce col semicerchio
+   tra una sezione e l'altra (ChapterDivider) — con tre titoli che si
+   ricompongono scorrendo (JoinWords) e lo slider di foto su una sola riga. */
 
-.story {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: clamp(2rem, 6vw, 6rem);
-  align-items: start;
+/* ---------- Sezioni ---------- */
+
+.section {
+  position: relative;
+  padding-bottom: clamp(4rem, 10vw, 9rem);
 }
 
-.storyAside {
-  position: sticky;
-  top: calc(var(--header-h) + 2rem);
-  display: grid;
-  gap: 1rem;
+/* La fascia sovrasta i primi 44svh della sezione che segue: il contenuto
+   comincia sotto. */
+.afterDivider {
+  padding-top: 46svh;
 }
 
-.storyAside .h2 {
-  max-width: 14ch;
+/* Il colore della sezione è anche quello della fascia che la precede o che la
+   segue: le due si fondono e resta visibile solo il semicerchio. */
+.dark {
+  background: var(--ink-deep);
+  color: var(--cream);
 }
 
-.storyText {
-  font-size: 1.1rem;
-  line-height: 1.7;
-  color: var(--muted);
-  max-width: 58ch;
-}
-
-.dropcap::first-letter {
-  float: left;
-  margin: 0.1em 0.12em 0 0;
-  font-family: var(--font-display);
-  font-size: 4.2em;
-  line-height: 0.8;
+.light {
+  background: var(--cream-2);
   color: var(--ink);
 }
 
-/* ---------- Pilastri ---------- */
-
-.pillars {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+.chapter {
+  width: 100%;
+  max-width: var(--max-w);
+  margin-inline: auto;
+  padding-inline: var(--pad-x);
 }
 
-.pillar {
-  display: grid;
-  gap: 1rem;
-  padding: 2rem;
-  border: 1px solid color-mix(in srgb, var(--cream) 18%, transparent);
-  border-radius: var(--radius);
-  background: color-mix(in srgb, var(--cream) 5%, transparent);
+/* Come .eyebrow del sito, ma del colore del testo intorno: qui il fondo
+   cambia da una sezione all'altra. */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.75;
 }
 
-.pillarNum {
+.eyebrow::before {
+  content: "";
+  width: 1.75em;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+/* ---------- Manifesto ---------- */
+
+.manifesto {
+  display: grid;
+  gap: clamp(2.5rem, 6vw, 4.5rem);
+  max-width: 56rem;
+  margin-inline: auto;
+  padding: 0 var(--pad-x) clamp(6rem, 14vw, 12rem);
+  text-align: center;
+}
+
+.manifestoBlock {
   font-family: var(--font-display);
-  font-size: 2.2rem;
+  font-size: clamp(1.15rem, 2.4vw, 2rem);
+  line-height: 1.45;
+}
+
+/* Blocco, non inline: la riga deve poter essere scalata e sfocata */
+.manifestoLine {
+  display: block;
+}
+
+.manifestoLead {
+  max-width: 54ch;
+  margin-inline: auto;
+  font-size: clamp(0.98rem, 1.2vw, 1.1rem);
+  line-height: 1.7;
+  opacity: 0.8;
+}
+
+/* ---------- Titoli che si uniscono ---------- */
+
+/* La misura scende con la lunghezza del titolo (--join-ch, il numero di
+   caratteri): resta su una riga sola anche da telefono. */
+.joinTitle {
+  position: relative;
+  margin-block: clamp(3rem, 9vw, 7rem);
+  font-size: clamp(2.4rem, min(11vw, 165vw / var(--join-ch, 8)), 8rem);
   line-height: 1;
-  color: var(--lemon);
+  text-align: center;
 }
 
-.pillarText {
-  color: color-mix(in srgb, var(--cream) 75%, transparent);
+.joinLine {
+  display: block;
+  white-space: nowrap;
 }
 
-/* ---------- Metodo ---------- */
+/* inline-block: gli span si possono spostare e scalare */
+.joinPart {
+  display: inline-block;
+}
 
-.process {
+/* ---------- Gli impasti ---------- */
+
+.doughs {
   display: grid;
-  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-  gap: clamp(2rem, 6vw, 6rem);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(2rem, 4vw, 4rem);
+  margin-top: clamp(2rem, 6vw, 5rem);
+}
+
+.dough {
+  display: grid;
+  align-content: start;
+  gap: 0.6rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+}
+
+.doughNo {
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  opacity: 0.6;
+}
+
+.doughName {
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+}
+
+.doughTime {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.15rem;
+  opacity: 0.85;
+}
+
+.doughText {
+  margin-top: 0.4rem;
+  font-size: 0.98rem;
+  line-height: 1.65;
+  opacity: 0.78;
+}
+
+/* ---------- Apertura chiara ---------- */
+
+/* Come nel riferimento: il testo sta nella metà destra della pagina */
+.intro {
+  display: grid;
+  gap: 1.4rem;
+  width: 100%;
+  max-width: var(--max-w);
+  margin-inline: auto;
+  padding: 0 var(--pad-x) clamp(4rem, 12vw, 10rem);
+  justify-items: end;
+}
+
+.introText {
+  max-width: 38ch;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+/* ---------- Le farine ---------- */
+
+.flours {
+  margin-top: clamp(2rem, 6vw, 5rem);
+  border-bottom: 1px solid var(--line);
+}
+
+.flour {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 0.4rem clamp(2rem, 5vw, 5rem);
+  padding-block: clamp(1.6rem, 3vw, 2.4rem);
+  border-top: 1px solid var(--line);
   align-items: start;
 }
 
-.processHead {
-  position: sticky;
-  top: calc(var(--header-h) + 2rem);
-  display: grid;
-  gap: 1rem;
+.flourName {
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  max-width: 22ch;
 }
 
-.processHead .h2 {
-  max-width: 12ch;
-}
-
-/* ---------- Citazione ---------- */
-
-.quote {
-  background: var(--cream-2);
-}
-
-.blockquote {
-  max-width: 24ch;
-  margin-inline: auto;
-  text-align: center;
-  font-family: var(--font-display);
-  font-size: clamp(1.8rem, 4vw, 3rem);
-  line-height: 1.2;
-  letter-spacing: -0.005em;
-}
-
-.blockquote footer {
-  margin-top: 1.5rem;
-  font-family: var(--font-body);
-  font-size: 0.85rem;
+.flourNote {
+  grid-column: 1;
+  font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--muted);
 }
 
-/* ---------- CTA ---------- */
+.flourText {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  max-width: 46ch;
+  line-height: 1.7;
+  color: var(--muted);
+}
 
-.cta {
+/* ---------- Lo slider delle foto ---------- */
+
+/* Una sola riga, larga quanto serve: scorre di lato con lo scroll (PhotoRail)
+   e i riquadri sono sfalsati in verticale. */
+.rail {
+  position: relative;
+  margin-top: clamp(4rem, 12vw, 10rem);
+  overflow: hidden;
+}
+
+.track {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.9rem, 1.8vw, 1.8rem);
+  width: max-content;
+  height: 58svh;
+  padding-inline: var(--pad-x);
+  will-change: transform;
+}
+
+.tile {
+  position: relative;
+  flex: none;
+  height: var(--tile-h);
+  aspect-ratio: var(--tile-ratio);
+  overflow: hidden;
+  transform: translateY(var(--tile-shift));
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
+}
+
+.tileImg {
+  object-fit: cover;
+}
+
+/* Senza animazioni la riga resta trascinabile a mano */
+@media (prefers-reduced-motion: reduce) {
+  .rail {
+    overflow-x: auto;
+  }
+}
+
+/* ---------- La squadra: le materie prime ---------- */
+
+/* Sfondo caldo e granuloso come nel riferimento, ma ai bordi torna scuro:
+   così le fasce sopra e sotto ci si fondono. */
+.grain {
+  position: relative;
+  isolation: isolate;
+  padding-inline: var(--pad-x);
+  color: var(--cream);
+  background:
+    radial-gradient(
+      120% 55% at 18% 28%,
+      rgba(198, 190, 172, 0.45),
+      transparent 62%
+    ),
+    radial-gradient(
+      100% 45% at 82% 72%,
+      rgba(150, 144, 128, 0.4),
+      transparent 64%
+    ),
+    linear-gradient(
+      180deg,
+      var(--ink-deep) 0%,
+      #6f685c 34%,
+      #6f685c 66%,
+      var(--ink-deep) 100%
+    );
+}
+
+/* La grana: rumore in SVG, appena percettibile */
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.2;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.teamLead {
+  max-width: 44ch;
+  margin: -1.5rem auto clamp(3rem, 8vw, 6rem);
+  font-size: 0.98rem;
+  line-height: 1.7;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.team {
+  display: grid;
+  gap: 0.5rem;
+  max-width: 60rem;
+  margin-inline: auto;
+}
+
+.member {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0 1.2rem;
+  align-items: baseline;
+}
+
+.memberName {
+  justify-self: end;
+  text-align: right;
+  font-size: 0.95rem;
+}
+
+.memberRole {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.1rem;
+  opacity: 0.85;
+}
+
+/* ---------- Domande ---------- */
+
+.faqTitle {
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(2.6rem, 8vw, 6rem);
+  text-align: center;
+}
+
+.faq {
+  max-width: 50rem;
+  margin-inline: auto;
+  border-top: 1px solid var(--line);
+}
+
+.faqItem {
+  border-bottom: 1px solid var(--line);
+}
+
+.faqHead {
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+.faqButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  width: 100%;
+  padding-block: 1.35rem;
+  text-align: left;
+  font-size: 1.02rem;
+  line-height: 1.4;
+}
+
+/* Il segno + che diventa − quando la risposta è aperta */
+.faqSign {
+  position: relative;
+  flex: none;
+  width: 14px;
+  height: 14px;
+}
+
+.faqSign::before,
+.faqSign::after {
+  content: "";
+  position: absolute;
+  background: currentColor;
+}
+
+.faqSign::before {
+  top: 6.25px;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+}
+
+.faqSign::after {
+  top: 0;
+  bottom: 0;
+  left: 6.25px;
+  width: 1.5px;
+  transition: transform 0.4s var(--ease-out);
+}
+
+.faqButton[aria-expanded="true"] .faqSign::after {
+  transform: scaleY(0);
+}
+
+/* Da 0fr a 1fr: si apre senza dover misurare l'altezza */
+.faqPanel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s var(--ease-out);
+}
+
+.faqPanel[data-open] {
+  grid-template-rows: 1fr;
+}
+
+/* Il figlio diretto si stringe a zero: niente spaziature qui, o da chiuso
+   resterebbero visibili */
+.faqPanelInner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.faqPanelInner p {
+  max-width: 54ch;
+  padding-bottom: 1.6rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+/* ---------- Chiusura ---------- */
+
+.closing {
+  display: grid;
+  gap: 1.2rem;
+  justify-items: start;
+  width: 100%;
+  max-width: var(--max-w);
+  margin-inline: auto;
+  padding: clamp(5rem, 12vw, 10rem) var(--pad-x) 0;
+}
+
+.closingTitle {
+  max-width: 16ch;
+}
+
+.closingActions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
+  gap: 1rem 1.75rem;
+  margin-top: 0.6rem;
 }
 
-@media (max-width: 800px) {
-  .story,
-  .process {
+/* ---------- Mobile ---------- */
+
+@media (max-width: 860px) {
+  .doughs {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .flour {
     grid-template-columns: 1fr;
   }
 
-  .storyAside,
-  .processHead {
-    position: static;
+  .flourText {
+    grid-column: 1;
+    grid-row: auto;
+    margin-top: 0.6rem;
   }
 
-  .pillars {
+  .intro {
+    justify-items: start;
+  }
+
+  .member {
     grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 0;
+    margin-bottom: 0.9rem;
+    text-align: center;
+  }
+
+  .memberName {
+    justify-self: center;
+    text-align: center;
+  }
+
+  /* Fascia più bassa e riquadri più piccoli: ci stanno dentro anche
+     sfalsati, e se ne vedono due alla volta */
+  .track {
+    height: 50svh;
+  }
+
+  .tile {
+    height: calc(var(--tile-h) * 0.8);
+    transform: translateY(calc(var(--tile-shift) * 0.7));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faqPanel,
+  .faqSign::after {
+    transition: none;
   }
 }

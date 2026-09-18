@@ -1,32 +1,41 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, type ReactNode } from "react";
 import Image from "next/image";
 import { gsap, MOTION_OK, useGSAP } from "@/lib/gsap";
+import { box, wirePath } from "@/lib/wire";
 import HeroNav from "@/components/HeroNav";
-import Letters from "./Letters";
-import { wirePath, type Box } from "./wires";
-import s from "./gourmet.module.css";
+import Letters from "@/components/Letters";
+import s from "./StoryHero.module.css";
 
 type Props = {
-  /** id del primo capitolo, per l'invito a scorrere. */
-  firstId: string;
+  /** Foto a tutta pagina. */
+  photo: string;
+  /** Titolo intero, per gli screen reader: le due parole sono decorative. */
+  title: string;
+  /** Le due parole del titolo: la prima in alto a sinistra, la seconda —
+      in corsivo — in basso a destra. */
+  words: [string, string];
+  /** Percorso della pagina, per il menu. */
+  current: string;
+  /** Invito a scorrere, in basso a sinistra. */
+  hint: ReactNode;
+  hintHref: string;
 };
 
-// Posizione di una parola rispetto al blocco che le contiene, senza le
-// trasformazioni di GSAP (a metà animazione la parola è scalata).
-const box = (el: HTMLElement): Box => ({
-  left: el.offsetLeft,
-  top: el.offsetTop,
-  width: el.offsetWidth,
-  height: el.offsetHeight,
-});
-
 /**
- * Hero: foto a tutto schermo, menu in alto, le due parole del titolo agli
- * angoli opposti unite da una linea che si disegna, invito a scorrere in basso.
+ * Hero delle pagine di racconto: foto a tutto schermo, menu in alto, le due
+ * parole del titolo agli angoli opposti unite da una linea che si disegna,
+ * invito a scorrere in basso.
  */
-export default function GourmetHero({ firstId }: Props) {
+export default function StoryHero({
+  photo,
+  title,
+  words,
+  current,
+  hint,
+  hintHref,
+}: Props) {
   const ref = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -40,7 +49,8 @@ export default function GourmetHero({ firstId }: Props) {
 
       // Le due parole sono su righe diverse: la linea scende dalla metà
       // orizzontale della prima alla metà orizzontale della seconda
-      const layout = () => path.setAttribute("d", wirePath(box(a), box(b), "solid"));
+      const layout = () =>
+        path.setAttribute("d", wirePath(box(a), box(b), "solid"));
       layout();
       document.fonts.ready.then(layout);
 
@@ -106,29 +116,29 @@ export default function GourmetHero({ firstId }: Props) {
   return (
     <section ref={ref} className={s.hero} data-hero>
       <Image
-        src="/assets/Header-Gourmet.jpg"
+        src={photo}
         alt=""
         fill
         sizes="100vw"
         loading="eager"
         fetchPriority="high"
-        className={s.heroPhoto}
+        className={s.photo}
         data-hero-photo
       />
-      <div className={s.heroShade} aria-hidden="true" />
+      <div className={s.shade} aria-hidden="true" />
 
-      <div className={s.heroInner}>
-        <HeroNav current="/pizze-gourmet" />
+      <div className={s.inner}>
+        <HeroNav current={current} />
 
         <div className={s.claim} data-claim>
           <h1 className={s.claimTitle}>
-            <span className="visually-hidden">Le pizze d’autore</span>
+            <span className="visually-hidden">{title}</span>
             <span
               className={`${s.word} ${s.wordA}`}
               aria-hidden="true"
               data-hero-word
             >
-              <Letters text="Le pizze" />
+              <Letters text={words[0]} />
             </span>
             <span
               className={`${s.word} ${s.wordB}`}
@@ -136,19 +146,17 @@ export default function GourmetHero({ firstId }: Props) {
               data-hero-word
             >
               <em>
-                <Letters text="d’autore." />
+                <Letters text={words[1]} />
               </em>
             </span>
           </h1>
-          <svg className={s.heroWire} aria-hidden="true" focusable="false">
+          <svg className={s.wireBox} aria-hidden="true" focusable="false">
             <path className={s.wire} data-hero-wire />
           </svg>
         </div>
 
-        <a href={`#${firstId}`} className={s.hint} data-hero-hint>
-          Scopri
-          <br />
-          le cinque pizze ↓
+        <a href={hintHref} className={s.hint} data-hero-hint>
+          {hint}
         </a>
       </div>
     </section>

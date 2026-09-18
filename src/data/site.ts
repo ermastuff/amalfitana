@@ -62,7 +62,7 @@ export const site = {
     { href: "/", label: "Home" },
     { href: "/menu", label: "Menu" },
     { href: "/pizze-gourmet", label: "Pizze Gourmet" },
-    { href: "/filosofia", label: "Filosofia", disabled: true },
+    { href: "/filosofia", label: "Filosofia" },
     { href: "/contatti", label: "Contatti", disabled: true },
   ] satisfies NavLink[],
 };

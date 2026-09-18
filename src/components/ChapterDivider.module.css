@@ -1,0 +1,27 @@
+/* Sta sopra alla sezione seguente per 44svh (margine negativo): lo sfondo di
+   quella sezione è già dietro alla fascia, così il semicerchio prima ci scende
+   dentro fino in fondo e poi, rivoltandosi, è lo sfondo a salire nella fascia.
+   Chi la usa lascia 44svh liberi in cima alla sezione che segue. */
+.divider {
+  position: relative;
+  z-index: 2;
+  height: 66svh;
+  margin-bottom: -44svh;
+  pointer-events: none;
+}
+
+.arc {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.arc path {
+  fill: var(--cream-2);
+}
+
+.arcDark path {
+  fill: var(--ink-deep);
+}

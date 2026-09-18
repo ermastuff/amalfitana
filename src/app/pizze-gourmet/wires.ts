@@ -1,5 +1,6 @@
 /* Cablaggio del racconto: dove stanno frasi e foto nella griglia di ogni
-   capitolo e come si disegna la linea che unisce una frase alla successiva.
+   capitolo e di che tipo è la linea che unisce una frase alla successiva
+   (il percorso lo disegna wirePath, in @/lib/wire).
 
    Impianto uguale per tutti i capitoli, così niente è messo a caso:
    - la griglia ha cinque colonne e le frasi stanno solo nella seconda e
@@ -13,9 +14,7 @@
    - le linee uniscono solo le frasi: le foto non sono mai un capo, al
      massimo la linea ci passa sotto. */
 
-export type WireKind = "solid" | "dashed" | "straight";
-
-export type Box = { left: number; top: number; width: number; height: number };
+import type { WireKind } from "@/lib/wire";
 
 /** Posto di una frase: colonna (la 2 o la 4 delle cinque) e riga. Da mobile
     le colonne sono strette, quindi la frase ne occupa tre o quattro. */
@@ -156,41 +155,3 @@ export const PATTERNS: Pattern[] = [
     wireWidth: "clamp(150px, 17vw, 240px)",
   },
 ];
-
-const r = (n: number) => Math.round(n * 10) / 10;
-const PAD = 16;
-
-/**
- * Percorso SVG dalla frase `a` alla frase `b`, nelle coordinate del
- * contenitore. Se le due frasi sono affiancate (si sovrappongono in
- * verticale) la linea va da un fianco all'altro, agganciata alla metà
- * verticale di entrambe, con tangenti orizzontali. Altrimenti scende dalla
- * metà orizzontale di `a` alla metà orizzontale di `b`, con tangenti
- * verticali (la "S" del riferimento) oppure dritta in diagonale.
- */
-export function wirePath(a: Box, b: Box, kind: WireKind): string {
-  const acx = a.left + a.width / 2;
-  const acy = a.top + a.height / 2;
-  const bcx = b.left + b.width / 2;
-  const bcy = b.top + b.height / 2;
-  const P = (x: number, y: number) => `${r(x)} ${r(y)}`;
-
-  const overlapY =
-    Math.min(a.top + a.height, b.top + b.height) - Math.max(a.top, b.top);
-  const sideBySide = overlapY > Math.min(a.height, b.height) * 0.5;
-
-  if (sideBySide) {
-    const rightward = bcx >= acx;
-    const sx = rightward ? a.left + a.width + PAD : a.left - PAD;
-    const ex = rightward ? b.left - PAD : b.left + b.width + PAD;
-    if (kind === "straight") return `M${P(sx, acy)} L${P(ex, bcy)}`;
-    const c = (ex - sx) * 0.5;
-    return `M${P(sx, acy)} C${P(sx + c, acy)} ${P(ex - c, bcy)} ${P(ex, bcy)}`;
-  }
-
-  const sy = a.top + a.height + PAD;
-  const ey = b.top - PAD;
-  if (kind === "straight") return `M${P(acx, sy)} L${P(bcx, ey)}`;
-  const c = Math.max(ey - sy, 0) * 0.5;
-  return `M${P(acx, sy)} C${P(acx, sy + c)} ${P(bcx, ey - c)} ${P(bcx, ey)}`;
-}

@@ -1,17 +1,17 @@
 import { Fragment } from "react";
-import s from "./gourmet.module.css";
+import s from "./Letters.module.css";
 
 /**
  * Testo diviso in lettere, per animarle una a una. Gli span restano inline,
  * così crenatura e a capo sono quelli del font; ogni parola è un blocco che
  * non si spezza. Decorativo: chi lo usa mette accanto il testo intero per gli
- * screen reader.
+ * screen reader, e anima i figli con `[data-letter]`.
  */
 export default function Letters({ text }: { text: string }) {
   return text.split(" ").map((word, wi) => (
     <Fragment key={wi}>
       {wi > 0 && " "}
-      <span className={s.letterWord}>
+      <span className={s.word}>
         {Array.from(word).map((char, ci) => (
           <span key={ci} className={s.letter} data-letter>
             {char}

@@ -3,23 +3,15 @@
 import { useId, useRef, type CSSProperties } from "react";
 import Image from "next/image";
 import { gsap, MOTION_OK, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { box, wirePath } from "@/lib/wire";
 import type { GourmetPizza } from "@/data/gourmet";
-import Letters from "./Letters";
-import { PATTERNS, wirePath, type Box } from "./wires";
+import Letters from "@/components/Letters";
+import { PATTERNS } from "./wires";
 import s from "./gourmet.module.css";
 
 type Props = { pizza: GourmetPizza; index: number; total: number };
 
 const pad = (n: number) => String(n).padStart(2, "0");
-
-// Posizione e misura di un nodo rispetto al racconto, senza le trasformazioni
-// di GSAP (a metà animazione il nodo è scalato): le linee vanno ai posti finali.
-const box = (el: HTMLElement): Box => ({
-  left: el.offsetLeft,
-  top: el.offsetTop,
-  width: el.offsetWidth,
-  height: el.offsetHeight,
-});
 
 /**
  * Un capitolo: la foto resta ferma (sticky, con un lieve parallasse) mentre

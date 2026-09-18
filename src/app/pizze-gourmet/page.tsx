@@ -3,10 +3,10 @@ import { Fragment } from "react";
 import Link from "next/link";
 import { gourmetPizzas } from "@/data/gourmet";
 import { site } from "@/data/site";
+import ChapterDivider from "@/components/ChapterDivider";
+import ScrollPace from "@/components/ScrollPace";
+import StoryHero from "@/components/StoryHero";
 import Chapter from "./Chapter";
-import ChapterDivider from "./ChapterDivider";
-import GourmetHero from "./GourmetHero";
-import ScrollPace from "./ScrollPace";
 import s from "./gourmet.module.css";
 
 export const metadata: Metadata = {
@@ -21,7 +21,20 @@ export default function GourmetPage() {
       {/* Scroll più lento sui racconti, più svelto tra una sezione e l'altra */}
       <ScrollPace />
 
-      <GourmetHero firstId={gourmetPizzas[0].slug} />
+      <StoryHero
+        photo="/assets/Header-Gourmet.jpg"
+        title="Le pizze d’autore"
+        words={["Le pizze", "d’autore."]}
+        current="/pizze-gourmet"
+        hintHref={`#${gourmetPizzas[0].slug}`}
+        hint={
+          <>
+            Scopri
+            <br />
+            le cinque pizze ↓
+          </>
+        }
+      />
 
       {gourmetPizzas.map((pizza, i) => (
         <Fragment key={pizza.slug}>

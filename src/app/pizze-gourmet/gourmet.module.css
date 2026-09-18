@@ -1,111 +1,10 @@
-/* Pagina gourmet: hero fotografica, poi un capitolo per pizza. In ogni
+/* Pagina gourmet: un capitolo per pizza dopo la hero (StoryHero). In ogni
    capitolo la foto resta ferma (sticky, con un lieve parallasse) mentre
    titolo, citazione e punti del racconto le scorrono sopra; prima di ogni
    capitolo una fascia neutra col semicerchio che si rivolta allo scroll. */
 
-/* ---------- Hero ---------- */
-
-/* Come in home l'header resta nascosto sopra a questa hero (vedi HERO_ROUTES
-   in Header.tsx): il menu sta qui dentro, in alto. */
-.hero {
-  position: relative;
-  display: flex;
-  min-height: 100svh;
-  overflow: hidden;
-  background: var(--ink-deep);
-  color: var(--cream);
-}
-
-.heroPhoto {
-  object-fit: cover;
-  object-position: 50% 50%;
-}
-
-.heroShade {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(28, 18, 14, 0.55) 0%,
-    rgba(28, 18, 14, 0.25) 35%,
-    rgba(28, 18, 14, 0.3) 65%,
-    rgba(28, 18, 14, 0.62) 100%
-  );
-}
-
-.heroInner {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  width: 100%;
-  padding: clamp(1.4rem, 3vw, 2.4rem) var(--pad-x) clamp(1.6rem, 3vw, 2.6rem);
-}
-
-/* Le due parole agli angoli opposti; la linea che le unisce è calcolata in
-   GourmetHero.tsx sulle loro posizioni. */
-.claim {
-  position: relative;
-}
-
-/* L'h1 non fa da scatola: le parole si posizionano rispetto a .claim */
-.claimTitle {
-  display: contents;
-}
-
-.word {
-  position: absolute;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(3.3rem, 9.8vw, 9.8rem);
-  line-height: 0.95;
-  white-space: nowrap;
-}
-
-.wordA {
-  top: 10%;
-  left: 0;
-}
-
-.wordB {
-  right: 0;
-  bottom: 8%;
-}
-
-.hint {
-  justify-self: start;
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  line-height: 1.55;
-}
-
-/* ---------- Lettere ---------- */
-
-/* Span inline (non inline-block): crenatura e a capo restano quelli del
-   font. La parola non si spezza al suo interno. */
-.letterWord {
-  white-space: nowrap;
-}
-
-.letter {
-  display: inline;
-}
-
-/* Con le animazioni attive le lettere della hero e l'invito partono
-   nascosti: il fade in di GSAP li fa comparire senza il lampo iniziale.
-   I titoli dei capitoli stanno sotto la piega: ci pensa GSAP da solo. */
-@media (prefers-reduced-motion: no-preference) {
-  .word .letter,
-  .hint {
-    opacity: 0;
-  }
-}
-
 /* ---------- Linee ---------- */
 
-.heroWire,
 .wires {
   position: absolute;
   inset: 0;
@@ -192,7 +91,7 @@
 }
 
 /* Il padding in alto tiene il titolo sotto alla fascia di transizione, che
-   sovrasta i primi 44svh del capitolo (vedi .divider) */
+   sovrasta i primi 44svh del capitolo (vedi ChapterDivider) */
 .beatTitle {
   display: grid;
   align-content: center;
@@ -311,31 +210,6 @@
   padding-bottom: 4svh;
 }
 
-/* ---------- Fascia prima di ogni capitolo ---------- */
-
-/* Sta sopra al capitolo seguente per 44svh (margine negativo): la sua foto è
-   già dietro alla fascia, così il semicerchio prima le scende dentro fino in
-   fondo e poi, rivoltandosi, è la foto a salire dentro alla fascia. */
-.divider {
-  position: relative;
-  z-index: 2;
-  height: 66svh;
-  margin-bottom: -44svh;
-  pointer-events: none;
-}
-
-.arc {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.arc path {
-  fill: var(--cream-2);
-}
-
 /* ---------- Chiusura ---------- */
 
 .closing {
@@ -362,14 +236,6 @@
 /* ---------- Mobile ---------- */
 
 @media (max-width: 700px) {
-  .wordA {
-    top: 6%;
-  }
-
-  .wordB {
-    bottom: 14%;
-  }
-
   .beatTitle {
     padding-top: 40svh;
   }
