@@ -1,16 +1,29 @@
 "use client";
 
-import { useRef, useState, type FormEvent } from "react";
+import { useId, useRef, useState, type FormEvent } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { site } from "@/data/site";
 import s from "./ContactForm.module.css";
 
+/** Il primo è quello che ci interessa di più: chi vuole lavorare con noi. */
+const TOPICS = [
+  "Lavora con noi",
+  "Ordini e asporto",
+  "Feste ed eventi",
+  "Fornitori",
+  "Altro",
+];
+
 /**
- * Form di prenotazione. Demo senza backend: al submit mostra solo la conferma.
- * Collegare una Server Action o un'API route per l'invio reale.
+ * Il modulo della pagina contatti, pensato per le candidature ma buono per
+ * qualsiasi messaggio. Non c'è un backend: all'invio prepariamo l'email già
+ * scritta nel programma di posta di chi scrive. Per farla partire dal sito
+ * basta collegare qui una Server Action.
  */
 export default function ContactForm() {
   const [sent, setSent] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const uid = useId().replace(/:/g, "");
 
   useGSAP(
     () => {
@@ -25,86 +38,133 @@ export default function ContactForm() {
     { scope: ref, dependencies: [sent] },
   );
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const get = (name: string) => String(data.get(name) ?? "").trim();
+    const body = [
+      `Nome: ${get("nome")}`,
+      `Email: ${get("email")}`,
+      get("telefono") && `Telefono: ${get("telefono")}`,
+      "",
+      get("messaggio"),
+    ]
+      .filter(Boolean)
+      .join("\n");
+    window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(
+      `${get("motivo")} — dal sito`,
+    )}&body=${encodeURIComponent(body)}`;
     setSent(true);
   }
 
-  return (
-    <div ref={ref} className={s.wrap}>
-      {sent ? (
+  if (sent) {
+    return (
+      <div ref={ref} className={s.wrap}>
         <div className={s.success} data-success role="status">
-          <p className={s.successTitle}>Grazie, richiesta ricevuta.</p>
+          <p className={s.successTitle}>Il messaggio è pronto.</p>
           <p>
-            Ti confermiamo il tavolo entro poche ore via email o telefono.
+            Abbiamo aperto il tuo programma di posta con tutto già scritto:
+            controlla e invia. Se non si è aperto, scrivici direttamente a{" "}
+            <a href={`mailto:${site.email}`} className="text-link">
+              {site.email}
+            </a>
+            .
           </p>
           <button
             type="button"
             className="text-link"
             onClick={() => setSent(false)}
           >
-            Invia un&apos;altra richiesta
+            Scrivi un altro messaggio
           </button>
         </div>
-      ) : (
-        <form className={s.form} onSubmit={handleSubmit}>
-          <div className={s.row}>
-            <label className={s.field}>
-              <span>Nome</span>
-              <input name="nome" type="text" autoComplete="name" required />
-            </label>
-            <label className={s.field}>
-              <span>Email</span>
-              <input name="email" type="email" autoComplete="email" required />
-            </label>
-          </div>
+      </div>
+    );
+  }
 
-          <div className={s.row}>
-            <label className={s.field}>
-              <span>Telefono</span>
-              <input name="telefono" type="tel" autoComplete="tel" />
-            </label>
-            <label className={s.field}>
-              <span>Persone</span>
-              <select name="persone" defaultValue="2">
-                {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
-                  <option key={n} value={n}>
-                    {n}
-                  </option>
-                ))}
-                <option value="9+">9 o più</option>
-              </select>
-            </label>
-          </div>
-
-          <div className={s.row}>
-            <label className={s.field}>
-              <span>Data</span>
-              <input name="data" type="date" required />
-            </label>
-            <label className={s.field}>
-              <span>Orario</span>
-              <input name="orario" type="time" defaultValue="20:00" required />
-            </label>
-          </div>
-
-          <label className={s.field}>
-            <span>Note</span>
-            <textarea
-              name="note"
-              rows={4}
-              placeholder="Allergie, seggiolone, un tavolo vista mare…"
-            />
+  return (
+    <div ref={ref} className={s.wrap}>
+      <form className={s.form} onSubmit={handleSubmit}>
+        <div className={s.field}>
+          <label className={s.label} htmlFor={`${uid}-motivo`}>
+            ( Di cosa si tratta )
           </label>
-
-          <div className={s.actions}>
-            <button type="submit" className="btn btn--primary">
-              Invia richiesta
-            </button>
-            <p className={s.hint}>Nessun pagamento richiesto.</p>
+          <div className={s.selectBox}>
+            <select
+              id={`${uid}-motivo`}
+              name="motivo"
+              className={s.select}
+              defaultValue={TOPICS[0]}
+              required
+            >
+              {TOPICS.map((topic) => (
+                <option key={topic} value={topic}>
+                  {topic}
+                </option>
+              ))}
+            </select>
+            <span className={s.chevron} aria-hidden="true" />
           </div>
-        </form>
-      )}
+        </div>
+
+        <div className={s.field}>
+          <label className={s.label} htmlFor={`${uid}-messaggio`}>
+            ( Il tuo messaggio )
+          </label>
+          <textarea
+            id={`${uid}-messaggio`}
+            name="messaggio"
+            rows={5}
+            required
+            placeholder="Raccontaci chi sei e cosa sai fare."
+          />
+        </div>
+
+        <div className={s.row}>
+          <div className={s.field}>
+            <label className={s.label} htmlFor={`${uid}-nome`}>
+              ( Nome )
+            </label>
+            <input
+              id={`${uid}-nome`}
+              name="nome"
+              type="text"
+              autoComplete="name"
+              required
+            />
+          </div>
+          <div className={s.field}>
+            <label className={s.label} htmlFor={`${uid}-email`}>
+              ( Email )
+            </label>
+            <input
+              id={`${uid}-email`}
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+            />
+          </div>
+        </div>
+
+        <div className={s.field}>
+          <label className={s.label} htmlFor={`${uid}-telefono`}>
+            ( Telefono, se vuoi )
+          </label>
+          <input
+            id={`${uid}-telefono`}
+            name="telefono"
+            type="tel"
+            autoComplete="tel"
+          />
+        </div>
+
+        <button type="submit" className={`soft-btn ${s.send}`}>
+          {"Invia "}
+          <span className="soft-btn__rule" aria-hidden="true" />
+          {" il messaggio"}
+        </button>
+      </form>
     </div>
   );
 }

@@ -331,6 +331,53 @@ h3 em {
 
 /* ---------- Utility ---------- */
 
+/* Bottone rettangolare con gli angoli tondi: fondo appena più scuro della
+   pagina e scritta bruna. In hover si allarga, e con lui la linea in mezzo. */
+.soft-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75em;
+  padding: 1.05em 1.5em;
+  border-radius: 10px;
+  background: var(--cream-3);
+  color: var(--ink);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1;
+  transition:
+    padding 0.45s var(--ease-out),
+    background-color 0.35s;
+}
+
+.soft-btn__rule {
+  width: 1.6em;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.5;
+  transition:
+    width 0.45s var(--ease-out),
+    opacity 0.35s;
+}
+
+.soft-btn:hover,
+.soft-btn:focus-visible {
+  padding-inline: 2.2em;
+  background: color-mix(in srgb, var(--cream-3) 90%, var(--ink));
+}
+
+.soft-btn:hover .soft-btn__rule,
+.soft-btn:focus-visible .soft-btn__rule {
+  width: 3.2em;
+  opacity: 0.85;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .soft-btn,
+  .soft-btn__rule {
+    transition: none;
+  }
+}
+
 .text-link {
   position: relative;
   font-weight: 600;

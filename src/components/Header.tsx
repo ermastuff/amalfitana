@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { useLenis } from "lenis/react";
-import { site } from "@/data/site";
+import { booking, mainNav, site } from "@/data/site";
 import s from "./Header.module.css";
 
 // Pagine che aprono con una hero scura a tutta pagina: lì la navigazione sta
@@ -117,9 +117,11 @@ export default function Header() {
             <span className={s.logo} aria-hidden="true" />
           </Link>
 
+          {/* I contatti non sono qui: al loro posto, a destra, il numero da
+              chiamare. La pagina resta nel menu del telefono e nel footer. */}
           <nav className={s.nav} aria-label="Navigazione principale">
             <ul className={s.navList}>
-              {site.nav.map((link) => (
+              {mainNav.map((link) => (
                 <li key={link.href}>
                   {link.disabled ? (
                     <span className={`${s.navLink} ${s.off}`}>
@@ -139,9 +141,10 @@ export default function Header() {
             </ul>
           </nav>
 
-          {/* Pizzeria d'asporto: si ordina al telefono (Contatti è da fare) */}
-          <a href={site.orderPhoneHref} className={`btn ${s.cta}`}>
-            Ordina ora
+          {/* Pizzeria d'asporto: si prenota al telefono */}
+          <a href={booking.href} className={`btn ${s.cta}`}>
+            {`${booking.label} `}
+            <span className={s.ctaNumber}>{booking.phone}</span>
           </a>
 
           <button

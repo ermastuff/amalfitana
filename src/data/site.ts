@@ -63,13 +63,24 @@ export const site = {
     { href: "/menu", label: "Menu" },
     { href: "/pizze-gourmet", label: "Pizze Gourmet" },
     { href: "/filosofia", label: "Filosofia" },
-    { href: "/contatti", label: "Contatti", disabled: true },
-  ] satisfies NavLink[],
+    { href: "/contatti", label: "Contatti" },
+  ] as NavLink[],
 };
 
-/** Menu mostrato dentro alle hero (home e /menu): le voci del sito senza la
-    home, a cui riporta il simbolo del logo al centro. */
-export const heroNav = site.nav.filter((link) => link.href !== "/");
+/** L'invito a chiamare, al posto della voce "Contatti" in cima a destra. */
+export const booking = {
+  label: "Prenota",
+  phone: site.orderPhone,
+  href: site.orderPhoneHref,
+};
+
+/** Le voci dei menu in cima alla pagina: i contatti non ci stanno, al loro
+    posto c'è il numero da chiamare (la pagina resta linkata nel footer). */
+export const mainNav = site.nav.filter((link) => link.href !== "/contatti");
+
+/** Menu mostrato dentro alle hero: le voci del sito senza la home, a cui
+    riporta il simbolo del logo al centro. */
+export const heroNav = mainNav.filter((link) => link.href !== "/");
 
 /** Le voci del menu della hero divise a metà, ai due lati del simbolo. */
 const half = Math.ceil(heroNav.length / 2);

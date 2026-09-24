@@ -1,31 +1,29 @@
-/* Il menu raccontato con le foto: a sinistra una colonna di foto accavallate
-   che ondeggia da destra verso sinistra mentre si scorre (MenuWave.tsx), a
-   destra le liste, che restano ferme finché il gruppo non è finito. */
+/* Il menu raccontato con le foto: una sola colonna che ondeggia a destra e a
+   sinistra mentre si scorre (MenuWave.tsx), con di fianco — fermo — il blocco
+   dei due link. */
 
 .wave {
   position: relative;
   padding-block: clamp(4rem, 10vw, 9rem) clamp(5rem, 12vw, 10rem);
   background: var(--cream-2);
-  overflow: hidden;
+  /* clip, non hidden: `hidden` farebbe di questa sezione un contenitore di
+     scorrimento e il blocco dei link non resterebbe più fermo (sticky). */
+  overflow: clip;
 }
 
-.group {
+.inner {
   display: grid;
-  grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
   gap: clamp(2rem, 5vw, 5rem);
-  align-items: start;
   width: 100%;
   max-width: var(--max-w);
   margin-inline: auto;
   padding-inline: var(--pad-x);
 }
 
-.group + .group {
-  margin-top: clamp(4rem, 10vw, 9rem);
-}
-
-/* Le foto stanno una sull'altra (--z) e ognuna parte da una sua distanza dal
-   bordo (--dx, da 0 a 1): l'onda parte da destra e finisce a sinistra. */
+/* Le foto stanno una sull'altra (--z) e in colonna al centro: a spostarle di
+   lato ci pensa l'onda. `position: relative` serve anche alle misure prese
+   con offsetTop. */
 .photos {
   position: relative;
 }
@@ -35,7 +33,7 @@
   z-index: var(--z);
   width: var(--w);
   margin-top: calc(var(--overlap) * -1);
-  margin-left: calc((100% - var(--w)) * var(--dx));
+  margin-inline: auto;
   aspect-ratio: var(--ratio, 1 / 1);
   overflow: hidden;
   background: color-mix(in srgb, var(--ink) 8%, transparent);
@@ -47,91 +45,60 @@
   object-position: var(--pos, 50% 50%);
 }
 
-/* ---------- Le liste ---------- */
+/* ---------- Il blocco dei link ---------- */
 
-.side {
-  position: sticky;
-  top: 24svh;
-}
-
+/* La colonna si allunga quanto le foto (è il comportamento normale della
+   griglia): dentro, il blocco resta fermo finché le foto non sono finite. */
 .card {
+  position: sticky;
+  top: 30svh;
   display: grid;
-  gap: 1rem;
+  gap: 1.2rem;
   max-width: 26rem;
 }
 
-.eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 0.6em;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.eyebrow::before {
-  content: "";
-  width: 1.75em;
-  height: 1px;
-  background: currentColor;
-  opacity: 0.6;
-}
-
 .title {
-  font-size: clamp(2.6rem, 6vw, 4.6rem);
-  line-height: 1;
+  font-size: clamp(2.4rem, 5.4vw, 4.2rem);
+  line-height: 1.02;
+}
+
+.titleLine {
+  display: block;
+}
+
+/* La seconda riga rientra, come nel riferimento */
+.titleLine + .titleLine {
+  padding-left: clamp(0.8rem, 2.5vw, 2.5rem);
 }
 
 .text {
-  max-width: 34ch;
+  max-width: 32ch;
   line-height: 1.7;
   color: var(--muted);
 }
 
-.items {
-  display: grid;
-  gap: 0.35rem;
-  margin-top: 0.4rem;
-  padding-top: 1.2rem;
-  border-top: 1px solid var(--line);
-  font-size: 0.95rem;
-}
-
-.items li {
+.actions {
   display: flex;
-  align-items: baseline;
-  gap: 0.7em;
-}
-
-.items li::before {
-  content: "";
-  flex: none;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.4;
-}
-
-.card a {
-  justify-self: start;
-  margin-top: 0.6rem;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 0.8rem;
 }
 
 /* ---------- Mobile ---------- */
 
 @media (max-width: 900px) {
-  .group {
+  .inner {
     grid-template-columns: minmax(0, 1fr);
     gap: 2.5rem;
   }
 
   .side {
+    order: -1;
+  }
+
+  .card {
     position: relative;
     top: auto;
-    order: -1;
   }
 
   .photo {

@@ -136,10 +136,17 @@
 }
 
 .cta {
+  gap: 0.6em;
   padding: 0.75em 1.35em;
   font-size: 0.9rem;
   background: var(--ink);
   color: var(--cream);
+}
+
+.ctaNumber {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  opacity: 0.8;
 }
 
 .cta:hover {

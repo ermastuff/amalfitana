@@ -52,150 +52,106 @@ export type WavePhoto = {
   ratio: string;
   /** Larghezza rispetto alla colonna delle foto. */
   width: string;
-  /** Da 0 (tutta a sinistra) a 1 (tutta a destra): l'onda parte da destra e
-      finisce a sinistra. */
-  dx: number;
   /** Quanto la foto risale su quella prima: le foto si accavallano. */
   overlap: string;
   /** Il punto della foto da tenere nel riquadro. */
   pos?: string;
 };
 
-export type WaveGroup = {
-  eyebrow: string;
-  title: string;
-  text: string;
-  items: string[];
-  link: { href: string; label: string };
-  photos: WavePhoto[];
-};
-
-/** Due gruppi: il menu di sempre e le pizze d'autore. Le foto scorrono, le
-    scritte restano ferme di fianco. */
-export const waveGroups: WaveGroup[] = [
+/** Una sola colonna di foto: lo scroll la fa ondeggiare come un serpente e
+    allarga di volta in volta quella che passa in mezzo allo schermo. */
+export const wavePhotos: WavePhoto[] = [
   {
-    eyebrow: "Il menu",
-    title: "Tradizione",
-    text: "Settanta pizze, dalla margherita alle pale da condividere. Più calzoni, supplementi e bevande.",
-    items: [
-      "Pizze classiche",
-      "Pizze speciali",
-      "Ultime novità",
-      "Pizze pala",
-      "Calzoni",
-      "Supplementi",
-      "Bevande",
-    ],
-    link: { href: "/menu", label: "Vedi tutto il menu" },
-    photos: [
-      {
-        src: "/assets/Margherita.png",
-        alt: "Pizza margherita appena sfornata",
-        ratio: "1 / 1",
-        width: "58%",
-        dx: 0.95,
-        overlap: "0rem",
-      },
-      {
-        src: "/assets/filosofia/rail-cornicione.jpg",
-        alt: "Il cornicione alto e leggero",
-        ratio: "5 / 4",
-        width: "50%",
-        dx: 0.68,
-        overlap: "5rem",
-      },
-      {
-        src: "/assets/Bufala Extra.png",
-        alt: "Pizza con bufala e crudo",
-        ratio: "1 / 1",
-        width: "62%",
-        dx: 0.86,
-        overlap: "6rem",
-      },
-      {
-        src: "/assets/filosofia/rail-basilico.jpg",
-        alt: "Basilico fresco",
-        ratio: "3 / 2",
-        width: "46%",
-        dx: 0.44,
-        overlap: "7rem",
-      },
-      {
-        src: "/assets/filosofia/rail-margherita.jpg",
-        alt: "Margherita sul piatto",
-        ratio: "6 / 5",
-        width: "54%",
-        dx: 0.62,
-        overlap: "6rem",
-      },
-      {
-        src: "/assets/filosofia/rail-forno.jpg",
-        alt: "La pizza pronta per il servizio",
-        ratio: "10 / 9",
-        width: "48%",
-        dx: 0.22,
-        overlap: "8rem",
-      },
-    ],
+    src: "/assets/Margherita.png",
+    alt: "Pizza margherita appena sfornata",
+    ratio: "1 / 1",
+    width: "52%",
+    overlap: "0rem",
   },
   {
-    eyebrow: "Pizze gourmet",
-    title: "D’autore",
-    text: "Cinque pizze che nascono come una sinfonia: farina macinata a pietra e ingredienti scelti uno per uno.",
-    items: [
-      "Renana",
-      "La dolce vita",
-      "Pastorale",
-      "Moonlight",
-      "Il Canto della Terra",
-    ],
-    link: { href: "/pizze-gourmet", label: "Scopri le gourmet" },
-    photos: [
-      {
-        src: "/assets/gourmet/renana.jpg",
-        alt: "Renana: burrata e crudo San Daniele",
-        ratio: "3 / 4",
-        width: "50%",
-        dx: 0.78,
-        pos: "50% 66%",
-        overlap: "0rem",
-      },
-      {
-        src: "/assets/gourmet/pastorale.jpg",
-        alt: "Pastorale: salsiccia, taleggio e radicchio",
-        ratio: "3 / 4",
-        width: "44%",
-        dx: 0.5,
-        pos: "50% 66%",
-        overlap: "7rem",
-      },
-      {
-        src: "/assets/gourmet/moonlight.jpg",
-        alt: "Moonlight: ricotta di bufala e salmone",
-        ratio: "3 / 4",
-        width: "52%",
-        dx: 0.66,
-        pos: "50% 66%",
-        overlap: "6rem",
-      },
-      {
-        src: "/assets/gourmet/dolce-vita.jpg",
-        alt: "La dolce vita: provola affumicata e crudo",
-        ratio: "3 / 4",
-        width: "46%",
-        dx: 0.28,
-        pos: "50% 66%",
-        overlap: "8rem",
-      },
-      {
-        src: "/assets/gourmet/canto-della-terra.jpg",
-        alt: "Il Canto della Terra: crema di melanzane e cotto",
-        ratio: "3 / 4",
-        width: "54%",
-        dx: 0.04,
-        pos: "50% 66%",
-        overlap: "6rem",
-      },
-    ],
+    src: "/assets/gourmet/renana.jpg",
+    alt: "Renana: burrata e crudo San Daniele",
+    ratio: "3 / 4",
+    width: "44%",
+    overlap: "6rem",
+    pos: "50% 66%",
+  },
+  {
+    src: "/assets/filosofia/rail-cornicione.jpg",
+    alt: "Il cornicione alto e leggero",
+    ratio: "5 / 4",
+    width: "56%",
+    overlap: "7rem",
+  },
+  {
+    src: "/assets/Bufala Extra.png",
+    alt: "Pizza con bufala e crudo",
+    ratio: "1 / 1",
+    width: "48%",
+    overlap: "6rem",
+  },
+  {
+    src: "/assets/gourmet/pastorale.jpg",
+    alt: "Pastorale: salsiccia, taleggio e radicchio",
+    ratio: "3 / 4",
+    width: "42%",
+    overlap: "8rem",
+    pos: "50% 66%",
+  },
+  {
+    src: "/assets/filosofia/rail-basilico.jpg",
+    alt: "Basilico fresco",
+    ratio: "3 / 2",
+    width: "58%",
+    overlap: "7rem",
+  },
+  {
+    src: "/assets/gourmet/moonlight.jpg",
+    alt: "Moonlight: ricotta di bufala e salmone",
+    ratio: "3 / 4",
+    width: "46%",
+    overlap: "6rem",
+    pos: "50% 66%",
+  },
+  {
+    src: "/assets/filosofia/rail-margherita.jpg",
+    alt: "Margherita sul piatto",
+    ratio: "6 / 5",
+    width: "52%",
+    overlap: "8rem",
+  },
+  {
+    src: "/assets/gourmet/dolce-vita.jpg",
+    alt: "La dolce vita: provola affumicata e crudo",
+    ratio: "3 / 4",
+    width: "44%",
+    overlap: "6rem",
+    pos: "50% 66%",
+  },
+  {
+    src: "/assets/filosofia/rail-forno.jpg",
+    alt: "La pizza pronta per il servizio",
+    ratio: "10 / 9",
+    width: "54%",
+    overlap: "7rem",
+  },
+  {
+    src: "/assets/gourmet/canto-della-terra.jpg",
+    alt: "Il Canto della Terra: crema di melanzane e cotto",
+    ratio: "3 / 4",
+    width: "48%",
+    overlap: "8rem",
+    pos: "50% 66%",
   },
 ];
+
+/** L'unico blocco di testo di fianco alle foto: due righe, una frase e i due
+    link al menu e alle gourmet. */
+export const waveText = {
+  lines: ["Le classiche", "e le gourmet."],
+  text: "Le pizze di sempre e le cinque d’autore.",
+  links: [
+    { href: "/menu", lead: "Vedi", label: "il menu" },
+    { href: "/pizze-gourmet", lead: "Scopri", label: "le gourmet" },
+  ],
+};

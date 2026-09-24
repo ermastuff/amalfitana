@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { heroNavSides, site, type NavLink } from "@/data/site";
+import { booking, heroNavSides, site, type NavLink } from "@/data/site";
 import s from "./HeroNav.module.css";
 
 type Props = {
@@ -11,10 +11,11 @@ type Props = {
 const [NAV_LEFT, NAV_RIGHT] = heroNavSides;
 
 /**
- * Menu delle hero (home, menu, gourmet): le voci del sito ai due lati del
- * simbolo del logo, che riporta alla home. Le pagine ancora da fare restano
- * nel menu, spente e senza link. Voci e simbolo portano `data-hero-nav`, che
- * le hero usano per l'animazione d'ingresso.
+ * Menu delle hero: le voci del sito ai due lati del simbolo del logo, che
+ * riporta alla home. In fondo a destra, al posto dei contatti, il numero da
+ * chiamare per prenotare. Le pagine ancora da fare restano nel menu, spente e
+ * senza link. Voci e simbolo portano `data-hero-nav`, che le hero usano per
+ * l'animazione d'ingresso.
  */
 export default function HeroNav({ current, className }: Props) {
   const item = (link: NavLink) => (
@@ -47,7 +48,16 @@ export default function HeroNav({ current, className }: Props) {
       >
         <span className={s.symbol} aria-hidden="true" />
       </Link>
-      <ul>{NAV_RIGHT.map(item)}</ul>
+      <ul>
+        {NAV_RIGHT.map(item)}
+        <li data-hero-nav>
+          {/* Da schermo stretto resta solo la parola: il numero non ci sta */}
+          <a href={booking.href} className={`${s.link} ${s.book}`}>
+            {`${booking.label} `}
+            <span className={s.bookNumber}>{booking.phone}</span>
+          </a>
+        </li>
+      </ul>
     </nav>
   );
 }
