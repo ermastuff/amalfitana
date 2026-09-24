@@ -171,14 +171,14 @@
   color: var(--muted);
 }
 
-/* ---------- Le farine ---------- */
+/* ---------- Gli impasti a scelta ---------- */
 
-.flours {
+.choices {
   margin-top: clamp(2rem, 6vw, 5rem);
   border-bottom: 1px solid var(--line);
 }
 
-.flour {
+.choice {
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
   gap: 0.4rem clamp(2rem, 5vw, 5rem);
@@ -187,12 +187,12 @@
   align-items: start;
 }
 
-.flourName {
+.choiceName {
   font-size: clamp(1.4rem, 2.4vw, 2rem);
   max-width: 22ch;
 }
 
-.flourNote {
+.choiceNote {
   grid-column: 1;
   font-size: 0.68rem;
   font-weight: 600;
@@ -201,12 +201,25 @@
   color: var(--muted);
 }
 
-.flourText {
+.choiceText {
   grid-column: 2;
   grid-row: 1 / span 2;
   max-width: 46ch;
   line-height: 1.7;
   color: var(--muted);
+}
+
+/* Le basi da portare a casa: una riga sotto all'elenco */
+.bases {
+  max-width: 52ch;
+  margin-top: clamp(2rem, 4vw, 3rem);
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.bases strong {
+  color: var(--ink);
+  font-weight: 600;
 }
 
 /* ---------- Lo slider delle foto ---------- */
@@ -453,11 +466,11 @@
     gap: 2rem;
   }
 
-  .flour {
+  .choice {
     grid-template-columns: 1fr;
   }
 
-  .flourText {
+  .choiceText {
     grid-column: 1;
     grid-row: auto;
     margin-top: 0.6rem;

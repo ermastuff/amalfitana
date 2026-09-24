@@ -4,7 +4,7 @@ import MenuBrowser from "./MenuBrowser";
 export const metadata: Metadata = {
   title: "Menu",
   description:
-    "Il menu della pizzeria Amalfitana: pizze classiche e speciali, ultime novità, pizze pala, calzoni, supplementi e bevande. Impasto a 48 ore, forno a legna.",
+    "Il menu de L’Amalfitana, pizzeria d’asporto a Flero: pizze classiche e speciali, ultime novità, gourmet, pizze pala, calzoni, supplementi e bevande. Impasti con biga di 24 ore.",
 };
 
 export default function MenuPage() {

@@ -9,7 +9,7 @@ export const site = {
   name: "L'Amalfitana",
   tagline: "Traditional Gourmet · Costiera Amalfitana",
   description:
-    "Pizzeria L'Amalfitana: impasto a lunga lievitazione, forno a legna e ingredienti della Costiera. Pizze classiche e gourmet ad Amalfi.",
+    "L’Amalfitana, pizzeria d’asporto a Flero (BS): impasti con biga di 24 ore, sette impasti a scelta, pizze classiche, speciali e gourmet.",
   // Dati del locale presi da pizzeriadasportolamalfitana.com (settembre 2026).
   legalName: "Pizzeria d’asporto L’Amalfitana",
   vat: "02678610987",

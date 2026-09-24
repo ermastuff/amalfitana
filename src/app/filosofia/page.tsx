@@ -4,8 +4,9 @@ import ChapterDivider from "@/components/ChapterDivider";
 import ScrollPace from "@/components/ScrollPace";
 import StoryHero from "@/components/StoryHero";
 import {
+  bases,
+  choices,
   doughs,
-  flours,
   intro,
   manifesto,
   manifestoLead,
@@ -21,7 +22,7 @@ import s from "./filosofia.module.css";
 export const metadata: Metadata = {
   title: "Filosofia",
   description:
-    "Farine macinate a pietra, lievitazioni di 48 e 72 ore, materie prime scelte una per una: come nascono gli impasti de L’Amalfitana.",
+    "Biga di 24 ore e altre 24-48 di lievitazione, sette impasti tra cui scegliere e materie prime scelte una per una: come nascono le pizze de L’Amalfitana.",
 };
 
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -42,14 +43,14 @@ export default function FilosofiaPage() {
           <>
             Scopri
             <br />
-            farine e impasti ↓
+            il metodo e gli impasti ↓
           </>
         }
       />
 
       <ChapterDivider />
 
-      {/* ---- Gli impasti ---- */}
+      {/* ---- Il metodo ---- */}
       <section className={`${s.section} ${s.dark} ${s.afterDivider}`}>
         <div className={s.manifesto} data-pace="slow">
           <Deep as="p" className={s.manifestoBlock} stagger={0.12}>
@@ -65,7 +66,7 @@ export default function FilosofiaPage() {
         </div>
 
         <div className={s.chapter} id="impasti">
-          <p className={s.eyebrow}>Gli impasti</p>
+          <p className={s.eyebrow}>Il metodo</p>
           <JoinWords parts={["Im", "pasto"]} label="Impasto" />
           <ol className={s.doughs} data-pace="slow">
             {doughs.map((dough, i) => (
@@ -82,7 +83,7 @@ export default function FilosofiaPage() {
 
       <ChapterDivider tone="dark" />
 
-      {/* ---- Le farine ---- */}
+      {/* ---- Gli impasti a scelta ---- */}
       <section className={`${s.section} ${s.light} ${s.afterDivider}`}>
         <div className={s.intro} data-pace="slow">
           {intro.map((paragraph) => (
@@ -92,18 +93,22 @@ export default function FilosofiaPage() {
           ))}
         </div>
 
-        <div className={s.chapter} id="farine">
-          <p className={s.eyebrow}>Le farine</p>
-          <JoinWords parts={["Macinata", "a pietra"]} label="Macinata a pietra" spaced />
-          <ul className={s.flours} data-pace="slow">
-            {flours.map((flour) => (
-              <Deep as="li" key={flour.name} className={s.flour}>
-                <h3 className={s.flourName}>{flour.name}</h3>
-                <p className={s.flourNote}>{flour.note}</p>
-                <p className={s.flourText}>{flour.text}</p>
+        <div className={s.chapter} id="impasti-a-scelta">
+          <p className={s.eyebrow}>La scelta</p>
+          <JoinWords parts={["Sette", "impasti"]} label="Sette impasti" spaced />
+          <ul className={s.choices} data-pace="slow">
+            {choices.map((choice) => (
+              <Deep as="li" key={choice.name} className={s.choice}>
+                <h3 className={s.choiceName}>{choice.name}</h3>
+                <p className={s.choiceNote}>{choice.note}</p>
+                <p className={s.choiceText}>{choice.text}</p>
               </Deep>
             ))}
           </ul>
+
+          <Deep as="p" className={s.bases}>
+            <strong>{bases.title}.</strong> {bases.text}
+          </Deep>
         </div>
 
         <PhotoRail />
@@ -146,7 +151,7 @@ export default function FilosofiaPage() {
             Il resto lo racconta <em>la pizza</em>.
           </h2>
           <p className="lead">
-            Farine, tempi e materie prime finiscono tutti nello stesso posto.
+            Biga, tempo e materie prime finiscono tutti nello stesso posto.
             Chiama e ordina: da asporto o a domicilio, a Flero.
           </p>
           <div className={s.closingActions}>

@@ -1,78 +1,103 @@
-/* I contenuti della pagina Filosofia: farine, impasti e materie prime.
-   Testi e dati tecnici sono da confermare con la pizzeria. */
+/* I contenuti della pagina Filosofia: il metodo degli impasti, quelli tra cui
+   si può scegliere e le materie prime. Metodo, tempi e idratazione sono
+   quelli dati dalla pizzeria; i testi che li raccontano sono da rileggere
+   insieme a loro. */
 
 /** Le righe del manifesto, in serif, una sotto l'altra. */
 export const manifesto = [
   "C’è chi vede della farina; noi vediamo un campo a luglio.",
   "C’è chi vede dell’acqua; noi vediamo il tempo che lavora.",
-  "Il lievito che respira sotto al telo?",
+  "La biga che riposa da ieri sera?",
   "Sta già scrivendo il sapore di domani.",
 ];
 
 /** Il paragrafo che chiude il manifesto. */
 export const manifestoLead =
-  "Da L’Amalfitana una pizza comincia molto prima del forno: comincia da un sacco di farina che sa ancora di grano, da due giorni di attesa in cella, da chi impasta e sa cosa sta aspettando. Poche cose, scelte bene, sempre le stesse.";
+  "Da L’Amalfitana una pizza comincia due o tre giorni prima del forno: una biga di ventiquattro ore, poi l’impasto si completa e lievita altre ventiquattro o quarantotto. Il tempo non si vede, ma si sente.";
 
 /** I due paragrafi d'apertura, allineati a destra come nel riferimento. */
 export const intro = [
-  "Siamo una pizzeria d’asporto a Flero e facciamo un mestiere antico con qualche pretesa in più: farine macinate a pietra, lievitazioni lunghe, una lista della spesa corta e fatta di nomi che conosciamo.",
-  "Qui sotto c’è tutto quello che entra nei nostri impasti: le farine, i tempi, le materie prime. Nessun segreto, solo il modo in cui lavoriamo ogni sera.",
+  "Siamo una pizzeria d’asporto a Flero e facciamo un mestiere antico con qualche pretesa in più: tutti i nostri impasti nascono da una biga, il metodo indiretto, e prendono tutto il tempo che serve.",
+  "Qui sotto c’è come li facciamo e tra quanti puoi scegliere. Nessun segreto, solo il modo in cui lavoriamo ogni sera.",
 ];
 
 export type Dough = {
   name: string;
-  /** Il dato che conta: il tempo di lievitazione. */
+  /** Il dato che conta: il tempo o l'idratazione. */
   time: string;
   text: string;
 };
 
+/** Le tre famiglie, con il metodo di ognuna. */
 export const doughs: Dough[] = [
   {
-    name: "La tonda",
-    time: "48 ore",
-    text: "Tipo 1 macinata a pietra, idratazione al 70%, mezzo grammo di lievito per chilo di farina. Cornicione alto e leggero, fondo asciutto.",
+    name: "I tradizionali",
+    time: "Biga 24 ore",
+    text: "Un preimpasto che riposa ventiquattro ore, poi si completa e lievita altre ventiquattro o quarantotto. Profumi intensi, più gusto, massima digeribilità.",
   },
   {
     name: "La pala",
-    time: "72 ore",
-    text: "Semola rimacinata di grano duro e tipo 1, idratazione all’80%. Si stende a mano sulla pala: alveoli grandi, crosta sottile, dentro quasi cremosa.",
+    time: "80% di idratazione",
+    text: "Stesso metodo indiretto, molta più acqua e altre ventiquattro ore di maturazione. Viene leggera e croccante, fragrante e digeribile.",
   },
   {
-    name: "Il calzone",
-    time: "48 ore",
-    text: "Lo stesso impasto della tonda, steso più sottile. Dentro il vapore cuoce il ripieno, fuori la superficie si dora senza seccare.",
+    name: "Gli integrali",
+    time: "Biga 24 ore",
+    text: "Lo stesso tempo lungo, che all’integrale serve più che a ogni altro impasto: è la lavorazione a togliergli il peso.",
   },
 ];
 
-export type Flour = {
+export type Choice = {
   name: string;
-  /** Nota tecnica breve: forza, macinatura, provenienza. */
+  /** Nota breve: il grano, il metodo, la particolarità. */
   note: string;
   text: string;
 };
 
-export const flours: Flour[] = [
+/** I sette impasti tra cui si sceglie ordinando. */
+export const choices: Choice[] = [
   {
-    name: "Tipo 1 macinata a pietra",
-    note: "W 280",
-    text: "La base di tutto. La pietra scalda poco e lascia nel sacco il germe e una parte di crusca: profumo di grano e un impasto che resta vivo.",
+    name: "Tradizionale",
+    note: "Biga 24 ore",
+    text: "Quello di tutti i giorni: il metodo indiretto e due o tre giorni di attesa prima del forno.",
   },
   {
-    name: "Tipo 0",
-    note: "W 300",
-    text: "Entra in piccola parte, dove serve struttura: è la maglia glutinica che regge quarantotto ore di frigo senza cedere.",
+    name: "Napoli",
+    note: "Cornicione alto",
+    text: "Più morbido e più alto sul bordo, per chi cerca la pizza napoletana.",
   },
   {
-    name: "Semola rimacinata di grano duro",
-    note: "Grano duro",
-    text: "Il colore d’oro e la croccantezza della pala. Beve più acqua delle altre e in cottura fa una crosta sottilissima.",
+    name: "Kamut",
+    note: "Grano khorasan",
+    text: "Un grano antico dal gusto dolce, per un impasto dal sapore diverso.",
   },
   {
-    name: "Integrale macinata a pietra",
+    name: "Senza lievito",
+    note: "Per chi lo evita",
+    text: "Stessa cura, un’altra strada: basta dirlo quando ordini.",
+  },
+  {
+    name: "Integrale",
     note: "Crusca intera",
-    text: "Per gli impasti più rustici: dà una nota di nocciola e un fondo più scuro. Poca, o coprirebbe tutto il resto.",
+    text: "Farina integrale e biga lunga: è il tempo a renderlo leggero.",
+  },
+  {
+    name: "Farro",
+    note: "Grano antico",
+    text: "Gusto rustico e una nota di nocciola, per cambiare registro.",
+  },
+  {
+    name: "Base senza glutine",
+    note: "Base dedicata",
+    text: "La base pizza senza glutine, da farcire come tutte le altre.",
   },
 ];
+
+/** Le basi da portare via: si comprano anche da sole. */
+export const bases = {
+  title: "Le basi da portare a casa",
+  text: "Le basi pizza si possono comprare anche da sole: le condisci tu e le inforni quando vuoi.",
+};
 
 export type RailPhoto = {
   src: string;
@@ -89,7 +114,7 @@ export type RailPhoto = {
 export const rail: RailPhoto[] = [
   {
     src: "/assets/filosofia/rail-alveoli.jpg",
-    alt: "L’alveolatura di un impasto lievitato 48 ore",
+    alt: "L’alveolatura di un impasto lievitato due giorni",
     ratio: "1 / 1",
     height: "46svh",
     shift: "-3.7svh",
@@ -201,31 +226,35 @@ export type Faq = { q: string; a: string };
 
 export const faq: Faq[] = [
   {
-    q: "Quanto lievita il vostro impasto?",
-    a: "Quarantotto ore in cella a temperatura controllata, settantadue per la pala. È il tempo a rendere una pizza leggera, non la quantità di lievito: noi ne usiamo mezzo grammo per chilo di farina.",
+    q: "Quanto lievitano i vostri impasti?",
+    a: "Prima una biga di ventiquattro ore, poi l’impasto si completa e lievita altre ventiquattro o quarantotto. Due o tre giorni in tutto, prima che la pizza entri in forno.",
   },
   {
-    q: "Che farine usate?",
-    a: "Tipo 1 e tipo 0 macinate a pietra, semola rimacinata di grano duro per la pala e una integrale per gli impasti più rustici. Nessuna miscela pronta: le pesiamo noi, impasto per impasto.",
+    q: "Che cos’è la biga?",
+    a: "Un preimpasto di farina, acqua e pochissimo lievito che riposa ventiquattro ore prima di diventare impasto. È un metodo indiretto: più lento di quello diretto, e per questo più profumato e digeribile.",
   },
   {
-    q: "Perché la macinatura a pietra?",
-    a: "La pietra gira piano e scalda poco: nel sacco restano il germe e una parte di crusca. Si sente nel profumo dell’impasto crudo e nel gusto del cornicione.",
+    q: "Quali impasti posso scegliere?",
+    a: "Tradizionale, Napoli, kamut, senza lievito, integrale, al farro e la base senza glutine. Basta dirlo quando ordini.",
   },
   {
-    q: "La pizza è più digeribile?",
-    a: "Una lievitazione lunga scompone gli amidi e il glutine prima che lo faccia lo stomaco. Non è una promessa medica, è il motivo per cui aspettiamo due giorni.",
+    q: "Perché la pala è diversa?",
+    a: "Stesso metodo indiretto, ma con l’ottanta per cento di idratazione e altre ventiquattro ore di maturazione. Esce leggera e croccante, fragrante.",
   },
   {
-    q: "Avete impasti senza glutine?",
-    a: "No, e preferiamo dirlo chiaramente: nel nostro laboratorio la farina è ovunque e non potremmo garantire l’assenza di contaminazione.",
+    q: "Perché il vostro integrale è più leggero?",
+    a: "Perché un integrale lavorato in fretta si porta dietro qualche problema: i tannini e i resorcinoli della crusca frenano gli enzimi digestivi, l’acido fitico ostacola l’assorbimento di calcio, ferro e magnesio, e l’asparagina libera in cottura forma acrilamide. La biga e la lievitazione lunga servono a questo.",
+  },
+  {
+    q: "Avete la pizza senza glutine?",
+    a: "C’è la base pizza senza glutine, da farcire come le altre. Nel laboratorio però si lavorano anche farine con glutine: se sei celiaco dillo quando ordini, così ne parliamo.",
+  },
+  {
+    q: "Posso comprare solo la base?",
+    a: "Sì: vendiamo le basi pizza da portare a casa. Le condisci tu e le inforni quando vuoi.",
   },
   {
     q: "Da dove arrivano gli ingredienti?",
     a: "Da fornitori che seguiamo da anni, con le denominazioni dove esistono: San Daniele 24 mesi, bufala campana, San Marzano. Se un prodotto non ci convince, quella sera esce dal menu.",
-  },
-  {
-    q: "Posso vedere come lavorate?",
-    a: "Sì. Passa in Via XXV Aprile nel pomeriggio, prima del servizio: il banco è a vista e l’impasto è già pronto in cella.",
   },
 ];
