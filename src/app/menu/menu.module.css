@@ -152,7 +152,7 @@
 /* La misura è in vw così i sette bottoni stanno su una riga sola anche
    quando la finestra si stringe (vedi il nowrap sotto i 901px in su). */
 .filter {
-  padding: 0.85em 1.35em;
+  padding: 0.85em 1.15em;
   border: 1.5px solid var(--line-strong);
   border-radius: 999px;
   font-family: var(--font-display);
@@ -210,6 +210,22 @@
   display: flex;
   flex-direction: column;
   gap: 0.55rem;
+}
+
+/* Solo le gourmet hanno la foto in cima alla card */
+.shot {
+  position: relative;
+  margin-bottom: 0.35rem;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
+}
+
+/* Le foto sono verticali e la pizza sta in basso, come nella pagina gourmet */
+.shotImg {
+  object-fit: cover;
+  object-position: 50% 62%;
 }
 
 .name {

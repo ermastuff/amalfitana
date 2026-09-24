@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { gsap, MOTION_OK, useGSAP } from "@/lib/gsap";
 import HeroNav from "@/components/HeroNav";
 import Reveal from "@/components/Reveal";
@@ -177,7 +178,7 @@ export default function MenuBrowser() {
               onClick={() => setActiveId(sec.id)}
               data-reveal-item
             >
-              {sec.title}
+              {sec.short ?? sec.title}
             </button>
           ))}
         </div>
@@ -188,11 +189,29 @@ export default function MenuBrowser() {
           <header className={s.groupHead} data-menu-head>
             <h2 className={s.groupTitle}>{active.title}</h2>
             {active.note && <p className={s.note}>{active.note}</p>}
+            {active.link && (
+              <Link href={active.link.href} className="text-link">
+                {active.link.label}
+              </Link>
+            )}
           </header>
 
           <ul className={s.grid}>
             {active.items.map((item) => (
               <li key={item.name} className={s.card} data-menu-card>
+                {/* La foto ce l'hanno solo le gourmet: il nome la descrive
+                    già, quindi qui è decorativa. */}
+                {item.image && (
+                  <div className={s.shot}>
+                    <Image
+                      src={item.image}
+                      alt=""
+                      fill
+                      sizes="(max-width: 600px) 92vw, (max-width: 900px) 45vw, 30vw"
+                      className={s.shotImg}
+                    />
+                  </div>
+                )}
                 <h3 className={s.name}>{item.name}</h3>
                 {item.description && (
                   <p className={s.desc}>{item.description}</p>

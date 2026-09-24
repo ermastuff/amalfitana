@@ -1,17 +1,53 @@
+import { gourmetPizzas } from "./gourmet";
+
 export type MenuItem = {
   name: string;
   /** Assente dove il prodotto non ha farcitura da elencare (pala, supplementi). */
   description?: string;
   price: number;
+  /** Solo le gourmet hanno la foto: la loro card la mostra in cima. */
+  image?: string;
 };
 
 export type MenuSection = {
   id: string;
   title: string;
+  /** Etichetta corta per il bottone del filtro, se il titolo è lungo. */
+  short?: string;
   note?: string;
+  /** Un link in fondo all'intestazione della sezione. */
+  link?: { href: string; label: string };
   /** Prezzi da sommare a quello della pizza: mostrati col segno (+ / −). */
   delta?: boolean;
   items: MenuItem[];
+};
+
+// Prezzi delle gourmet: da confermare con la pizzeria. Nome, ingredienti e
+// foto arrivano da data/gourmet.ts, gli stessi della pagina dedicata.
+const GOURMET_PRICES: Record<string, number> = {
+  renana: 15,
+  "la-dolce-vita": 14.5,
+  pastorale: 13.5,
+  moonlight: 15.5,
+  "il-canto-della-terra": 13.5,
+};
+
+const gourmetSection: MenuSection = {
+  id: "gourmet",
+  title: "Pizze gourmet",
+  short: "Gourmet",
+  note: "Farina macinata a pietra e ingredienti scelti uno per uno: le cinque pizze d’autore.",
+  link: { href: "/pizze-gourmet", label: "Il racconto delle gourmet" },
+  items: gourmetPizzas.map((pizza) => ({
+    name: pizza.name,
+    // La farina è la stessa per tutte e cinque: lo dice la nota qui sopra,
+    // nelle card resta il resto.
+    description: pizza.ingredients
+      .filter((ingredient) => !ingredient.startsWith("Farina"))
+      .join(", "),
+    price: GOURMET_PRICES[pizza.slug],
+    image: pizza.image,
+  })),
 };
 
 // Le sezioni sono anche i filtri della pagina /menu, nell'ordine in cui
@@ -568,6 +604,7 @@ export const menuSections: MenuSection[] = [
       },
     ],
   },
+  gourmetSection,
   {
     id: "pala",
     title: "Pizze pala",
