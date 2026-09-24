@@ -87,19 +87,6 @@
   transform: scaleX(1);
 }
 
-/* L'invito a chiamare: la parola e, di fianco, il numero */
-.book {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.55em;
-}
-
-.bookNumber {
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.06em;
-  opacity: 0.75;
-}
-
 /* Pagine ancora da fare: voce spenta, senza link né sottolineatura */
 .link.off,
 .link.off:hover {
@@ -114,11 +101,6 @@
 @media (max-width: 900px) {
   .nav ul {
     gap: 0.6rem;
-  }
-
-  /* Il numero non ci sta: resta la parola, il link chiama lo stesso */
-  .bookNumber {
-    display: none;
   }
 }
 

@@ -190,8 +190,10 @@ export default function MenuBrowser() {
             <h2 className={s.groupTitle}>{active.title}</h2>
             {active.note && <p className={s.note}>{active.note}</p>}
             {active.link && (
-              <Link href={active.link.href} className="text-link">
-                {active.link.label}
+              <Link href={active.link.href} className={`soft-btn ${s.headLink}`}>
+                {`${active.link.lead} `}
+                <span className="soft-btn__rule" aria-hidden="true" />
+                {` ${active.link.label}`}
               </Link>
             )}
           </header>
@@ -216,11 +218,13 @@ export default function MenuBrowser() {
                 {item.description && (
                   <p className={s.desc}>{item.description}</p>
                 )}
-                <p className={s.price}>
-                  {active.delta
-                    ? formatDelta(item.price)
-                    : formatPrice(item.price)}
-                </p>
+                {item.price !== undefined && (
+                  <p className={s.price}>
+                    {active.delta
+                      ? formatDelta(item.price)
+                      : formatPrice(item.price)}
+                  </p>
+                )}
               </li>
             ))}
           </ul>

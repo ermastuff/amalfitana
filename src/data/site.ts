@@ -69,7 +69,7 @@ export const site = {
 
 /** L'invito a chiamare, al posto della voce "Contatti" in cima a destra. */
 export const booking = {
-  label: "Prenota",
+  label: "Ordina",
   phone: site.orderPhone,
   href: site.orderPhoneHref,
 };

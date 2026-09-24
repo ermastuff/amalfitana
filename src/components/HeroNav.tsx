@@ -12,10 +12,10 @@ const [NAV_LEFT, NAV_RIGHT] = heroNavSides;
 
 /**
  * Menu delle hero: le voci del sito ai due lati del simbolo del logo, che
- * riporta alla home. In fondo a destra, al posto dei contatti, il numero da
- * chiamare per prenotare. Le pagine ancora da fare restano nel menu, spente e
- * senza link. Voci e simbolo portano `data-hero-nav`, che le hero usano per
- * l'animazione d'ingresso.
+ * riporta alla home. In fondo a destra, al posto dei contatti, "Ordina": il
+ * numero non si vede, è il link stesso. Le pagine ancora da fare restano nel
+ * menu, spente e senza link. Voci e simbolo portano `data-hero-nav`, che le
+ * hero usano per l'animazione d'ingresso.
  */
 export default function HeroNav({ current, className }: Props) {
   const item = (link: NavLink) => (
@@ -51,10 +51,9 @@ export default function HeroNav({ current, className }: Props) {
       <ul>
         {NAV_RIGHT.map(item)}
         <li data-hero-nav>
-          {/* Da schermo stretto resta solo la parola: il numero non ci sta */}
-          <a href={booking.href} className={`${s.link} ${s.book}`}>
-            {`${booking.label} `}
-            <span className={s.bookNumber}>{booking.phone}</span>
+          {/* Il numero non si vede: sta nel link, che al tocco chiama */}
+          <a href={booking.href} className={s.link}>
+            {booking.label}
           </a>
         </li>
       </ul>

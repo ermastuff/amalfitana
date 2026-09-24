@@ -4,7 +4,8 @@ export type MenuItem = {
   name: string;
   /** Assente dove il prodotto non ha farcitura da elencare (pala, supplementi). */
   description?: string;
-  price: number;
+  /** Assente dove il prezzo non si mostra (le gourmet). */
+  price?: number;
   /** Solo le gourmet hanno la foto: la loro card la mostra in cima. */
   image?: string;
 };
@@ -15,29 +16,21 @@ export type MenuSection = {
   /** Etichetta corta per il bottone del filtro, se il titolo è lungo. */
   short?: string;
   note?: string;
-  /** Un link in fondo all'intestazione della sezione. */
-  link?: { href: string; label: string };
+  /** Un bottone in fondo all'intestazione della sezione (stile .soft-btn). */
+  link?: { href: string; lead: string; label: string };
   /** Prezzi da sommare a quello della pizza: mostrati col segno (+ / −). */
   delta?: boolean;
   items: MenuItem[];
 };
 
-// Prezzi delle gourmet: da confermare con la pizzeria. Nome, ingredienti e
-// foto arrivano da data/gourmet.ts, gli stessi della pagina dedicata.
-const GOURMET_PRICES: Record<string, number> = {
-  renana: 15,
-  "la-dolce-vita": 14.5,
-  pastorale: 13.5,
-  moonlight: 15.5,
-  "il-canto-della-terra": 13.5,
-};
-
+// Nome, ingredienti e foto delle gourmet arrivano da data/gourmet.ts, gli
+// stessi della pagina dedicata. Il prezzo qui non si mostra.
 const gourmetSection: MenuSection = {
   id: "gourmet",
   title: "Pizze gourmet",
   short: "Gourmet",
   note: "Farina macinata a pietra e ingredienti scelti uno per uno: le cinque pizze d’autore.",
-  link: { href: "/pizze-gourmet", label: "Il racconto delle gourmet" },
+  link: { href: "/pizze-gourmet", lead: "Il racconto", label: "delle gourmet" },
   items: gourmetPizzas.map((pizza) => ({
     name: pizza.name,
     // La farina è la stessa per tutte e cinque: lo dice la nota qui sopra,
@@ -45,7 +38,6 @@ const gourmetSection: MenuSection = {
     description: pizza.ingredients
       .filter((ingredient) => !ingredient.startsWith("Farina"))
       .join(", "),
-    price: GOURMET_PRICES[pizza.slug],
     image: pizza.image,
   })),
 };

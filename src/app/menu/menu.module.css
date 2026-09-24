@@ -198,6 +198,11 @@
   max-width: 60ch;
 }
 
+.headLink {
+  justify-self: start;
+  margin-top: 0.7rem;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -216,7 +221,7 @@
 .shot {
   position: relative;
   margin-bottom: 0.35rem;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 3 / 4;
   overflow: hidden;
   border-radius: 12px;
   background: color-mix(in srgb, var(--ink) 8%, transparent);
