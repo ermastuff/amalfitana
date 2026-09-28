@@ -24,7 +24,15 @@ export type MenuSection = {
 };
 
 // Nome, ingredienti e foto delle gourmet arrivano da data/gourmet.ts, gli
-// stessi della pagina dedicata. Il prezzo qui non si mostra.
+// stessi della pagina dedicata; i prezzi dal pannello del menu.
+const GOURMET_PRICES: Record<string, number> = {
+  renana: 19.5,
+  "la-dolce-vita": 21,
+  pastorale: 21,
+  moonlight: 22,
+  "il-canto-della-terra": 21,
+};
+
 const gourmetSection: MenuSection = {
   id: "gourmet",
   title: "Pizze gourmet",
@@ -38,6 +46,7 @@ const gourmetSection: MenuSection = {
     description: pizza.ingredients
       .filter((ingredient) => !ingredient.startsWith("Farina"))
       .join(", "),
+    price: GOURMET_PRICES[pizza.slug],
     image: pizza.image,
   })),
 };
@@ -52,181 +61,181 @@ export const menuSections: MenuSection[] = [
       {
         name: "Margherita",
         description: "Pomodoro San Marzano DOP, mozzarella",
-        price: 6,
+        price: 6.5,
       },
       {
         name: "Capricciosa",
         description:
           "Pomodoro San Marzano DOP, mozzarella, prosciutto cotto, funghi, carciofi",
-        price: 8.5,
+        price: 9,
       },
       {
         name: "Verdure grigliate",
         description:
           "Pomodoro San Marzano DOP, mozzarella, spinaci, peperoni, melanzane, zucchine, grana",
-        price: 8.5,
+        price: 9,
       },
       {
         name: "Quattro stagioni",
         description:
           "Pomodoro San Marzano DOP, mozzarella, carciofi, funghi, prosciutto cotto",
-        price: 8,
+        price: 8.5,
       },
       {
         name: "Quattro formaggi",
         description:
           "Pomodoro San Marzano DOP, mozzarella, grana, gorgonzola, scamorza affumicata",
-        price: 8,
+        price: 8.5,
       },
       {
         name: "Pugliese",
         description:
           "Pomodoro San Marzano DOP, mozzarella, cipolle di Tropea, grana",
-        price: 7.5,
+        price: 8,
       },
       {
         name: "Zola e mele",
         description: "Pomodoro San Marzano DOP, mozzarella, gorgonzola, mele",
-        price: 8,
+        price: 8.5,
       },
       {
         name: "Prosciutto e funghi",
         description:
           "Pomodoro San Marzano DOP, mozzarella, prosciutto cotto, funghi",
-        price: 8,
+        price: 8.5,
       },
       {
         name: "Napoletana",
         description: "Pomodoro San Marzano DOP, mozzarella, acciughe, origano",
-        price: 7,
+        price: 7.5,
       },
       {
         name: "Siciliana",
         description:
           "Pomodoro San Marzano DOP, mozzarella, olive nere, capperi, acciughe, origano",
-        price: 7.5,
+        price: 8,
       },
       {
         name: "Delizia",
         description:
           "Pomodoro San Marzano DOP, mozzarella, panna, speck, grana",
-        price: 9.5,
+        price: 10.5,
       },
       {
         name: "Salame piccante + zola",
         description:
           "Pomodoro San Marzano DOP, mozzarella, salame piccante Levoni, gorgonzola",
-        price: 8.5,
+        price: 9,
       },
       {
         name: "Salame dolce",
         description:
           "Pomodoro San Marzano DOP, mozzarella, salame dolce Levoni",
-        price: 7.5,
+        price: 8.5,
       },
       {
         name: "Zola e pere",
         description: "Mozzarella, gorgonzola, pere",
-        price: 8,
+        price: 8.5,
       },
       {
         name: "Campagnola",
         description:
           "Pomodoro San Marzano DOP, pancetta affumicata, cipolle di Tropea, olive, funghi",
-        price: 7.5,
+        price: 8,
       },
       {
         name: "Primavera",
         description:
           "Pomodoro San Marzano DOP, mozzarella, pomodorini freschi, origano",
-        price: 7,
+        price: 7.5,
       },
       {
         name: "Fattoria",
         description:
           "Pomodoro San Marzano DOP, mozzarella, pancetta Levoni, rucola, gorgonzola",
-        price: 8.5,
+        price: 9.5,
       },
       {
         name: "Gorgonzola e speck",
         description: "Pomodoro San Marzano DOP, mozzarella, gorgonzola, speck",
-        price: 9,
+        price: 9.5,
       },
       {
         name: "Vesuvio",
         description:
           "Pomodoro San Marzano DOP, mozzarella, spinaci, salamella, grana",
-        price: 8.5,
+        price: 9.5,
       },
       {
         name: "Ravello",
         description:
           "Pomodoro San Marzano DOP, mozzarella, spinaci, ricotta, grana",
-        price: 8.5,
+        price: 9.5,
       },
       {
         name: "Tonno e cipolle",
         description:
           "Pomodoro San Marzano DOP, mozzarella, tonno, cipolle di Tropea",
-        price: 8,
+        price: 8.5,
       },
       {
         name: "Meraviglia",
         description: "Mozzarella, noci, gorgonzola",
-        price: 8,
+        price: 9,
       },
       {
         name: "Dietetica",
         description:
           "Pomodoro San Marzano DOP, mozzarella, melanzane grigliate, prosciutto cotto",
-        price: 8,
+        price: 9,
       },
       {
         name: "Radicchio n.1",
         description:
           "Pomodoro San Marzano DOP, mozzarella, scamorza, radicchio rosso",
-        price: 8,
+        price: 8.5,
       },
       {
         name: "Caprese",
         description:
           "Pomodoro San Marzano DOP, mozzarella, pomodorini freschi, mozzarella di bufala campana DOP, basilico fresco",
-        price: 8.5,
+        price: 9,
       },
       {
         name: "Salsiccia e taleggio",
         description:
           "Pomodoro San Marzano DOP, mozzarella, salsiccia, taleggio",
-        price: 8.5,
+        price: 9,
       },
       {
         name: "Prosciutto crudo",
         description:
           "Pomodoro San Marzano DOP, mozzarella, prosciutto crudo di Parma stagionato 24 mesi",
-        price: 8,
+        price: 8.5,
       },
       {
         name: "Speck",
         description: "Pomodoro San Marzano DOP, mozzarella, speck",
-        price: 8,
+        price: 8.5,
       },
       {
         name: "Americana",
         description:
           "Pomodoro San Marzano DOP, mozzarella, patatine fritte, wurstel",
-        price: 8,
+        price: 8.5,
       },
       {
         name: "Occhio di bue",
         description:
           "Pomodoro San Marzano DOP, mozzarella, prosciutto cotto, uovo",
-        price: 7.5,
+        price: 8,
       },
       {
         name: "Romana",
         description:
           "Pomodoro San Marzano DOP, mozzarella, capperi, acciughe, origano",
-        price: 7.5,
+        price: 8,
       },
       {
         name: "Marinara",
@@ -237,29 +246,29 @@ export const menuSections: MenuSection[] = [
         name: "Flerese",
         description:
           "Pomodoro San Marzano DOP, mozzarella, prosciutto cotto, gorgonzola",
-        price: 8,
+        price: 8.5,
       },
       {
         name: "Speck e brie",
         description: "Pomodoro San Marzano DOP, mozzarella, speck, brie",
-        price: 9,
+        price: 9.5,
       },
       {
         name: "Quella della suocera",
         description:
           "Pomodoro San Marzano DOP, mozzarella, pancetta affumicata Levoni, zucchine, grana",
-        price: 8.5,
+        price: 9.5,
       },
       {
         name: "Contadina",
         description:
           "Pomodoro San Marzano DOP, mozzarella, pancetta affumicata Levoni, asparagi",
-        price: 8.5,
+        price: 9.5,
       },
       {
         name: "Porcini",
         description: "Pomodoro San Marzano DOP, mozzarella, funghi porcini",
-        price: 8,
+        price: 8.5,
       },
     ],
   },
@@ -271,24 +280,24 @@ export const menuSections: MenuSection[] = [
         name: "La burrata",
         description:
           "Pomodoro San Marzano DOP, burrata, crudo di Parma 24 mesi e basilico fresco",
-        price: 10,
+        price: 11,
       },
       {
         name: "La genovese",
         description:
           "Pomodoro San Marzano DOP, mozzarella, scamorza, patate lesse, pesto",
-        price: 8,
+        price: 9.5,
       },
       {
         name: "Allegra",
         description:
           "Pomodoro San Marzano DOP, mozzarella, salsiccia, patate lesse",
-        price: 8.5,
+        price: 9,
       },
       {
         name: "Pizzucca",
         description: "Mozzarella, pancetta, taleggio, crema di zucca",
-        price: 8.5,
+        price: 9.5,
       },
       {
         name: "Carpe diem",
@@ -303,18 +312,18 @@ export const menuSections: MenuSection[] = [
       {
         name: "Pizza dello zio",
         description: "Mozzarella, crema di zucca, funghi porcini, grana",
-        price: 9,
+        price: 10.5,
       },
       {
         name: "Amalfitana",
         description: "Pomodoro San Marzano DOP, mozzarella, frutti di mare",
-        price: 11,
+        price: 12,
       },
       {
         name: "Bufalina",
         description:
           "Pomodoro San Marzano DOP, mozzarella, pomodorini freschi, rucola, mozzarella di bufala",
-        price: 9,
+        price: 9.5,
       },
       {
         name: "Gamberetti e zucchine",
@@ -326,24 +335,24 @@ export const menuSections: MenuSection[] = [
         name: "Viennese",
         description:
           "Pomodoro San Marzano DOP, mozzarella, salame piccante Levoni, asparagi, 4 formaggi",
-        price: 9.5,
+        price: 10.5,
       },
       {
         name: "La carbonara",
         description:
           "Pomodoro San Marzano DOP, mozzarella, pancetta Levoni, uovo, panna, grana",
-        price: 9,
+        price: 12,
       },
       {
         name: "Trevisana",
         description:
           "Pomodoro San Marzano DOP, mozzarella, taleggio, radicchio rosso",
-        price: 8,
+        price: 8.5,
       },
       {
         name: "Rustica",
         description: "Pomodoro San Marzano DOP, mozzarella, asparagi, speck",
-        price: 9,
+        price: 9.5,
       },
       {
         name: "Pizza Euro",
@@ -354,71 +363,71 @@ export const menuSections: MenuSection[] = [
         name: "Bomba",
         description:
           "Pomodoro San Marzano DOP, mozzarella, salsiccia, fagioli, cipolle di Tropea",
-        price: 9,
+        price: 10,
       },
       {
         name: "Salame piccante e friarielli",
         description:
           "Pomodoro San Marzano DOP, mozzarella, salame piccante Levoni, cime di rapa",
-        price: 8.5,
+        price: 9.5,
       },
       {
         name: "L’Emiliana",
         description:
           "Mozzarella, spinaci, salsiccia, prosciutto cotto Levoni, pecorino",
-        price: 9,
+        price: 11,
       },
       {
         name: "Camuna",
         description:
           "Pomodoro San Marzano DOP, mozzarella, funghi porcini, salsiccia, grana",
-        price: 9.5,
+        price: 10.5,
       },
       {
         name: "’Nduja",
         description:
           "Pomodoro San Marzano DOP, mozzarella, ’nduja calabrese di Spilinga",
-        price: 7,
+        price: 7.5,
       },
       {
         name: "Tramontina",
         description: "Mozzarella, cime di rapa, acciughe",
-        price: 8,
+        price: 9,
       },
       {
         name: "Tirolese",
         description:
           "Pomodoro San Marzano DOP, mozzarella, salame piccante Levoni, wurstel, speck",
-        price: 9.5,
+        price: 10,
       },
       {
         name: "Golosa",
         description:
           "Pomodoro San Marzano DOP, mozzarella, zucchine grigliate, brie",
-        price: 8,
+        price: 8.5,
       },
       {
         name: "Mediterranea",
         description:
           "Pomodoro San Marzano DOP, mozzarella, rucola, pomodorini, crudo di Parma 24 mesi",
-        price: 9.5,
+        price: 10.5,
       },
       {
         name: "Varazze",
         description:
           "Pomodoro San Marzano DOP, mozzarella, tonno, cipolle di Tropea, tris olive piccantine",
-        price: 8.5,
+        price: 9.5,
       },
       {
         name: "Salsiccia e friarielli",
         description:
           "Pomodoro San Marzano DOP, mozzarella, cime di rapa, salsiccia",
-        price: 8.5,
+        price: 9.5,
       },
       {
         name: "Calamari",
         description: "Pomodoro San Marzano DOP, mozzarella, calamari",
-        price: 8.5,
+        price: 11,
       },
     ],
   },
@@ -430,94 +439,94 @@ export const menuSections: MenuSection[] = [
         name: "Pizza della casa",
         description:
           "Pomodoro San Marzano DOP, burrata, pomodori secchi, crudo di Parma 24 mesi, basilico",
-        price: 11,
+        price: 12,
       },
       {
         name: "Tricolore",
         description:
           "Pomodoro San Marzano DOP, burrata, pomodori secchi, pesto",
-        price: 8.5,
+        price: 11,
       },
       {
         name: "Fiori di zucca",
         description:
           "Pomodoro San Marzano DOP, fiori di zucca, burrata, acciughe",
-        price: 9,
+        price: 11,
       },
       {
         name: "Light",
         description:
           "Pomodoro San Marzano DOP, mozzarella, philadelphia, crudo di Parma 24 mesi, pomodorini, rucola",
-        price: 10,
+        price: 12,
       },
       {
         name: "Taggiasca",
         description:
           "Pomodoro San Marzano DOP, burrata, pomodori secchi, olive Taggiasche",
-        price: 9,
+        price: 11,
       },
       {
         name: "West",
         description:
           "Pomodoro San Marzano DOP, mozzarella, fagioli, pancetta croccante",
-        price: 8.5,
+        price: 9,
       },
       {
         name: "Trapanese",
         description: "Mozzarella, ricotta, pomodori secchi, basilico, mandorle",
-        price: 9,
+        price: 10.5,
       },
       {
         name: "Arcobaleno",
         description:
           "Pomodoro San Marzano DOP, zucchine, melanzane, pomodorini, olive Taggiasche, burrata",
-        price: 9.5,
+        price: 12,
       },
       {
         name: "Philadelphia",
         description:
           "Pomodoro San Marzano DOP, mozzarella, philadelphia, pancetta affumicata, pomodorini secchi",
-        price: 10,
+        price: 11,
       },
       {
         name: "Norma",
         description:
           "Pomodoro San Marzano DOP, mozzarella, melanzane condite con aglio, olio, menta, pecorino DOP",
-        price: 9,
+        price: 9.5,
       },
       {
         name: "Bologna",
         description: "Mozzarella, mortadella, burrata, granella di pistacchio",
-        price: 10.5,
+        price: 12,
       },
       {
         name: "Parmigiana",
         description: "Pomodoro San Marzano DOP, mozzarella, melanzane, grana",
-        price: 8,
+        price: 8.5,
       },
       {
         name: "Per me Napoli",
         description:
           "Impasto Napoli, pomodoro San Marzano DOP, mozzarella fior di latte, basilico",
-        price: 8.5,
+        price: 9,
       },
       {
         name: "La pregiata",
         description:
           "Mozzarella, speck, gorgonzola, crema di funghi prataioli al profumo di tartufo",
-        price: 9.5,
+        price: 11,
       },
       {
         name: "La verde",
         description:
           "Mozzarella, pere, gorgonzola, prosciutto crudo di Parma 24 mesi",
-        price: 10,
+        price: 11,
       },
       {
         name: "Pizzutello",
         description:
           "Impasto Napoli, pomodoro San Marzano DOP, mozzarella, pomodoro Pizzutello, bufala, basilico",
-        price: 9.5,
+        price: 10.5,
       },
       {
         name: "La delicata",
@@ -576,7 +585,13 @@ export const menuSections: MenuSection[] = [
         name: "L’Esosa",
         description:
           "Focaccia con acciughe, olive taggiasche in uscita, pomodori secchi, burrata",
-        price: 10,
+        price: 12,
+      },
+      {
+        name: "Maialina",
+        description:
+          "Impasto verace, provola affumicata, porchetta arrosto Levoni, patate al forno, rosmarino",
+        price: 13,
       },
       {
         name: "Pizza del sabato",
@@ -592,7 +607,7 @@ export const menuSections: MenuSection[] = [
       },
       {
         name: "Focaccia alla Nutella",
-        price: 7,
+        price: 7.5,
       },
     ],
   },
@@ -600,11 +615,13 @@ export const menuSections: MenuSection[] = [
   {
     id: "pala",
     title: "Pizze pala",
-    note: "Mezzo metro, alta percentuale di idratazione. Per le pizze pala sono escluse le farciture delle ultime novità e gourmet.",
+    note: "Mezzo metro, alta percentuale di idratazione. Per i due gusti sono escluse le farciture delle pizze speciali, delle novità e delle gourmet.",
     items: [
-      { name: "Margherita", price: 17 },
-      { name: "Farcita", price: 21 },
-      { name: "Due gusti", price: 23 },
+      { name: "Margherita", price: 18 },
+      { name: "Farcita", price: 23 },
+      { name: "Due gusti", price: 25 },
+      { name: "Un gusto speciale", price: 27 },
+      { name: "Due gusti speciali", price: 30 },
     ],
   },
   {
@@ -614,30 +631,30 @@ export const menuSections: MenuSection[] = [
       {
         name: "Margherita",
         description: "Pomodoro San Marzano DOP, mozzarella",
-        price: 6,
+        price: 6.5,
       },
       {
         name: "Prosciutto e funghi",
         description:
           "Pomodoro San Marzano DOP, mozzarella, prosciutto cotto, funghi",
-        price: 8,
+        price: 8.5,
       },
       {
         name: "Normale",
         description: "Pomodoro San Marzano DOP, mozzarella, prosciutto cotto",
-        price: 7,
+        price: 7.5,
       },
       {
         name: "Cotto e carciofi",
         description:
           "Pomodoro San Marzano DOP, mozzarella, prosciutto cotto, carciofi",
-        price: 8,
+        price: 8.5,
       },
       {
         name: "Farcito",
         description:
           "Pomodoro San Marzano DOP, mozzarella, prosciutto cotto, funghi, carciofi",
-        price: 8.5,
+        price: 9,
       },
     ],
   },
